@@ -5,6 +5,7 @@
 2: github에 올리고 싶은 폴더에 우클릭해서 bash 창을 연다 - git init
 
 3: git config --global user.email "yyggh337@gmail.com"
+
     git config --global user.name "KU_CS_HTG" 이름과 이메일을 등록
 
 4: github repository를 만들고 주소를 복사해둔다
