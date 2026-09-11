@@ -1,0 +1,181 @@
+"""
+LG Careers 채용공고 수집기 (내부 JSON API 사용)
+
+기존 start.py가 실패한 이유:
+    careers.lg.com 은 SPA(Single Page Application)라서
+    requests.get() 이 받아오는 HTML 에는 <div id="root"></div> 뿐이고
+    실제 공고 내용은 브라우저가 JS 를 실행한 뒤 API 를 호출해 채운다.
+    → BeautifulSoup 이 파싱할 텍스트 자체가 없음.
+
+해결:
+    화면을 그리는 데 쓰이는 그 API 를 파이썬에서 직접 호출한다.
+    HTML 파싱 없이 구조화된 JSON 을 바로 받으므로 더 빠르고 안정적이다.
+
+필요 패키지: pip install requests beautifulsoup4
+"""
+
+from __future__ import annotations   # 타입 힌트에서 list[str] 같은 표기를 구버전에서도 허용
+
+import json
+import re
+import time
+from typing import Any
+
+import requests
+from bs4 import BeautifulSoup
+
+# ─────────────────────────────────────────────────────────────
+# 1) API 기본 설정
+# ─────────────────────────────────────────────────────────────
+
+API_BASE = "https://api.careers.lg.com/rmk"
+
+# Origin / Referer 는 브라우저가 자동으로 붙여주는 헤더.
+# 서버가 "우리 사이트에서 온 요청인가"를 확인할 수 있으므로 함께 보내준다.
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+    ),
+    "Content-Type": "application/json",
+    "Origin": "https://careers.lg.com",
+    "Referer": "https://careers.lg.com/",
+    "Accept": "application/json",
+}
+
+
+def api_post(path: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """API 공통 호출 함수.
+
+    이 사이트의 API 는 전부 POST + JSON body 이고,
+    응답은 {"status": "S", "data": {...}} 형태로 한 겹 감싸져 있다.
+    status 가 "S"(Success) 가 아니면 data 를 믿으면 안 된다.
+    """
+    url = f"{API_BASE}{path}"          # f-string: 문자열 안에서 {변수} 를 그대로 치환
+    response = requests.post(
+        url,
+        json=payload,                  # json= 로 주면 requests 가 알아서 직렬화 + 헤더 처리
+        headers=HEADERS,
+        timeout=10,
+    )
+    response.raise_for_status()        # 4xx/5xx 면 여기서 예외 발생
+    body = response.json()
+
+    if body.get("status") != "S":
+        raise RuntimeError(f"API 실패: {body.get('msg')} (payload={payload})")
+
+    return body["data"]
+
+
+# ─────────────────────────────────────────────────────────────
+# 2) 공고 목록 / 상세 조회
+# ─────────────────────────────────────────────────────────────
+
+def list_job_notices(company_codes: list[str] | None = None) -> list[dict]:
+    """채용공고 목록. company_codes 예: ["CNS"], ["LGE", "LGU"]
+
+    계열사 코드: LGE(전자) LGD(디스플레이) LGIT(이노텍) LGC(화학) LGES(에너지솔루션)
+                 LGHH(생활건강) LGU(유플러스) HELLOVISION CNS SVO(스포츠) GIIR
+    """
+    payload = {
+        "lnbSearch": "",               # 검색어
+        "hashTagText": "",
+        "recDate": "CREATION_DATE",    # 정렬 기준
+        "order": "DESC",
+        "careerList": [],              # 신입/경력 필터
+        "companyCodeList": company_codes or [],
+        "desireLocList": [],
+        "jobGroupList": [],
+    }
+    data = api_post("/job/retrieveJobNoticesList", payload)
+    return data["jobNoticeList"]
+
+
+def fetch_job_detail(job_notice_id: str | int) -> dict:
+    """공고 상세. job_notice_id 는 상세 URL 의 ?id= 값과 동일하다."""
+    data = api_post(
+        "/job/retrieveJobNoticesDetail",
+        {"jobNoticeId": str(job_notice_id)},   # ← 키 이름이 'id' 가 아니라 'jobNoticeId'
+    )
+    return data["jobNoticesDetail"]
+
+
+# ─────────────────────────────────────────────────────────────
+# 3) HTML 조각 → 평문 텍스트
+# ─────────────────────────────────────────────────────────────
+
+def html_to_text(html: str | None) -> str:
+    """API 가 주는 mainTask / requiredItem 등은 에디터가 만든 HTML 조각이다.
+    여기서만 BeautifulSoup 을 쓴다 (페이지 전체가 아니라 필드 단위로).
+    """
+    if not html:
+        return ""
+    text = BeautifulSoup(html, "html.parser").get_text(separator="\n")
+    text = text.replace("\xa0", " ")             # &nbsp; 제거
+    text = re.sub(r"\n{3,}", "\n\n", text)       # 빈 줄 3개 이상 → 2개로 정리
+    return text.strip()
+
+
+def parse_notice(detail: dict) -> dict:
+    """상세 응답에서 필요한 필드만 뽑아 납작한 dict 로 재구성."""
+    notice = detail["jobNoticesDetail"]          # 공고 전체 메타데이터
+
+    # recList: 이 공고에 포함된 '직무' 목록. 우리가 원하는 본문이 여기 있다.
+    # 리스트 컴프리헨션 (JS 의 Array.map 과 같은 역할)
+    jobs = [
+        {
+            "job_name": rec.get("jobGroupName"),         # 직무명
+            "org_name": rec.get("orgName"),              # 소속 조직
+            "location": rec.get("locationName"),
+            "org_intro": html_to_text(rec.get("detailContext")),   # 조직 소개
+            "main_tasks": html_to_text(rec.get("mainTask")),       # 주요 업무 + 요구 역량
+            "required": html_to_text(rec.get("requiredItem")),     # 필수 사항
+            "preferred": html_to_text(rec.get("preferredItem")),   # 우대 사항
+            "major": html_to_text(rec.get("majorCodeName")),       # 전공 분야
+        }
+        for rec in detail.get("recList", [])
+    ]
+
+    return {
+        "job_notice_id": notice.get("jobNoticeId"),
+        "notice_name": notice.get("jobNoticeName"),
+        "company": notice.get("companyName"),
+        "career_type": notice.get("careerTypeName"),   # 신입 / 경력
+        "work_location": notice.get("workLocation"),
+        "rec_start": notice.get("recStartDate"),
+        "rec_end": notice.get("recEndDate"),
+        "qualification": notice.get("qualForAppInfo"),   # 지원 자격 (이건 평문)
+        "process": notice.get("recProcessInfo"),         # 전형 절차
+        "jobs": jobs,
+    }
+
+
+# ─────────────────────────────────────────────────────────────
+# 4) 실행 예시
+# ─────────────────────────────────────────────────────────────
+
+if __name__ == "__main__":
+    # (a) 단일 공고
+    detail = fetch_job_detail(1002196)
+    notice = parse_notice(detail)
+
+    print(f"[{notice['company']}] {notice['notice_name']}")
+    print(f"접수: {notice['rec_start']} ~ {notice['rec_end']}")
+    print(f"포함 직무 {len(notice['jobs'])}개\n")
+
+    first = notice["jobs"][0]
+    print(f"── {first['org_name']} / {first['job_name']}")
+    print(first["main_tasks"][:600])
+
+    # (b) LG CNS 공고 전체 수집 → JSON 저장
+    #     서버 부담을 줄이려고 요청 사이에 0.5초 간격을 둔다.
+    results = []
+    for item in list_job_notices(company_codes=["CNS"]):
+        results.append(parse_notice(fetch_job_detail(item["jobNoticeId"])))
+        time.sleep(0.5)
+
+    with open("lg_cns_jobs.json", "w", encoding="utf-8") as f:
+        # with 문: 블록을 벗어날 때 파일을 자동으로 닫아준다 (try/finally 대체)
+        json.dump(results, f, ensure_ascii=False, indent=2)
+
+    print(f"\n저장 완료: {len(results)}개 공고 → lg_cns_jobs.json")
