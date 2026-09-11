@@ -18,8 +18,11 @@
 git pull origin main
 
 *업데이트한 내용 push하기(자신이 업데이트한 내용을 github에 올려서 이게 최신 버전이라고 다른 팀원들에게 알리기)
+
 1: git에 있는 거(다른 기기에서 repository 업데이트 해놓은 경우) 먼저 pull하고 업데이트해야 함
 까먹었다면 일일이 대조하면서 추가된 파일 다 빼놓고 pull할 수밖에 없음
+
 2: git add . 
 git commit -m “20260909-2” 이런 식으로 commit message 작성
+
 3: git push -u origin main
