@@ -9,7 +9,7 @@
 
 4: github repository를 만들고 주소를 복사해둔다
 
-5: git remote add origin https://github.com/KU-CS-HTG/LG_CNS_Campus_Study.git
+5: git remote add origin https://github.com/KU-CS-HTG/LG-CNS-KG-Project-1.git
 이런 식으로 repository와 연결
 
 6: git remote -v로 잘 연결되었는지 확인
