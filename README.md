@@ -28,4 +28,8 @@ git pull origin main
 
 git commit -m “20260909-2” 이런 식으로 commit message 작성
 
-3: git push -u origin main
+3: git branch로 현재 branch 확인
+
+main이 아니라면 git branch -M main 
+
+4: git push -u origin main
