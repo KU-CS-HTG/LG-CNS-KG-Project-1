@@ -1,11 +1,17 @@
 *기본 세팅(새로운 기기에서 git 시작하기)
+
 1: git을 설치한다 (pull할때 기본을 merge로 할지, rebase로 할지 고르는 거 있는데 협업 염두하면 merge로 하는 게 좋을듯
+
 2: github에 올리고 싶은 폴더에 우클릭해서 bash 창을 연다 - git init
+
 3: git config --global user.email "yyggh337@gmail.com"
     git config --global user.name "KU_CS_HTG" 이름과 이메일을 등록
+
 4: github repository를 만들고 주소를 복사해둔다
+
 5: git remote add origin https://github.com/KU-CS-HTG/LG_CNS_Campus_Study.git
 이런 식으로 repository와 연결
+
 6: git remote -v로 잘 연결되었는지 확인
 
 *깃허브 저장소 내용 pull하기(다른 사람이 올려놓은 최신 코드를 먼저 받아오고, 그걸 업데이트해야 각자 사용하는 코드의 버전이 달라지는 것을 막을 수 있음)
