@@ -23,6 +23,7 @@ git pull origin main
 까먹었다면 일일이 대조하면서 추가된 파일 다 빼놓고 pull할 수밖에 없음
 
 2: git add . 
+
 git commit -m “20260909-2” 이런 식으로 commit message 작성
 
 3: git push -u origin main
