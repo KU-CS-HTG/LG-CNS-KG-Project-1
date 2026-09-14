@@ -17,6 +17,7 @@ LG Careers 채용공고 수집기 (내부 JSON API 사용)
 from __future__ import annotations   # 타입 힌트에서 list[str] 같은 표기를 구버전에서도 허용
 
 import json
+from pathlib import Path
 import re
 import time
 from typing import Any
@@ -169,3 +170,8 @@ if __name__ == "__main__":
             indent=2
         )
     print(f"\n저장 완료: {len(results)}개 직무 → lg_cns_jobs.json")
+
+    raw = [fetch_job_detail(i["jobNoticeId"]) for i in list_job_notices(["CNS"])]
+    Path("raw_notices.json").write_text(
+    json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
