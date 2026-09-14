@@ -116,38 +116,23 @@ def html_to_text(html: str | None) -> str:
     return text.strip()
 
 
-def parse_notice(detail: dict) -> dict:
-    """상세 응답에서 필요한 필드만 뽑아 납작한 dict 로 재구성."""
-    notice = detail["jobNoticesDetail"]          # 공고 전체 메타데이터
-
-    # recList: 이 공고에 포함된 '직무' 목록. 우리가 원하는 본문이 여기 있다.
-    # 리스트 컴프리헨션 (JS 의 Array.map 과 같은 역할)
+def parse_notice(detail: dict) -> list[dict]:
+    """상세 응답에서 직무별 추천에 필요한 정보만 추출."""
+    notice = detail["jobNoticesDetail"]
+    company = notice.get("companyName")
+    career_type = notice.get("careerTypeName")
     jobs = [
         {
-            "job_name": rec.get("jobGroupName"),         # 직무명
-            "org_name": rec.get("orgName"),              # 소속 조직
-            "location": rec.get("locationName"),
-            "org_intro": html_to_text(rec.get("detailContext")),   # 조직 소개
-            "main_tasks": html_to_text(rec.get("mainTask")),       # 주요 업무 + 요구 역량
-            "required": html_to_text(rec.get("requiredItem")),     # 필수 사항
-            "preferred": html_to_text(rec.get("preferredItem")),   # 우대 사항
-            "major": html_to_text(rec.get("majorCodeName")),       # 전공 분야
+            "company": company,
+            "job_name": rec.get("jobGroupName"),
+            "org_intro": html_to_text(rec.get("detailContext")),
+            "main_tasks": html_to_text(rec.get("mainTask")),
+            "required": html_to_text(rec.get("requiredItem")),
+            "preferred": html_to_text(rec.get("preferredItem")),
         }
         for rec in detail.get("recList", [])
     ]
-
-    return {
-        "job_notice_id": notice.get("jobNoticeId"),
-        "notice_name": notice.get("jobNoticeName"),
-        "company": notice.get("companyName"),
-        "career_type": notice.get("careerTypeName"),   # 신입 / 경력
-        "work_location": notice.get("workLocation"),
-        "rec_start": notice.get("recStartDate"),
-        "rec_end": notice.get("recEndDate"),
-        "qualification": notice.get("qualForAppInfo"),   # 지원 자격 (이건 평문)
-        "process": notice.get("recProcessInfo"),         # 전형 절차
-        "jobs": jobs,
-    }
+    return jobs
 
 
 # ─────────────────────────────────────────────────────────────
@@ -155,27 +140,32 @@ def parse_notice(detail: dict) -> dict:
 # ─────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    # (a) 단일 공고
+
+    # (a) 단일 공고 테스트
     detail = fetch_job_detail(1002196)
-    notice = parse_notice(detail)
+    jobs = parse_notice(detail)
+    print(f"포함 직무 {len(jobs)}개\n")
 
-    print(f"[{notice['company']}] {notice['notice_name']}")
-    print(f"접수: {notice['rec_start']} ~ {notice['rec_end']}")
-    print(f"포함 직무 {len(notice['jobs'])}개\n")
-
-    first = notice["jobs"][0]
-    print(f"── {first['org_name']} / {first['job_name']}")
+    first = jobs[0]
+    print(f"[{first['company']}]")
+    print(f"{first['job_name']}")
     print(first["main_tasks"][:600])
 
     # (b) LG CNS 공고 전체 수집 → JSON 저장
-    #     서버 부담을 줄이려고 요청 사이에 0.5초 간격을 둔다.
     results = []
+
     for item in list_job_notices(company_codes=["CNS"]):
-        results.append(parse_notice(fetch_job_detail(item["jobNoticeId"])))
+        jobs = parse_notice(
+            fetch_job_detail(item["jobNoticeId"])
+        )
+        results.extend(jobs)
         time.sleep(0.5)
 
     with open("lg_cns_jobs.json", "w", encoding="utf-8") as f:
-        # with 문: 블록을 벗어날 때 파일을 자동으로 닫아준다 (try/finally 대체)
-        json.dump(results, f, ensure_ascii=False, indent=2)
-
-    print(f"\n저장 완료: {len(results)}개 공고 → lg_cns_jobs.json")
+        json.dump(
+            results,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+    print(f"\n저장 완료: {len(results)}개 직무 → lg_cns_jobs.json")
