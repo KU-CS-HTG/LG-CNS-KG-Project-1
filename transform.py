@@ -11,7 +11,7 @@ LG Careers 원본 JSON → 목표 스키마(JobData) 변환 파이프라인
 """
 
 from __future__ import annotations
-
+from dotenv import load_dotenv
 import json
 import re
 from datetime import date
@@ -28,6 +28,7 @@ from pydantic import BaseModel, Field, field_validator
 # Literal: "이 필드는 이 값들 중 하나만 허용" 이라는 뜻.
 # job_family 를 자유 문자열로 두면 "AI/Data", "AI·데이터", "인공지능" 이 전부
 # 다른 노드가 되어 그래프가 터진다. 통제 어휘(controlled vocabulary)로 묶는다.
+load_dotenv()
 JobFamily = Literal[
     "AI/Data", "Software", "Cloud/Infra", "Security",
     "Consulting/PM", "Sales", "Manufacturing", "Corporate", "Other",
@@ -365,6 +366,17 @@ def run(raw_path: str = "raw_notices.json", out_path: str = "curated_jobs.jsonl"
         for job in jobs:
             f.write(job.model_dump_json() + "\n")
 
+    # 사람이 보기 편한 pretty-print 버전도 함께 저장
+    pretty_path = Path(out_path).with_suffix(".pretty.json")
+    pretty_path.write_text(
+        json.dumps(
+            [job.model_dump(mode="json") for job in jobs],
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    
     # 품질 리포트 — 눈으로 확인할 것들
     no_duties = [r["job_id"] for r in reports if r["duties_source"] == "none"]
     suspects = [r for r in reports if r["suspect_required"] or r["suspect_preferred"]]
