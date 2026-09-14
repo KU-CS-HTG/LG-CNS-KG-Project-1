@@ -33,3 +33,5 @@ git commit -m “20260909-2” 이런 식으로 commit message 작성
 main이 아니라면 git branch -M main 
 
 4: git push -u origin main
+
+※환경변수 .env 는 본인 파일을 복사해서 사용하세요.

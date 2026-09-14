@@ -1,0 +1,423 @@
+{
+  "skills": [
+    "AWS",
+    "Agile",
+    "AngularJS",
+    "Azure",
+    "C",
+    "C#",
+    "CI/CD",
+    "Cloud",
+    "Computer Vision",
+    "Data Analysis",
+    "Data Modeling",
+    "Database",
+    "Deep Learning",
+    "DevOps",
+    "Docker",
+    "GCP",
+    "Git",
+    "Java",
+    "JavaScript",
+    "Jenkins",
+    "Kubernetes",
+    "LLM",
+    "LangChain",
+    "LangGraph",
+    "MSA",
+    "Machine Learning",
+    "Network",
+    "Node.js",
+    "Oracle",
+    "Project Management",
+    "Prompt Engineering",
+    "Python",
+    "RAG",
+    "React",
+    "SQL",
+    "SVN",
+    "Security",
+    "Spring",
+    "Spring Boot",
+    "Statistics",
+    "Terraform",
+    "TypeScript",
+    "Vue.js"
+  ],
+  "majors": [
+    {
+      "id": "샘플대학교--컴퓨터공학과",
+      "school": "샘플대학교",
+      "name": "컴퓨터공학과",
+      "develops": {
+        "Python": [
+          "프로그래밍입문",
+          "고급파이썬"
+        ],
+        "Database": [
+          "데이터베이스",
+          "데이터베이스설계"
+        ],
+        "Machine Learning": [
+          "기계학습",
+          "인공지능"
+        ],
+        "Java": [
+          "객체지향프로그래밍"
+        ]
+      }
+    },
+    {
+      "id": "샘플대학교--산업공학과",
+      "school": "샘플대학교",
+      "name": "산업공학과",
+      "develops": {
+        "Statistics": [
+          "확률통계",
+          "실험계획법"
+        ],
+        "Data Analysis": [
+          "데이터마이닝"
+        ],
+        "Project Management": [
+          "생산관리",
+          "프로젝트관리"
+        ]
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "id": "1002127-ai-ax",
+      "role": "AI (AX)",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "LLM",
+        "Prompt Engineering",
+        "RAG",
+        "LangChain",
+        "LangGraph"
+      ],
+      "prefers": [
+        "Git",
+        "Docker",
+        "Kubernetes"
+      ]
+    },
+    {
+      "id": "1002127-robotics-rx",
+      "role": "Robotics (RX)",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Java",
+        "Spring",
+        "React",
+        "Vue.js"
+      ],
+      "prefers": [
+        "Computer Vision"
+      ]
+    },
+    {
+      "id": "1002127-consulting",
+      "role": "Consulting",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Cloud",
+        "Data Analysis"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002127-dx-engineer",
+      "role": "DX Engineer",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Java",
+        "Python",
+        "Spring Boot",
+        "SQL",
+        "React",
+        "Vue.js",
+        "TypeScript"
+      ],
+      "prefers": [
+        "LLM"
+      ]
+    },
+    {
+      "id": "1002127-cloud-application-modernization",
+      "role": "Cloud Application Modernization",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Java",
+        "Python",
+        "JavaScript",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Git",
+        "Agile"
+      ],
+      "prefers": [
+        "LLM",
+        "RAG"
+      ]
+    },
+    {
+      "id": "1002127-architect",
+      "role": "Architect",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Network"
+      ],
+      "prefers": [
+        "Security"
+      ]
+    },
+    {
+      "id": "1002127-erp",
+      "role": "ERP",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "SQL",
+        "Java"
+      ],
+      "prefers": [
+        "LLM"
+      ]
+    },
+    {
+      "id": "1002127-smart-factory",
+      "role": "Smart Factory",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Java",
+        "Python",
+        "C#",
+        "React"
+      ],
+      "prefers": [
+        "LLM"
+      ]
+    },
+    {
+      "id": "1002098-클라우드-인프라-사업-개발",
+      "role": "클라우드 인프라 사업 개발",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002098",
+      "requires": [
+        "Cloud",
+        "Network"
+      ],
+      "prefers": [
+        "Oracle"
+      ]
+    },
+    {
+      "id": "1002046-sap-프로젝트-관리자-pm-im",
+      "role": "SAP 프로젝트 관리자(PM/IM)",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002046",
+      "requires": [
+        "Project Management"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1001677-생명보험-업무전문가-및-시스템엔지니어",
+      "role": "생명보험 업무전문가 및 시스템엔지니어",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001677",
+      "requires": [
+        "Java",
+        "Oracle",
+        "Spring Boot"
+      ],
+      "prefers": [
+        "DevOps",
+        "CI/CD",
+        "Cloud",
+        "SVN",
+        "Git",
+        "MSA",
+        "React",
+        "Vue.js",
+        "AngularJS"
+      ]
+    },
+    {
+      "id": "1001677-손해보험-업무전문가-및-시스템엔지니어",
+      "role": "손해보험 업무전문가 및 시스템엔지니어",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001677",
+      "requires": [
+        "Java",
+        "Oracle",
+        "Spring Boot"
+      ],
+      "prefers": [
+        "DevOps",
+        "CI/CD",
+        "Cloud",
+        "SVN",
+        "Git",
+        "MSA",
+        "React",
+        "Vue.js",
+        "AngularJS"
+      ]
+    },
+    {
+      "id": "1001677-증권-업무전문가-및-시스템엔지니어",
+      "role": "증권 업무전문가 및 시스템엔지니어",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001677",
+      "requires": [
+        "C",
+        "Java"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1001432-application-architect",
+      "role": "Application Architect",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001432",
+      "requires": [
+        "MSA"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1001427-global-core-banking-pm-pmo",
+      "role": "Global Core Banking PM / PMO",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001427",
+      "requires": [
+        "Project Management"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1001427-global-core-banking-business-analyst",
+      "role": "Global Core Banking Business Analyst",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001427",
+      "requires": [],
+      "prefers": [
+        "Cloud"
+      ]
+    },
+    {
+      "id": "1001371-infrastructure-architect",
+      "role": "Infrastructure Architect",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001371",
+      "requires": [
+        "Kubernetes"
+      ],
+      "prefers": [
+        "MSA"
+      ]
+    },
+    {
+      "id": "1001371-data-architect",
+      "role": "Data Architect",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001371",
+      "requires": [
+        "Data Modeling"
+      ],
+      "prefers": [
+        "Database",
+        "AWS",
+        "Azure",
+        "GCP"
+      ]
+    },
+    {
+      "id": "1001371-cloud-devops-architect",
+      "role": "Cloud & DevOps Architect",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001371",
+      "requires": [
+        "Terraform",
+        "Jenkins",
+        "Kubernetes"
+      ],
+      "prefers": [
+        "MSA"
+      ]
+    },
+    {
+      "id": "1001361-메신저-서비스-개발-운영",
+      "role": "메신저 서비스 개발/운영",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001361",
+      "requires": [
+        "Node.js",
+        "JavaScript"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1000834-ai",
+      "role": "AI",
+      "company": "LG CNS",
+      "career_type": "인턴",
+      "url": "https://careers.lg.com/apply/detail?id=1000834",
+      "requires": [],
+      "prefers": [
+        "Deep Learning",
+        "Machine Learning",
+        "Prompt Engineering"
+      ]
+    },
+    {
+      "id": "1000834-cloud-application-modernization",
+      "role": "Cloud Application Modernization",
+      "company": "LG CNS",
+      "career_type": "인턴",
+      "url": "https://careers.lg.com/apply/detail?id=1000834",
+      "requires": [
+        "AWS",
+        "Azure",
+        "GCP",
+        "Agile",
+        "React",
+        "Spring",
+        "DevOps"
+      ],
+      "prefers": []
+    }
+  ]
+}
