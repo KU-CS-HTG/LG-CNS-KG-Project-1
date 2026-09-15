@@ -74,6 +74,17 @@ CANON: dict[str, str] = {
     "git": "Git", "형상관리": "Version Control", "svn": "SVN",
     "agile": "Agile", "애자일": "Agile", "scrum": "Agile",
 
+    # ── 학문 역량 (전공 과목명에서 나온다 — 컴공·전기정보·수리과학 과목이 실제로 가리키는 것들.
+    #    LG CNS 신입 공고에도 등장하는 말이라 직무 쪽과 이어질 수 있다)
+    "알고리즘": "Algorithm", "algorithm": "Algorithm",
+    "자료구조": "Data Structure", "data structure": "Data Structure",
+    "운영체제": "Operating Systems", "os": "Operating Systems", "operating systems": "Operating Systems",
+    "컴퓨터구조": "Computer Architecture", "컴퓨터조직론": "Computer Architecture", "computer architecture": "Computer Architecture",
+    "소프트웨어공학": "Software Engineering", "software engineering": "Software Engineering",
+    "최적화": "Optimization", "optimization": "Optimization",
+    "신호처리": "Signal Processing", "디지털신호처리": "Signal Processing", "signal processing": "Signal Processing",
+    "수치해석": "Numerical Analysis", "수리모델링": "Numerical Analysis", "numerical analysis": "Numerical Analysis",
+
     # ── 비기술 역량 (전공 쪽에서 자주 나온다)
     "커뮤니케이션": "Communication", "의사소통": "Communication",
     "문제해결": "Problem Solving", "문제 해결": "Problem Solving",
@@ -94,6 +105,13 @@ NOT_A_SKILL = re.compile(
 )
 
 MAX_LEN = 25   # 이보다 길면 이름이 아니라 문장으로 본다
+
+# 대표 표기 자기 자신도 통과해야 한다.
+# LLM 은 프롬프트의 통제 어휘 목록(= CANON 의 값)을 보고 "Machine Learning" 처럼 대표 표기를 그대로 적는데,
+# CANON 키에 "machine learning" 이 없으면 canonicalize 가 None 을 돌려줘 그 역량이 조용히 버려진다.
+# (실측: 대표 표기 63개 중 9개 — Machine Learning, Data Analysis, Statistics, Deep Learning 등 — 가 이 경로로 탈락했다)
+# 별칭을 일일이 추가하는 대신, 값 쪽에서도 찾는다. 새 대표 표기를 넣어도 자동으로 보호된다.
+_CANON_VALUES: dict[str, str] = {v.lower(): v for v in CANON.values()}
 
 
 def canonicalize(term: str, strict: bool = True) -> str | None:
@@ -132,6 +150,8 @@ def canonicalize(term: str, strict: bool = True) -> str | None:
 
     if key in CANON:
         return CANON[key]
+    if key in _CANON_VALUES:           # 대표 표기 그대로 들어온 경우 (대소문자 무시)
+        return _CANON_VALUES[key]
     if strict:
         return None
     if len(cleaned) > MAX_LEN or NOT_A_SKILL.search(cleaned):
