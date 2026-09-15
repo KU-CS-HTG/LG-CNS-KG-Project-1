@@ -100,67 +100,8 @@ def render(r: dict) -> str:
             L.append(f"          ✗ 교과 밖에서 채울 것 — {', '.join(j['gap'])}")   # ② 갭
     return "\n".join(L)
 
-EXPLAIN_SYSTEM = """너는 대학생 진로 상담 전문가다.
-아래 [근거]에 주어진 사실만 사용해서 "추천 이유"를 2~4문장으로 설명하라.
-
-규칙:
-1. [근거]에 없는 과목명, 역량명, 회사명을 절대 만들어내지 않는다.
-2. 각 과목이 어떤 역량(Skill)을 기르는지, 그 역량이 직무의 어떤 요구사항과
-   연결되는지 구체적으로 설명한다.
-3. gap(부족한 역량)이 있다면 "다만 ~는 교과 밖에서 별도로 채워야 한다"처럼
-   자연스럽게 한 문장으로 언급한다.
-4. 근거가 부족하면 신중하게 설명하되, 확신에 찬 어조를 쓰지 않는다."""
-
-def build_explain_prompt(r: dict) -> str:
-    """run()의 결과 dict에서 근거만 뽑아 프롬프트 텍스트로 만든다.
-    graph_store가 실제로 돌려준 값(major/job/subjects)만 사용 — 지어낼 재료를 주지 않는다."""
-    major = r["major"]
-    job = r["job"]
-    subjects = r["subjects"]
-
-    # 과목별로 "어느 역량의 근거였는지"를 같이 적어준다 (evidence 딕셔너리 역참조)
-    subject_lines = []
-    for subj in subjects:
-        matched_skills = [
-            skill for skill, via in major["evidence"].items() if subj in via
-        ]
-        subject_lines.append(f"- {subj} → {', '.join(matched_skills) or '(연결된 역량 없음)'}")
-
-    lines = [
-        f"전공: {major['school']} {major['name']}",
-        f"직무: {job['company']} {job['role']} ({job['career_type']})" if job else "직무: (매칭 없음)",
-        "",
-        "[근거 과목과 연결 역량]",
-        *subject_lines,
-        "",
-        f"[직무가 갖춘 역량(have)]\n{', '.join(job['have']) if job else '(없음)'}",
-        f"[직무가 요구하지만 전공에 없는 역량(gap)]\n{', '.join(job['gap']) if job and job['gap'] else '(없음)'}",
-    ]
-    return "\n".join(lines)
-
-async def explain(r: dict) -> None:
-    """추천 이유를 스트리밍으로 출력. run() 결과에 major/job/subjects가 있을 때만 호출."""
-    from langchain_core.prompts import ChatPromptTemplate
-    from langchain_openai import ChatOpenAI
-
-    if not r.get("major") or not r.get("job"):
-        return  # 매칭 결과가 없으면 설명할 근거 자체가 없다
-
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, timeout=20, max_retries=2)
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", EXPLAIN_SYSTEM),
-        ("human", "{evidence}"),
-    ])
-    chain = prompt | llm
-
-    print("\n[추천 이유] ", end="", flush=True)
-    async for chunk in chain.astream({"evidence": build_explain_prompt(r)}):
-        print(chunk.content, end="", flush=True)
-    print()
 
 if __name__ == "__main__":
-    import asyncio
-
     session: dict = {}
     answers = [input(f"\n{q}\n> ") for q in QUESTIONS]
     result = run(answers, session)
@@ -168,6 +109,3 @@ if __name__ == "__main__":
         answers.append(input(f"\n조금 더 알려주세요. {result['followup']}\n> "))
         result = run(answers, session)
     print("\n" + render(result))
-
-    if result.get("major") and result.get("job"):
-        asyncio.run(explain(result))
