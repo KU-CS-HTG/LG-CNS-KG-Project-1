@@ -49,6 +49,36 @@ def _score(user: set[str], target: set[str]) -> float:
 FAMILY_WEIGHT = 0.5   # 계열 일치(상위 개념으로 커버)는 정확 일치의 절반으로 센다
 
 
+@lru_cache(maxsize=1)
+def _idf() -> dict[str, float]:
+    """역량별 IDF (inverse document frequency) — 전공 쪽 기준.
+
+    전공 63개 중 42개가 Data Analysis 를 기르고 3개만 Signal Processing 을 기른다. 둘을 똑같이 1점으로 세면
+    "데이터 분석" 태그는 42개 전공을 동점으로 만들고, 정작 변별력 있는 희귀 역량은 묻힌다 (9/15 실측).
+    검색엔진의 TF-IDF 와 같은 발상: 흔한 단어(the, 데이터)는 덜 세고 드문 단어는 더 센다.
+
+        idf(s) = log( 전공 수 / s 를 기르는 전공 수 )     ← 흔할수록 0 에 가깝고, 드물수록 커진다
+
+    예 (전공 63개): Data Analysis 0.41 · Statistics 0.92 · Machine Learning 1.84 · Signal Processing 3.04
+    """
+    majors = _load().get("majors", [])
+    n = max(len(majors), 1)
+    df: dict[str, int] = {}
+    for m in majors:
+        for s in m.get("develops", {}):
+            df[s] = df.get(s, 0) + 1
+    return {s: math.log(n / c) for s, c in df.items()}
+
+
+def _weight(skill: str) -> float:
+    """태그 하나의 가중치. 전공 쪽에 없는 태그(IS_A 자식, 예: Java)는 부모(Programming)의 IDF 를 쓴다."""
+    idf = _idf()
+    if skill in idf:
+        return idf[skill]
+    parent = _is_a().get(skill)
+    return idf.get(parent, 1.0) if parent else 1.0
+
+
 def _is_a() -> dict[str, str]:
     """IS_A 엣지 (자식 → 부모). graph.json 의 "is_a". 없으면 빈 dict — 계층 없이도 동작한다."""
     return _load().get("is_a", {})
@@ -100,11 +130,15 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
             "family": family,                              # {사용자 태그: 그것을 커버한 전공 역량}
             # 각 역량이 어느 과목에서 나왔는지 — 출력 2칸의 "근거 과목". 계열 커버는 상위 개념의 과목이 근거
             "evidence": {s: develops[s] for s in matched + covered_by},
-            # 전공 점수 = 사용자 태그 중 이 전공이 기르는 비율 (커버리지). 계열 일치는 절반.
-            #   직무처럼 집합 코사인을 쓰면 역량이 '적은' 전공이 이긴다 — 실측(9/15): "데이터 분석·통계" 에
-            #   식물생산과학부·의예과·화학부(역량 2개)가 1.0 으로 공동 1위, 통계학과(역량 3개)는 0.82 로 밀렸다.
-            #   전공은 역량이 많다고 나쁠 이유가 없으므로 분모에 전공 쪽 크기를 넣지 않는다.
-            "score": (len(exact) + FAMILY_WEIGHT * len(family)) / len(user) if user else 0.0,
+            # 전공 점수 = IDF 가중 커버리지. "사용자 태그의 무게 중 이 전공이 채운 무게의 비율". 계열 일치는 절반.
+            #   - 왜 분모에 전공 쪽 크기를 넣지 않나: 직무처럼 집합 코사인을 쓰면 역량이 '적은' 전공이 이긴다.
+            #     실측(9/15): "데이터 분석·통계" 에 식물생산과학부·의예과·화학부(역량 2개)가 1.0 공동 1위, 통계학과는 0.82.
+            #   - 왜 IDF 가중: 42개 전공이 가진 Data Analysis 와 3개만 가진 Signal Processing 을 같은 1점으로 세면
+            #     흔한 태그가 동점을 양산한다. 시험 계산(9/15): "신호처리·데이터분석" 에서 Data Analysis 만 있는
+            #     첨단융합학부가 0.50 → 0.12 로 내려가고, 희귀 역량을 갖춘 전공이 위로 온다.
+            #   태그가 전부 흔한 것뿐이면(분모가 작으면) 결과는 가중 전과 같다 — 해가 되는 경우가 없다.
+            "score": (sum(_weight(s) for s in exact) + FAMILY_WEIGHT * sum(_weight(s) for s in family))
+                     / sum(_weight(s) for s in user) if user else 0.0,
             # 동점 처리 — 매칭된 역량의 근거 과목 수. 같은 커버리지면 그 역량을 더 깊게 다루는 전공이 위로.
             #   (작업 가이드 B-3 "2차 기준". 통계학과는 Statistics 근거 과목이 19개, 식물생산과학부는 2개)
             "evidence_count": sum(len(develops[s]) for s in matched + covered_by),
