@@ -1,26 +1,44 @@
 {
   "skills": [
+    "ABAP",
+    "AMR",
     "AWS",
     "Agile",
     "Algorithm",
     "AngularJS",
+    "AutoCAD",
+    "Autonomous Driving",
     "Azure",
+    "BMS",
     "C",
     "C#",
     "C++",
+    "CATIA",
     "CI/CD",
+    "Cadence Spectre",
+    "Chemical Engineering",
     "Cloud",
+    "Communication",
     "Computer Architecture",
     "Computer Vision",
+    "Creo",
     "Data Analysis",
     "Data Modeling",
     "Data Structure",
     "Database",
     "Deep Learning",
     "DevOps",
+    "Digital Twin",
     "Docker",
+    "ERP",
+    "Electrical Engineering",
+    "Electrochemistry",
+    "FDTD",
+    "Fiori",
     "GCP",
     "Git",
+    "Inventor",
+    "JMP",
     "Java",
     "JavaScript",
     "Jenkins",
@@ -28,8 +46,14 @@
     "LLM",
     "LangChain",
     "LangGraph",
+    "LightTools",
+    "MATLAB",
     "MSA",
     "Machine Learning",
+    "Manufacturing",
+    "Materials Engineering",
+    "Mechanical Design",
+    "Mechanical Engineering",
     "NLP",
     "Network",
     "Node.js",
@@ -37,24 +61,44 @@
     "Operating Systems",
     "Optimization",
     "Oracle",
+    "PLC",
+    "PostgreSQL",
     "Problem Solving",
     "Programming",
     "Project Management",
     "Prompt Engineering",
+    "PyTorch",
     "Python",
+    "R",
     "RAG",
+    "ROS",
+    "ROS2",
     "React",
+    "Rheology",
+    "Robotics",
+    "S/4HANA",
+    "SAP",
+    "SEM",
+    "SPEOS",
     "SQL",
     "SVN",
     "Security",
+    "Setfos",
     "Signal Processing",
+    "Simulation",
+    "Simulink",
+    "SmartSpice",
     "Software Engineering",
+    "SolidWorks",
     "Spring",
     "Spring Boot",
     "Statistics",
+    "TensorFlow",
     "Terraform",
     "TypeScript",
-    "Vue.js"
+    "VBA",
+    "Vue.js",
+    "minitab"
   ],
   "is_a": {
     "Oracle": "Database",
@@ -96,7 +140,40 @@
     "LangChain": "Machine Learning",
     "LangGraph": "Machine Learning",
     "Prompt Engineering": "Machine Learning",
-    "Agile": "Project Management"
+    "Agile": "Project Management",
+    "PyTorch": "Deep Learning",
+    "TensorFlow": "Deep Learning",
+    "PostgreSQL": "Database",
+    "R": "Statistics",
+    "minitab": "Statistics",
+    "JMP": "Statistics",
+    "MATLAB": "Numerical Analysis",
+    "VBA": "Programming",
+    "BMS": "Electrochemistry",
+    "Rheology": "Materials Engineering",
+    "SEM": "Materials Engineering",
+    "CATIA": "Mechanical Design",
+    "Creo": "Mechanical Design",
+    "SolidWorks": "Mechanical Design",
+    "AutoCAD": "Mechanical Design",
+    "Inventor": "Mechanical Design",
+    "Simulink": "Simulation",
+    "FDTD": "Simulation",
+    "SPEOS": "Simulation",
+    "LightTools": "Simulation",
+    "Setfos": "Simulation",
+    "SmartSpice": "Electrical Engineering",
+    "Cadence Spectre": "Electrical Engineering",
+    "ROS": "Robotics",
+    "ROS2": "Robotics",
+    "Autonomous Driving": "Robotics",
+    "PLC": "Robotics",
+    "AMR": "Robotics",
+    "Digital Twin": "Manufacturing",
+    "SAP": "ERP",
+    "S/4HANA": "ERP",
+    "Fiori": "ERP",
+    "ABAP": "ERP"
   },
   "majors": [
     {
@@ -992,13 +1069,13 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
+        "Machine Learning",
         "Deep Learning",
         "LLM",
         "Prompt Engineering",
         "RAG",
         "LangChain",
-        "LangGraph",
-        "Machine Learning"
+        "LangGraph"
       ],
       "prefers": [
         "Git",
@@ -1013,6 +1090,12 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
+        "AMR",
+        "Robotics",
+        "Autonomous Driving",
+        "Machine Learning",
+        "Simulation",
+        "Digital Twin",
         "Java",
         "Spring",
         "React",
@@ -1030,7 +1113,9 @@
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
         "Cloud",
-        "Data Analysis"
+        "Manufacturing",
+        "Data Analysis",
+        "Optimization"
       ],
       "prefers": []
     },
@@ -1082,7 +1167,8 @@
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
         "Network",
-        "Operating Systems"
+        "Operating Systems",
+        "Cloud"
       ],
       "prefers": [
         "Security"
@@ -1095,6 +1181,8 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
+        "ABAP",
+        "Fiori",
         "SQL",
         "Java"
       ],
@@ -1112,10 +1200,31 @@
         "Java",
         "Python",
         "C#",
-        "React"
+        "React",
+        "Machine Learning"
       ],
       "prefers": [
         "LLM"
+      ]
+    },
+    {
+      "id": "1002127-convergence-engineer",
+      "role": "Convergence Engineer",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Manufacturing"
+      ],
+      "prefers": [
+        "AutoCAD",
+        "Inventor",
+        "Creo",
+        "SolidWorks",
+        "CATIA",
+        "PLC"
       ]
     },
     {
@@ -1130,6 +1239,33 @@
       ],
       "prefers": [
         "Oracle"
+      ]
+    },
+    {
+      "id": "1002046-sap-프로젝트-관리자-pm-im",
+      "role": "SAP 프로젝트 관리자(PM/IM)",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002046",
+      "requires": [
+        "Project Management"
+      ],
+      "prefers": [
+        "S/4HANA"
+      ]
+    },
+    {
+      "id": "1002046-sap-모듈-컨설턴트-운영",
+      "role": "SAP 모듈 컨설턴트 / 운영",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002046",
+      "requires": [
+        "SAP",
+        "S/4HANA"
+      ],
+      "prefers": [
+        "Fiori"
       ]
     },
     {
@@ -1191,6 +1327,18 @@
       "prefers": []
     },
     {
+      "id": "1001427-global-core-banking-business-analyst",
+      "role": "Global Core Banking Business Analyst",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001427",
+      "requires": [],
+      "prefers": [
+        "Cloud",
+        "Machine Learning"
+      ]
+    },
+    {
       "id": "1001371-infrastructure-architect",
       "role": "Infrastructure Architect",
       "company": "LG CNS",
@@ -1200,6 +1348,7 @@
         "Kubernetes"
       ],
       "prefers": [
+        "Cloud",
         "MSA"
       ]
     },
@@ -1214,9 +1363,12 @@
       ],
       "prefers": [
         "Database",
+        "Cloud",
         "AWS",
         "Azure",
-        "GCP"
+        "GCP",
+        "Machine Learning",
+        "Data Analysis"
       ]
     },
     {
@@ -1226,6 +1378,7 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1001371",
       "requires": [
+        "Cloud",
         "Terraform",
         "Jenkins",
         "Kubernetes"
@@ -1254,8 +1407,8 @@
       "url": "https://careers.lg.com/apply/detail?id=1000834",
       "requires": [],
       "prefers": [
-        "Deep Learning",
         "Machine Learning",
+        "Deep Learning",
         "Prompt Engineering"
       ]
     },
@@ -1272,7 +1425,20 @@
         "Agile",
         "React",
         "Spring",
-        "DevOps"
+        "DevOps",
+        "Cloud"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1000834-erp",
+      "role": "ERP",
+      "company": "LG CNS",
+      "career_type": "인턴",
+      "url": "https://careers.lg.com/apply/detail?id=1000834",
+      "requires": [
+        "ERP",
+        "Machine Learning"
       ],
       "prefers": []
     },
@@ -1282,7 +1448,9 @@
       "company": "HSAD",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002146",
-      "requires": [],
+      "requires": [
+        "Machine Learning"
+      ],
       "prefers": [
         "LLM",
         "SQL"
@@ -1296,8 +1464,17 @@
       "url": "https://careers.lg.com/apply/detail?id=1002117",
       "requires": [],
       "prefers": [
+        "Statistics",
+        "Optimization",
         "Python",
-        "C++"
+        "VBA",
+        "C++",
+        "SmartSpice",
+        "Cadence Spectre",
+        "SPEOS",
+        "LightTools",
+        "FDTD",
+        "Setfos"
       ]
     },
     {
@@ -1307,11 +1484,39 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002117",
       "requires": [
+        "Electrical Engineering",
+        "Algorithm",
         "C",
         "C++",
-        "Python"
+        "Python",
+        "MATLAB"
       ],
       "prefers": []
+    },
+    {
+      "id": "1002117-기구",
+      "role": "기구",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [],
+      "prefers": [
+        "Mechanical Design",
+        "Simulation",
+        "Python"
+      ]
+    },
+    {
+      "id": "1002117-광학",
+      "role": "광학",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [],
+      "prefers": [
+        "Simulation",
+        "Python"
+      ]
     },
     {
       "id": "1002118-panel-설계",
@@ -1321,8 +1526,17 @@
       "url": "https://careers.lg.com/apply/detail?id=1002118",
       "requires": [],
       "prefers": [
+        "Statistics",
+        "Optimization",
         "Python",
-        "C++"
+        "VBA",
+        "C++",
+        "SmartSpice",
+        "Cadence Spectre",
+        "SPEOS",
+        "LightTools",
+        "FDTD",
+        "Setfos"
       ]
     },
     {
@@ -1332,9 +1546,62 @@
       "career_type": "산학장학생",
       "url": "https://careers.lg.com/apply/detail?id=1002118",
       "requires": [
+        "Electrical Engineering",
+        "Algorithm",
         "C",
         "C++",
+        "Python",
+        "MATLAB"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002118-기구",
+      "role": "기구",
+      "company": "LG디스플레이",
+      "career_type": "산학장학생",
+      "url": "https://careers.lg.com/apply/detail?id=1002118",
+      "requires": [
+        "Mechanical Design",
+        "Simulation",
         "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002118-광학",
+      "role": "광학",
+      "company": "LG디스플레이",
+      "career_type": "산학장학생",
+      "url": "https://careers.lg.com/apply/detail?id=1002118",
+      "requires": [],
+      "prefers": [
+        "Simulation",
+        "Python"
+      ]
+    },
+    {
+      "id": "1002212-생산-제조-품질",
+      "role": "생산/제조/품질",
+      "company": "LG전자",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002212",
+      "requires": [],
+      "prefers": [
+        "Mechanical Engineering",
+        "Electrical Engineering"
+      ]
+    },
+    {
+      "id": "1002183-material-r-d",
+      "role": "Material R&D",
+      "company": "LG전자",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002183",
+      "requires": [
+        "Materials Engineering",
+        "Chemical Engineering",
+        "SEM"
       ],
       "prefers": []
     },
@@ -1357,8 +1624,11 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002176",
       "requires": [
+        "Machine Learning",
         "Deep Learning",
-        "Python"
+        "Python",
+        "PyTorch",
+        "TensorFlow"
       ],
       "prefers": []
     },
@@ -1369,6 +1639,7 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002176",
       "requires": [
+        "PyTorch",
         "Python",
         "C++"
       ],
@@ -1404,6 +1675,20 @@
         "Deep Learning",
         "Python"
       ],
+      "prefers": [
+        "Digital Twin"
+      ]
+    },
+    {
+      "id": "1002176-physical-ai",
+      "role": "Physical AI",
+      "company": "LG에너지솔루션",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002176",
+      "requires": [
+        "ROS",
+        "ROS2"
+      ],
       "prefers": []
     },
     {
@@ -1413,8 +1698,69 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002176",
       "requires": [
+        "Machine Learning",
         "Optimization",
-        "Python"
+        "Python",
+        "PyTorch",
+        "TensorFlow"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-cell개발-각형전지",
+      "role": "Cell개발(각형전지)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Chemical Engineering",
+        "Mechanical Engineering",
+        "Materials Engineering",
+        "Electrochemistry"
+      ],
+      "prefers": [
+        "Mechanical Design"
+      ]
+    },
+    {
+      "id": "1002075-pack개발-자동차",
+      "role": "Pack개발(자동차)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering"
+      ],
+      "prefers": [
+        "CATIA",
+        "Creo"
+      ]
+    },
+    {
+      "id": "1002075-원통형cell개발",
+      "role": "원통형Cell개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Simulation"
+      ],
+      "prefers": [
+        "Materials Engineering",
+        "Rheology"
+      ]
+    },
+    {
+      "id": "1002075-원통형pack개발",
+      "role": "원통형Pack개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Design",
+        "CATIA",
+        "Creo"
       ],
       "prefers": []
     },
@@ -1426,7 +1772,21 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "C",
+        "Electrical Engineering",
         "Statistics"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-cell개발-ess",
+      "role": "Cell개발(ESS)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Chemical Engineering",
+        "Data Analysis"
       ],
       "prefers": []
     },
@@ -1437,7 +1797,11 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
-        "Data Analysis"
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "Mechanical Design",
+        "Data Analysis",
+        "PLC"
       ],
       "prefers": [
         "Programming"
@@ -1454,7 +1818,22 @@
         "Problem Solving"
       ],
       "prefers": [
+        "Mechanical Design",
         "Programming"
+      ]
+    },
+    {
+      "id": "1002075-검사기술-전극",
+      "role": "검사기술(전극)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrical Engineering",
+        "Mechanical Engineering"
+      ],
+      "prefers": [
+        "Deep Learning"
       ]
     },
     {
@@ -1464,10 +1843,83 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "Machine Learning",
         "Deep Learning",
         "Python"
       ],
       "prefers": []
+    },
+    {
+      "id": "1002075-공정기술-원통형",
+      "role": "공정기술(원통형)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "minitab",
+        "Python",
+        "R"
+      ]
+    },
+    {
+      "id": "1002075-원통형dx",
+      "role": "원통형DX",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "R",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-제품기술-원통형",
+      "role": "제품기술(원통형)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Data Analysis"
+      ],
+      "prefers": [
+        "minitab"
+      ]
+    },
+    {
+      "id": "1002075-공정기술-pack",
+      "role": "공정기술(Pack)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Manufacturing"
+      ],
+      "prefers": [
+        "AutoCAD",
+        "SolidWorks",
+        "CATIA",
+        "Creo",
+        "minitab",
+        "SAP"
+      ]
+    },
+    {
+      "id": "1002075-설비기술-pack-제어",
+      "role": "설비기술(Pack, 제어)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "SolidWorks",
+        "PLC"
+      ],
+      "prefers": [
+        "Data Analysis"
+      ]
     },
     {
       "id": "1002075-제조지능화-디지털트윈",
@@ -1476,10 +1928,27 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "Mechanical Design",
         "Machine Learning",
         "Deep Learning"
       ],
       "prefers": []
+    },
+    {
+      "id": "1002075-제조지능화-로봇",
+      "role": "제조지능화(로봇)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Python",
+        "Robotics"
+      ],
+      "prefers": [
+        "ROS",
+        "ROS2",
+        "Digital Twin"
+      ]
     },
     {
       "id": "1002075-제조지능화-원격",
@@ -1496,6 +1965,70 @@
       "prefers": []
     },
     {
+      "id": "1002075-공무-생산인프라-에너지",
+      "role": "공무/생산인프라(에너지)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering",
+        "Electrical Engineering"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-설비기술-fa",
+      "role": "설비기술(FA)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering",
+        "Electrical Engineering"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-cell기반기술",
+      "role": "Cell기반기술",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Simulation",
+        "Machine Learning"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-소재기술",
+      "role": "소재기술",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Chemical Engineering"
+      ],
+      "prefers": [
+        "Communication"
+      ]
+    },
+    {
+      "id": "1002075-양극재기술",
+      "role": "양극재기술",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Materials Engineering",
+        "Chemical Engineering",
+        "Electrochemistry"
+      ],
+      "prefers": []
+    },
+    {
       "id": "1002075-ai진단솔루션개발",
       "role": "AI진단솔루션개발",
       "company": "LG에너지솔루션",
@@ -1505,7 +2038,10 @@
         "Python",
         "Data Analysis"
       ],
-      "prefers": []
+      "prefers": [
+        "PostgreSQL",
+        "PyTorch"
+      ]
     },
     {
       "id": "1002075-bms_sox-알고리즘-설계",
@@ -1514,11 +2050,26 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "MATLAB",
+        "Simulink",
         "Python"
       ],
       "prefers": [
         "C"
       ]
+    },
+    {
+      "id": "1002075-bms_sw개발",
+      "role": "BMS_SW개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "BMS",
+        "MATLAB",
+        "Simulink"
+      ],
+      "prefers": []
     },
     {
       "id": "1002075-data-engineering",
@@ -1527,10 +2078,12 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "Cloud",
         "C",
         "JavaScript",
         "Python",
-        "Database"
+        "Database",
+        "PostgreSQL"
       ],
       "prefers": [
         "Terraform",
@@ -1540,12 +2093,27 @@
       ]
     },
     {
+      "id": "1002075-pack선행개발",
+      "role": "Pack선행개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering"
+      ],
+      "prefers": [
+        "Mechanical Design"
+      ]
+    },
+    {
       "id": "1002075-구조-시뮬레이션",
       "role": "구조 시뮬레이션",
       "company": "LG에너지솔루션",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
-      "requires": [],
+      "requires": [
+        "Simulation"
+      ],
       "prefers": [
         "Machine Learning",
         "Deep Learning"
@@ -1557,7 +2125,9 @@
       "company": "LG에너지솔루션",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
-      "requires": [],
+      "requires": [
+        "Simulation"
+      ],
       "prefers": [
         "Machine Learning",
         "Deep Learning"
@@ -1569,11 +2139,133 @@
       "company": "LG에너지솔루션",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
-      "requires": [],
+      "requires": [
+        "Simulation"
+      ],
       "prefers": [
         "Machine Learning",
         "Deep Learning"
       ]
+    },
+    {
+      "id": "1002075-진단기술개발",
+      "role": "진단기술개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Data Analysis",
+        "MATLAB",
+        "Simulink"
+      ],
+      "prefers": [
+        "Materials Engineering",
+        "Rheology"
+      ]
+    },
+    {
+      "id": "1002075-차세대전지-개발-소듐이온전지",
+      "role": "차세대전지 개발(소듐이온전지)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry"
+      ],
+      "prefers": [
+        "Chemical Engineering"
+      ]
+    },
+    {
+      "id": "1002075-특허-분석-개발-관리",
+      "role": "특허 분석/개발/관리",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "BMS",
+        "Mechanical Engineering"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002193-경력-반도체-기판-제품개발",
+      "role": "[경력] 반도체 기판 제품개발",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002193",
+      "requires": [],
+      "prefers": [
+        "SAP",
+        "Materials Engineering",
+        "JMP",
+        "Python"
+      ]
+    },
+    {
+      "id": "1002193-경력-반도체-기판-생산기술",
+      "role": "[경력] 반도체 기판 생산기술",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002193",
+      "requires": [],
+      "prefers": [
+        "JMP",
+        "Python"
+      ]
+    },
+    {
+      "id": "1001884-경력-반도체-기판-생산기술",
+      "role": "[경력] 반도체 기판 생산기술",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001884",
+      "requires": [
+        "JMP",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1001884-경력-반도체-기판-제품개발",
+      "role": "[경력] 반도체 기판 제품개발",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001884",
+      "requires": [
+        "SAP",
+        "Materials Engineering"
+      ],
+      "prefers": [
+        "Python",
+        "JMP"
+      ]
+    },
+    {
+      "id": "1002196-b2b영업",
+      "role": "B2B영업",
+      "company": "LG유플러스",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002196",
+      "requires": [
+        "Machine Learning",
+        "Cloud",
+        "Data Analysis"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002196-b2b영업-글로벌",
+      "role": "B2B영업(글로벌)",
+      "company": "LG유플러스",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002196",
+      "requires": [
+        "Machine Learning",
+        "Cloud",
+        "Data Analysis"
+      ],
+      "prefers": []
     },
     {
       "id": "1001202-software-architect",
@@ -1583,6 +2275,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1001202",
       "requires": [
         "Kubernetes",
+        "Cloud",
         "CI/CD",
         "Python",
         "TypeScript",
@@ -1597,6 +2290,7 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002204",
       "requires": [
+        "Cloud",
         "DevOps",
         "Docker",
         "Kubernetes",

@@ -1,103 +1,27 @@
-17	AI
 11	Excel
 10	영어
 8	TOEIC Speaking
 8	OPIc
 8	중국어
 6	PowerPoint
-6	기계공학
-5	시뮬레이션
-5	화학
-5	전기화학
-4	전기
-4	Creo
-4	SAP
 4	Salesforce
-4	Pytorch
 4	산업공학
-4	Simulink
-4	JMP
 4	Confluence
 4	정보보안기사
-3	로봇 제어
-3	Container
-3	기계
 3	AX
 3	일본어
-3	Public Cloud
-3	Matlab
-3	3D CAD
-3	화학공학
-3	CATIA
-3	3D 설계 Tool
 3	전기 관련 자격증
-3	전기 공학
 3	ISMS-P
 2	MCP
-2	자율주행
-2	디지털 트윈
-2	Robotics SW
 2	Robot Foundation Model
-2	Fiori
-2	AutoCAD
-2	SolidWorks
-2	PLC 제어
-2	S/4HANA Public Cloud
-2	S/4HANA Cloud Private
-2	Hybrid Cloud
 2	자동화 도구
-2	Serverless
-2	ERP
-2	실험계획법
-2	최적화 방법론
-2	VBA
-2	SmartSpice
-2	Cadence Spectre
-2	SPEOS
-2	LightTools
-2	FDTD
-2	Setfos
-2	회로 설계
-2	Display 제품 회로 설계
-2	알고리즘 개발
-2	회로 시뮬레이션 Tool
-2	CAE
-2	Simulator
-2	메카트로닉스
-2	3D 설계
-2	재료공학
-2	SEM
-2	Tensorflow
-2	Digital Twin
-2	ROS
-2	ROS2
-2	기구설계
-2	설계최적화
 2	부품 개발
 2	제2외국어 회화 능통
-2	전기 화학
-2	Simulation
-2	고분자 소재
-2	유변학
 2	PPT
 2	컴퓨터공학
-2	Data 분석
 2	지표 분석
 2	협업
-2	CAD
-2	전기공학
-2	전자공학
 2	엑셀
-2	minitab
-2	R
-2	기계 공학
-2	전자 공학
-2	PostgreSQL
-2	MATLAB
-2	BMS
-2	Cloud Infrastructure
-2	IaC
-2	빅데이터 기반 예측 모델링
 2	FCBGA
 2	FCCSP
 2	CSP
@@ -111,33 +35,25 @@
 2	노광기술
 2	도금기술
 2	표면처리기술
-2	원소재 개발
-2	Big Data
 2	MS Teams
 2	Word
 2	CISSP
 2	전산 회계 관련 자격증
 1	Function Calling
 1	Vector DB
-1	AMR
-1	로봇팔
 1	AI Transformation
 1	Digital Transformation
-1	Smart Factory
 1	Data Governance
-1	최적화 기법
 1	데이터/AI 관련 자격증
 1	AI 기반 개발 도구
 1	생성형 AI 기반 개발 도구
 1	AI Agent 기술
 1	Agent
 1	Cloud Architecture
-1	Virtualization
 1	Automation Tools
 1	Infrastructure Automation
 1	Cloud Operations
 1	SAP ERP
-1	ABAP
 1	데이터 기술
 1	Web UI
 1	3D UI
@@ -145,11 +61,8 @@
 1	데이터베이스 기술
 1	AI 기반 개발 기술
 1	건축
-1	설비
 1	냉공조
 1	데이터센터 설비
-1	Inventor
-1	Catia
 1	B2B Marketing
 1	Content Planning
 1	Storytelling
@@ -158,7 +71,6 @@
 1	서버
 1	스토리지
 1	백업
-1	가상화
 1	제안
 1	견적
 1	입찰
@@ -172,7 +84,6 @@
 1	Conversion
 1	GSI
 1	Pre-Sales
-1	S/4HANA
 1	SAP ECC6.0
 1	SD
 1	MM
@@ -239,7 +150,6 @@
 1	Enterprise Architecture
 1	Cloud Native
 1	데이터 표준화
-1	빅데이터
 1	HelmChart
 1	Gitlab
 1	ArgoCD
@@ -401,7 +311,6 @@
 1	외국어 (중국어)
 1	이차전지
 1	재료 공학
-1	화학 공학
 1	화공계열 전공
 1	신소재 전공
 1	3D Tool
@@ -409,7 +318,6 @@
 1	전력변환기기 동작원리
 1	소통
 1	제어
-1	PLC
 1	광학
 1	통계 소프트웨어
 1	머신 비전
@@ -434,7 +342,6 @@
 1	Origin
 1	AI 프로그램
 1	전기화학 분석장비 (EIS)
-1	공정기술
 1	공정 데이터 분석
 1	기계기사
 1	전기기사
@@ -445,11 +352,8 @@
 1	6시그마 BB
 1	3DCS
 1	GD&T
-1	AutoCad
-1	Minitab
 1	MES
 1	Auto CAD
-1	Solidworks
 1	PC 제어
 1	지멘스
 1	미쓰비시
@@ -488,13 +392,10 @@
 1	에너지관리기사
 1	기계/전기/안전/산업공학 자격증
 1	물리모델링
-1	인공지능
 1	데이터 사이언스
 1	Lab Automation
 1	소재 데이터 분석
 1	재료 기계
-1	재료
-1	소재
 1	MongoDB
 1	Apache Spark
 1	Delta Lake
