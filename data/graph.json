@@ -1,26 +1,43 @@
 {
   "skills": [
+    "ABAP",
+    "AMR",
     "AWS",
     "Agile",
     "Algorithm",
     "AngularJS",
+    "AutoCAD",
+    "Autonomous Driving",
     "Azure",
+    "BMS",
     "C",
     "C#",
     "C++",
+    "CATIA",
     "CI/CD",
+    "Cadence Spectre",
+    "Chemical Engineering",
     "Cloud",
+    "Communication",
     "Computer Architecture",
     "Computer Vision",
+    "Creo",
     "Data Analysis",
     "Data Modeling",
-    "Data Structure",
     "Database",
     "Deep Learning",
     "DevOps",
+    "Digital Twin",
     "Docker",
+    "ERP",
+    "Electrical Engineering",
+    "Electrochemistry",
+    "FDTD",
+    "Fiori",
     "GCP",
     "Git",
+    "Inventor",
+    "JMP",
     "Java",
     "JavaScript",
     "Jenkins",
@@ -28,8 +45,14 @@
     "LLM",
     "LangChain",
     "LangGraph",
+    "LightTools",
+    "MATLAB",
     "MSA",
     "Machine Learning",
+    "Manufacturing",
+    "Materials Engineering",
+    "Mechanical Design",
+    "Mechanical Engineering",
     "NLP",
     "Network",
     "Node.js",
@@ -37,24 +60,44 @@
     "Operating Systems",
     "Optimization",
     "Oracle",
+    "PLC",
+    "PostgreSQL",
     "Problem Solving",
     "Programming",
     "Project Management",
     "Prompt Engineering",
+    "PyTorch",
     "Python",
+    "R",
     "RAG",
+    "ROS",
+    "ROS2",
     "React",
+    "Rheology",
+    "Robotics",
+    "S/4HANA",
+    "SAP",
+    "SEM",
+    "SPEOS",
     "SQL",
     "SVN",
     "Security",
+    "Setfos",
     "Signal Processing",
+    "Simulation",
+    "Simulink",
+    "SmartSpice",
     "Software Engineering",
+    "SolidWorks",
     "Spring",
     "Spring Boot",
     "Statistics",
+    "TensorFlow",
     "Terraform",
     "TypeScript",
-    "Vue.js"
+    "VBA",
+    "Vue.js",
+    "minitab"
   ],
   "is_a": {
     "Oracle": "Database",
@@ -96,7 +139,40 @@
     "LangChain": "Machine Learning",
     "LangGraph": "Machine Learning",
     "Prompt Engineering": "Machine Learning",
-    "Agile": "Project Management"
+    "Agile": "Project Management",
+    "PyTorch": "Deep Learning",
+    "TensorFlow": "Deep Learning",
+    "PostgreSQL": "Database",
+    "R": "Statistics",
+    "minitab": "Statistics",
+    "JMP": "Statistics",
+    "MATLAB": "Numerical Analysis",
+    "VBA": "Programming",
+    "BMS": "Electrochemistry",
+    "Rheology": "Materials Engineering",
+    "SEM": "Materials Engineering",
+    "CATIA": "Mechanical Design",
+    "Creo": "Mechanical Design",
+    "SolidWorks": "Mechanical Design",
+    "AutoCAD": "Mechanical Design",
+    "Inventor": "Mechanical Design",
+    "Simulink": "Simulation",
+    "FDTD": "Simulation",
+    "SPEOS": "Simulation",
+    "LightTools": "Simulation",
+    "Setfos": "Simulation",
+    "SmartSpice": "Electrical Engineering",
+    "Cadence Spectre": "Electrical Engineering",
+    "ROS": "Robotics",
+    "ROS2": "Robotics",
+    "Autonomous Driving": "Robotics",
+    "PLC": "Robotics",
+    "AMR": "Robotics",
+    "Digital Twin": "Manufacturing",
+    "SAP": "ERP",
+    "S/4HANA": "ERP",
+    "Fiori": "ERP",
+    "ABAP": "ERP"
   },
   "majors": [
     {
@@ -107,6 +183,9 @@
         "Statistics": [
           "간호통계프로그래밍개론",
           "간호통계학"
+        ],
+        "NLP": [
+          "인간관계와 의사소통"
         ]
       }
     },
@@ -116,8 +195,16 @@
       "name": "간호학과",
       "develops": {
         "Statistics": [
-          "간호통계학",
+          "간호통계학"
+        ],
+        "Data Analysis": [
           "간호통계프로그래밍개론"
+        ],
+        "Project Management": [
+          "간호관리학"
+        ],
+        "NLP": [
+          "간호정보학및실습"
         ]
       }
     },
@@ -126,12 +213,18 @@
       "school": "서울대학교",
       "name": "건설환경도시공학부",
       "develops": {
+        "Project Management": [
+          "건설 공정관리",
+          "건설계획 및 관리",
+          "건설시스템종합설계"
+        ],
         "Data Analysis": [
           "건설환경 통계학"
         ],
-        "Project Management": [
-          "건설 공정관리",
-          "건설계획 및 관리"
+        "Mechanical Engineering": [
+          "구조해석 1",
+          "구조해석 2",
+          "구조시스템계획"
         ]
       }
     },
@@ -140,21 +233,20 @@
       "school": "서울대학교",
       "name": "건축학과",
       "develops": {
-        "Data Analysis": [
-          "건축환경시스템",
-          "건축구조시스템"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--건축학과(건축공학전공)",
-      "school": "서울대학교",
-      "name": "건축학과(건축공학전공)",
-      "develops": {
-        "Project Management": [
-          "건축시공 및 건설관리 입문",
-          "건설경영",
-          "건설관리"
+        "Mechanical Engineering": [
+          "건축재료역학 1"
+        ],
+        "Simulation": [
+          "건축환경시스템"
+        ],
+        "Computer Architecture": [
+          "건축과 컴퓨터"
+        ],
+        "Manufacturing": [
+          "기초스튜디오 1",
+          "기초스튜디오 2",
+          "기초스튜디오 3",
+          "기초스튜디오 4"
         ]
       }
     },
@@ -163,25 +255,8 @@
       "school": "서울대학교",
       "name": "건축학과(건축학전공(5년))",
       "develops": {
-        "Project Management": [
-          "건축기획",
-          "건축법과 제도"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--경영대학",
-      "school": "서울대학교",
-      "name": "경영대학",
-      "develops": {
-        "Data Analysis": [
-          "마케팅 애널리틱스"
-        ],
-        "Project Management": [
-          "전략적 브랜드 관리"
-        ],
-        "Statistics": [
-          "마케팅조사론"
+        "Materials Engineering": [
+          "건축재료계획"
         ]
       }
     },
@@ -190,16 +265,15 @@
       "school": "서울대학교",
       "name": "경영학과",
       "develops": {
-        "Project Management": [
-          "벤처창업론",
-          "벤처창업과 투자",
-          "스타트업 해커톤 캠프",
-          "창업론 실습 1",
-          "창업론 실습 2"
-        ],
         "Data Analysis": [
           "비즈니스 애널리틱스 개론",
           "경영빅데이터분석개론"
+        ],
+        "Statistics": [
+          "재무와 기계학습"
+        ],
+        "Project Management": [
+          "스타트업 해커톤 캠프"
         ]
       }
     },
@@ -212,8 +286,27 @@
           "경제통계학"
         ],
         "Data Analysis": [
-          "경제분석 및 예측과 데이터지능 1",
-          "경제 분석을 위한 데이터 사이언스"
+          "경제 분석을 위한 데이터 사이언스",
+          "경제분석 및 예측과 데이터지능 1"
+        ]
+      }
+    },
+    {
+      "id": "서울대학교--공예과",
+      "school": "서울대학교",
+      "name": "공예과",
+      "develops": {
+        "Manufacturing": [
+          "기초 금속공예",
+          "기초 도예",
+          "목공예",
+          "물레성형 기초",
+          "자유성형기법 1",
+          "자유성형기법 2",
+          "금속공예 1",
+          "금속공예 2",
+          "금속공예 3",
+          "금속공예 4"
         ]
       }
     },
@@ -225,9 +318,24 @@
         "Statistics": [
           "교육연구를 위한 통계방법"
         ],
+        "Data Analysis": [
+          "빅데이터와 학습자중심교육"
+        ],
+        "Machine Learning": [
+          "인공지능기반교육"
+        ],
         "Project Management": [
-          "학교와 학급경영",
-          "교육조직과 성장"
+          "학교와 학급경영"
+        ]
+      }
+    },
+    {
+      "id": "서울대학교--국악과",
+      "school": "서울대학교",
+      "name": "국악과",
+      "develops": {
+        "Project Management": [
+          "국악공연기획"
         ]
       }
     },
@@ -236,18 +344,48 @@
       "school": "서울대학교",
       "name": "기계공학부",
       "develops": {
+        "Mechanical Engineering": [
+          "기계공학개론",
+          "유체역학",
+          "응용유체역학",
+          "열전달",
+          "열역학",
+          "역학과 파동",
+          "동역학",
+          "메카트로닉스"
+        ],
+        "Mechanical Design": [
+          "기계제품설계",
+          "기계시스템설계 1",
+          "기계시스템설계 2"
+        ],
+        "Robotics": [
+          "로봇공학입문",
+          "로봇 비전"
+        ],
+        "Manufacturing": [
+          "재료와 제조공정",
+          "스마트 제조 실험",
+          "마이크로나노 가공생산"
+        ],
         "Optimization": [
           "최적설계"
         ],
-        "Machine Learning": [
-          "컴퓨터시뮬레이션과 머신러닝",
-          "기계공학을 위한 머신러닝"
-        ],
-        "Data Analysis": [
-          "스마트 제조 실험"
-        ],
-        "Computer Vision": [
-          "로봇 비전"
+        "Simulation": [
+          "컴퓨터시뮬레이션과 머신러닝"
+        ]
+      }
+    },
+    {
+      "id": "서울대학교--노어노문학과",
+      "school": "서울대학교",
+      "name": "노어노문학과",
+      "develops": {
+        "NLP": [
+          "러시아어학개론",
+          "러시아어 음성학: 발음과 억양",
+          "러시아어교육론",
+          "러시아어교재연구 및 지도법"
         ]
       }
     },
@@ -258,11 +396,19 @@
       "develops": {
         "Data Analysis": [
           "경제통계학",
-          "농경제계량분석"
+          "농경제계량분석",
+          "경제수학"
         ],
         "Statistics": [
-          "경제통계학",
-          "농경제계량분석"
+          "경제통계학"
+        ],
+        "Project Management": [
+          "농식품 공급망 관리 ",
+          "농산업경영실습"
+        ],
+        "Digital Twin": [
+          "디지털 농식품 경제학",
+          "농식품 디지털 경영 및 e-비즈니스"
         ]
       }
     },
@@ -273,31 +419,38 @@
       "develops": {
         "Statistics": [
           "통계학개론 및 실습"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--디자인과",
-      "school": "서울대학교",
-      "name": "디자인과",
-      "develops": {
-        "Project Management": [
-          "브랜드디자인프로젝트2",
-          "미디어디자인프로젝트2",
-          "UI,UX디자인프로젝트1"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--물리?천문학부",
-      "school": "서울대학교",
-      "name": "물리?천문학부",
-      "develops": {
-        "Data Analysis": [
-          "열과 통계물리"
         ],
-        "Signal Processing": [
-          "전자기파와 광학"
+        "Data Analysis": [
+          "4차 산업혁명과 농업 I"
+        ],
+        "Programming": [
+          "컴퓨터프로그래밍개론"
+        ],
+        "Machine Learning": [
+          "식품·동물생명공학개론"
+        ]
+      }
+    },
+    {
+      "id": "서울대학교--독어교육과",
+      "school": "서울대학교",
+      "name": "독어교육과",
+      "develops": {
+        "NLP": [
+          "독어번역연습",
+          "독어발음 및 듣기지도",
+          "기초독문법"
+        ]
+      }
+    },
+    {
+      "id": "서울대학교--동양화과",
+      "school": "서울대학교",
+      "name": "동양화과",
+      "develops": {
+        "Materials Engineering": [
+          "회화재료와 기법",
+          "한지제작기법"
         ]
       }
     },
@@ -308,6 +461,14 @@
       "develops": {
         "Data Analysis": [
           "전산천문학"
+        ],
+        "Simulation": [
+          "천문관측 및 실험1",
+          "천문관측 및 실험2"
+        ],
+        "Statistics": [
+          "천체물리학개론1",
+          "천체물리학개론2"
         ]
       }
     },
@@ -320,12 +481,8 @@
           "농업인공지능개론",
           "기계학습 기초 및 바이오시스템공학 응용"
         ],
-        "Data Analysis": [
-          "생체물성공학 및 실험",
-          "바이오소재기기분석"
-        ],
-        "Statistics": [
-          "생체역학 및 실험"
+        "Mechanical Engineering": [
+          "유체역학 및 기계"
         ]
       }
     },
@@ -335,8 +492,11 @@
       "name": "사회교육과",
       "develops": {
         "Project Management": [
-          "사회문화교육연습",
+          "사회과 수업 연구",
           "사회과 교재연구 및 지도법"
+        ],
+        "Statistics": [
+          "경제와 사회"
         ]
       }
     },
@@ -347,6 +507,12 @@
       "develops": {
         "Data Analysis": [
           "AI로 배우는 사회복지데이터분석"
+        ],
+        "Statistics": [
+          "사회복지조사"
+        ],
+        "Project Management": [
+          "사회복지프로그램 개발과 평가"
         ]
       }
     },
@@ -358,19 +524,9 @@
         "Data Analysis": [
           "사회연구를 위한 데이터과학",
           "소셜 빅데이터 조사분석"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--산림과학부",
-      "school": "서울대학교",
-      "name": "산림과학부",
-      "develops": {
-        "Data Analysis": [
-          "산림경관조사 및 분석"
         ],
-        "Project Management": [
-          "산림정책학 및 실습"
+        "Statistics": [
+          "사회조사방법"
         ]
       }
     },
@@ -382,22 +538,20 @@
         "Data Analysis": [
           "데이터관리와 분석",
           "데이터마이닝",
-          "빅데이터 산업응용",
+          "빅데이터 산업응용"
+        ],
+        "Statistics": [
           "산업공학통계"
         ],
         "Optimization": [
           "최적화알고리즘",
           "최적화모형 및 응용"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--생명과학부",
-      "school": "서울대학교",
-      "name": "생명과학부",
-      "develops": {
-        "Data Analysis": [
-          "생물정보학개론"
+        ],
+        "Simulation": [
+          "시뮬레이션"
+        ],
+        "Project Management": [
+          "기술경영 프로젝트(연합)"
         ]
       }
     },
@@ -408,9 +562,6 @@
       "develops": {
         "Data Analysis": [
           "소비자빅데이터분석"
-        ],
-        "Project Management": [
-          "소비자지역연계프로젝트"
         ]
       }
     },
@@ -437,9 +588,15 @@
         "Optimization": [
           "최적화의 수학적 이론 및 계산"
         ],
+        "Machine Learning": [
+          "심층신경망의 수학적 기초"
+        ],
         "Numerical Analysis": [
           "수치해석개론",
           "수치선형대수"
+        ],
+        "Data Analysis": [
+          "수학적 모델링 및 전산실험"
         ]
       }
     },
@@ -458,9 +615,14 @@
       "school": "서울대학교",
       "name": "수의학과",
       "develops": {
-        "Project Management": [
-          "수의학과 창업",
-          "동물병원 경영학"
+        "Statistics": [
+          "수의임상병리학"
+        ],
+        "Data Analysis": [
+          "수의진단검사의학 개론"
+        ],
+        "Machine Learning": [
+          "수의생물정보학"
         ]
       }
     },
@@ -471,6 +633,9 @@
       "develops": {
         "Statistics": [
           "확률과 통계",
+          "데이터분석과 통계교육"
+        ],
+        "Data Analysis": [
           "데이터분석과 통계교육"
         ]
       }
@@ -489,8 +654,8 @@
         "Cloud": [
           "스마트시스템 클라우드 컴퓨팅"
         ],
-        "Algorithm": [
-          "스마트시스템 자료구조와 알고리즘"
+        "Simulation": [
+          "식물모델링 및 시뮬레이션"
         ]
       }
     },
@@ -499,9 +664,6 @@
       "school": "서울대학교",
       "name": "식물생산과학부",
       "develops": {
-        "Data Analysis": [
-          "산업인력개발 통계분석 및 실습"
-        ],
         "Statistics": [
           "실험통계학"
         ]
@@ -524,6 +686,10 @@
       "develops": {
         "Data Analysis": [
           "식품영양연구를 위한 데이터사이언스 및 실습"
+        ],
+        "Project Management": [
+          "식품영양산업연구 인턴십1",
+          "식품영양산업연구 인턴십2"
         ]
       }
     },
@@ -534,6 +700,14 @@
       "develops": {
         "Statistics": [
           "심리통계학"
+        ],
+        "Data Analysis": [
+          "심리학과 수학",
+          "심리측정과 검사",
+          "인간 뇌이미징의 데이터사이언스"
+        ],
+        "Machine Learning": [
+          "응용실험심리학"
         ]
       }
     },
@@ -544,9 +718,6 @@
       "develops": {
         "Statistics": [
           "응용약학통계학"
-        ],
-        "Project Management": [
-          "약학 인재를 위한 기업가 정신과 창업"
         ]
       }
     },
@@ -559,6 +730,12 @@
           "커뮤니케이션 데이터 분석",
           "데이터 저널리즘 연습",
           "데이터 저널리즘"
+        ],
+        "Statistics": [
+          "커뮤니케이션 양적연구방법론"
+        ],
+        "Machine Learning": [
+          "AI와 미디어"
         ]
       }
     },
@@ -570,16 +747,48 @@
         "Data Analysis": [
           "언어데이터과학",
           "언어학을 위한 통계"
+        ],
+        "NLP": [
+          "언어와 정보처리",
+          "컴퓨터언어학"
         ]
       }
     },
     {
-      "id": "서울대학교--영어교육과",
+      "id": "서울대학교--에너지자원공학과",
       "school": "서울대학교",
-      "name": "영어교육과",
+      "name": "에너지자원공학과",
       "develops": {
+        "Chemical Engineering": [
+          "에너지자원전기화학",
+          "에너지자원물리화학 1",
+          "에너지자원물리화학 2",
+          "에너지자원처리공학",
+          "에너지소재열역학"
+        ],
+        "Data Analysis": [
+          "에너지 데이터 사이언스"
+        ],
         "Project Management": [
-          "영어교과교재 및 연구법"
+          "에너지사업 타당성평가",
+          "에너지자원공학설계"
+        ]
+      }
+    },
+    {
+      "id": "서울대학교--원자핵공학과",
+      "school": "서울대학교",
+      "name": "원자핵공학과",
+      "develops": {
+        "Simulation": [
+          "핵공학 시뮬레이션 실습",
+          "핵재료 시뮬레이션 입문"
+        ],
+        "Mechanical Engineering": [
+          "열역학 및 원자력시스템"
+        ],
+        "Numerical Analysis": [
+          "수치해석기초"
         ]
       }
     },
@@ -588,29 +797,19 @@
       "school": "서울대학교",
       "name": "융합학습과학전공",
       "develops": {
-        "Data Analysis": [
-          "학습과학을 위한 데이터 시각화",
-          "학습연구를 위한 통계방법",
-          "학습데이터과학"
-        ],
         "Machine Learning": [
           "학습과학과 기계학습 ",
           "AI 학습평가시스템",
-          "AI 학습플랫폼"
+          "인공지능 입문 ",
+          "AI 학습플랫폼",
+          "인공지능과 수학학습"
+        ],
+        "Data Analysis": [
+          "학습데이터과학",
+          "학습과학을 위한 데이터 시각화"
         ],
         "Statistics": [
           "학습연구를 위한 통계방법"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--음악대학",
-      "school": "서울대학교",
-      "name": "음악대학",
-      "develops": {
-        "Project Management": [
-          "공연제작워크숍",
-          "공연현장실습"
         ]
       }
     },
@@ -619,25 +818,21 @@
       "school": "서울대학교",
       "name": "응용생물화학부",
       "develops": {
-        "Data Analysis": [
-          "농업환경화학",
-          "분석화학",
-          "분석화학 및 실험"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--의류학과",
-      "school": "서울대학교",
-      "name": "의류학과",
-      "develops": {
-        "Data Analysis": [
-          "패션소비자분석",
-          "패션리테일링"
+        "Chemical Engineering": [
+          "고급응용생명화학",
+          "유기화학 1",
+          "유기화학 2",
+          "유기반응 및 합성화학",
+          "물리화학",
+          "생화학",
+          "분석화학"
         ],
-        "Project Management": [
-          "패션산업인턴십",
-          "패션컬렉션"
+        "Data Analysis": [
+          "응용생물학논문연구 1",
+          "응용생물학논문연구 2"
+        ],
+        "Statistics": [
+          "분석화학 및 실험"
         ]
       }
     },
@@ -659,8 +854,27 @@
       "school": "서울대학교",
       "name": "재료공학부",
       "develops": {
+        "Materials Engineering": [
+          "재료공학원리",
+          "재료기계학습",
+          "재료공정통계분석 및 설계",
+          "재료구조분석",
+          "재료의 기계적 거동",
+          "재료열역학"
+        ],
+        "Chemical Engineering": [
+          "현대재료물리화학",
+          "유기재료화학",
+          "응용전기화학",
+          "재료물리화학"
+        ],
         "Data Analysis": [
+          "재료기계학습",
           "재료공정통계분석 및 설계"
+        ],
+        "Simulation": [
+          "재료종합설계",
+          "재료수치해석"
         ]
       }
     },
@@ -672,26 +886,32 @@
         "Algorithm": [
           "알고리즘의 기초"
         ],
-        "Computer Architecture": [
-          "컴퓨터조직론"
-        ],
         "Data Analysis": [
-          "기계학습 기초"
-        ],
-        "Deep Learning": [
-          "딥러닝의 기초"
-        ],
-        "Machine Learning": [
-          "기계학습 기초"
-        ],
-        "Network": [
-          "네트워크 프로토콜 설 계 및 실습"
-        ],
-        "Signal Processing": [
+          "신호 및 시스템",
           "디지털신호처리의 기초"
         ],
-        "Software Engineering": [
-          "프로그래밍방법론"
+        "Deep Learning": [
+          "딥러닝의 기초",
+          "기계학습 기초"
+        ],
+        "Computer Vision": [
+          "컴퓨터비전의 기초"
+        ],
+        "Programming": [
+          "프로그래밍방법론",
+          "컴퓨터 시스템 프로그래밍"
+        ],
+        "Simulation": [
+          "전기공학설계프로젝트"
+        ],
+        "Robotics": [
+          "로봇공학개론"
+        ],
+        "Electrical Engineering": [
+          "전기.정보공학개론",
+          "전기기기 및 제어",
+          "전력전자공학",
+          "전력 및 에너지시스템의 기초"
         ]
       }
     },
@@ -702,6 +922,10 @@
       "develops": {
         "Data Analysis": [
           "국제정치 자료분석"
+        ],
+        "Statistics": [
+          "무역과 투자의 국제정치경제",
+          "금융과 발전의 국제정치경제"
         ]
       }
     },
@@ -712,16 +936,9 @@
       "develops": {
         "Statistics": [
           "계량정치"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--제약학과(2+4학제)",
-      "school": "서울대학교",
-      "name": "제약학과(2+4학제)",
-      "develops": {
-        "Data Analysis": [
-          "생물의약분석"
+        ],
+        "Project Management": [
+          "정치학연습"
         ]
       }
     },
@@ -746,6 +963,10 @@
         ],
         "Project Management": [
           "지역개발관리공학"
+        ],
+        "Mechanical Design": [
+          "조경드로잉 및 매체",
+          "조경컴퓨터그래픽"
         ]
       }
     },
@@ -757,14 +978,18 @@
         "Signal Processing": [
           "신호처리"
         ],
-        "Computer Architecture": [
+        "Mechanical Engineering": [
+          "유체역학기초",
+          "선박해양유체역학"
+        ],
+        "Mechanical Design": [
           "컴퓨터이용선박설계"
+        ],
+        "Project Management": [
+          "조선해양프로젝트"
         ],
         "Machine Learning": [
           "조선해양기계학습"
-        ],
-        "Statistics": [
-          "선박계산"
         ]
       }
     },
@@ -775,6 +1000,10 @@
       "develops": {
         "Data Analysis": [
           "해양지구과학 빅데이터처리"
+        ],
+        "Statistics": [
+          "대기지구과학 및 실험1",
+          "대기지구과학 및 실험2"
         ]
       }
     },
@@ -794,7 +1023,9 @@
       "name": "지리교육과",
       "develops": {
         "Data Analysis": [
-          "원격탐사와 지리자료분석"
+          "지리정보체계와 지리교육",
+          "원격탐사와 지리자료분석",
+          "공간분석과 지리교육"
         ]
       }
     },
@@ -804,10 +1035,15 @@
       "name": "지리학과",
       "develops": {
         "Data Analysis": [
-          "공간정보분석 1: 통계모형"
+          "공간정보분석 1: 통계모형",
+          "공간정보분석 2: 머신러닝",
+          "공간정보분석 3: 시공간데이터사이언스"
         ],
         "Machine Learning": [
           "공간정보분석 2: 머신러닝"
+        ],
+        "Statistics": [
+          "공간정보분석 1: 통계모형"
         ]
       }
     },
@@ -817,15 +1053,14 @@
       "name": "첨단융합학부",
       "develops": {
         "Data Analysis": [
-          "데이터엔지니어링",
-          "데이터마이닝과 기계학습",
           "데이터기반 의사결정",
           "데이터과학개론",
+          "데이터 시각화와 탐색적 자료분석",
           "고급 데이터 분석"
         ],
         "Machine Learning": [
-          "기계학습과 딥러닝",
-          "딥러닝의 기초"
+          "데이터마이닝과 기계학습",
+          "기계학습과 딥러닝"
         ],
         "Statistics": [
           "보건의료자료분석을 위한 통계방법론",
@@ -837,23 +1072,6 @@
         "Deep Learning": [
           "딥러닝의 기초",
           "딥러닝 가속기설계"
-        ],
-        "Algorithm": [
-          "자료구조와 알고리즘"
-        ]
-      }
-    },
-    {
-      "id": "서울대학교--체육교육과",
-      "school": "서울대학교",
-      "name": "체육교육과",
-      "develops": {
-        "Project Management": [
-          "스포츠경영학",
-          "스포츠정책행정론"
-        ],
-        "Statistics": [
-          "체육측정평가"
         ]
       }
     },
@@ -866,27 +1084,32 @@
           "데이터마이닝 개론"
         ],
         "Machine Learning": [
-          "기계학습 개론"
+          "기계학습 개론",
+          "인공지능"
         ],
         "Computer Vision": [
           "컴퓨터비전"
-        ],
-        "NLP": [
-          "자연언어처리 개론"
-        ],
-        "Security": [
-          "인터넷 보안",
-          "현대암호학 개론"
         ],
         "Software Engineering": [
           "소프트웨어공학",
           "소프트웨어 개발의 원리와 실습"
         ],
+        "Database": [
+          "데이터베이스"
+        ],
+        "Programming": [
+          "프로그래밍언어",
+          "프로그래밍연습",
+          "프로그래밍의 원리"
+        ],
         "Algorithm": [
           "알고리즘"
         ],
-        "Data Structure": [
-          "자료구조"
+        "Operating Systems": [
+          "운영체제"
+        ],
+        "Computer Architecture": [
+          "컴퓨터구조"
         ]
       }
     },
@@ -898,26 +1121,28 @@
         "Machine Learning": [
           "기계학습과 계산금융"
         ],
-        "Statistics": [
+        "Data Analysis": [
+          "데이터마이닝 방법 및 실습",
           "다변량자료분석 및 실습",
-          "베이즈통계 및 실습",
-          "비모수통계 및 실습",
-          "수리통계 1",
-          "수리통계 2",
+          "생존자료분석 및 실습",
           "시계열분석 및 실습",
           "이산자료분석 및 실습",
+          "자료분석 및 실습",
+          "자료분석 심화방법론 및 실습"
+        ],
+        "Statistics": [
+          "수리통계 1",
+          "수리통계 2",
+          "베이즈통계 및 실습",
+          "비모수통계 및 실습",
+          "회귀분석 및 실습",
+          "확률의 개념 및 응용",
+          "확률과정론",
+          "통계계산",
+          "기초의학통계학 및 실험",
           "전산통계 및 실험",
           "통계적품질관리 및 실습",
           "표본설계 및 조사실습",
-          "회귀분석 및 실습",
-          "확률과정론",
-          "통계계산",
-          "자료분석 및 실습",
-          "수리통계",
-          "자료분석 심화방법론 및 실습"
-        ],
-        "Data Analysis": [
-          "데이터마이닝 방법 및 실습",
           "실험계획 및 실습",
           "함수추정의 응용 및 실습"
         ]
@@ -928,15 +1153,15 @@
       "school": "서울대학교",
       "name": "항공우주공학과",
       "develops": {
-        "Data Analysis": [
-          "항공드론빅데이터알고리즘"
-        ],
-        "Computer Architecture": [
-          "전산유체역학 기초",
-          "전산구조해석"
-        ],
-        "Algorithm": [
-          "항공드론빅데이터알고리즘"
+        "Mechanical Engineering": [
+          "압축성유체역학",
+          "점성 유체역학",
+          "고에너지열유체역학",
+          "비행동역학및제어",
+          "운동체역학",
+          "항공기구조역학",
+          "전산구조해석",
+          "항공우주열역학"
         ]
       }
     },
@@ -946,7 +1171,8 @@
       "name": "화학교육과",
       "develops": {
         "Statistics": [
-          "화학논리 및 논술"
+          "화학연구1",
+          "화학연구2"
         ]
       }
     },
@@ -955,11 +1181,29 @@
       "school": "서울대학교",
       "name": "화학부",
       "develops": {
-        "Data Analysis": [
-          "화학과 AI"
-        ],
-        "Statistics": [
-          "분석화학"
+        "Chemical Engineering": [
+          "전기화학: 기초와 응용",
+          "재료화학: 설계 및 응용",
+          "기기분석 ",
+          "화학연구실험",
+          "유기화학2",
+          "유기무기실험",
+          "양자화학",
+          "분자설계 및 합성",
+          "분자생화학",
+          "분석화학",
+          "물리화학3",
+          "물리화학2",
+          "물리화학1",
+          "물리유기화학개론",
+          "무기화학 2: 반응과 메커니즘",
+          "무기화학 1: 구조와 결합",
+          "대사생화학",
+          "나노소재화학",
+          "고분자화학개론",
+          "유기재료합성 : 설계 및 응용",
+          "계산화학",
+          "유기화학1"
         ]
       }
     },
@@ -968,17 +1212,22 @@
       "school": "서울대학교",
       "name": "화학생물공학부",
       "develops": {
+        "Chemical Engineering": [
+          "화학생물공학의 이해",
+          "화학생물공정실험",
+          "화학생물합성실험",
+          "공정제어 및 설계",
+          "공정 및 제품설계",
+          "화공열역학",
+          "환경화학생물공학"
+        ],
         "Data Analysis": [
           "화학생물공학을 위한 인공지능",
-          "공정제어 및 설계",
-          "공학생물"
-        ],
-        "Project Management": [
-          "공학기술과 경영",
-          "화학산업경영"
+          "화공전산응용"
         ],
         "Statistics": [
-          "응용생화학2",
+          "기기분석",
+          "분리공정",
           "분석화학"
         ]
       }
@@ -992,13 +1241,13 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
+        "Machine Learning",
         "Deep Learning",
         "LLM",
         "Prompt Engineering",
         "RAG",
         "LangChain",
-        "LangGraph",
-        "Machine Learning"
+        "LangGraph"
       ],
       "prefers": [
         "Git",
@@ -1013,6 +1262,12 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
+        "AMR",
+        "Robotics",
+        "Autonomous Driving",
+        "Machine Learning",
+        "Simulation",
+        "Digital Twin",
         "Java",
         "Spring",
         "React",
@@ -1030,7 +1285,9 @@
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
         "Cloud",
-        "Data Analysis"
+        "Manufacturing",
+        "Data Analysis",
+        "Optimization"
       ],
       "prefers": []
     },
@@ -1082,7 +1339,8 @@
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
         "Network",
-        "Operating Systems"
+        "Operating Systems",
+        "Cloud"
       ],
       "prefers": [
         "Security"
@@ -1095,6 +1353,8 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002127",
       "requires": [
+        "ABAP",
+        "Fiori",
         "SQL",
         "Java"
       ],
@@ -1112,10 +1372,31 @@
         "Java",
         "Python",
         "C#",
-        "React"
+        "React",
+        "Machine Learning"
       ],
       "prefers": [
         "LLM"
+      ]
+    },
+    {
+      "id": "1002127-convergence-engineer",
+      "role": "Convergence Engineer",
+      "company": "LG CNS",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002127",
+      "requires": [
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Manufacturing"
+      ],
+      "prefers": [
+        "AutoCAD",
+        "Inventor",
+        "Creo",
+        "SolidWorks",
+        "CATIA",
+        "PLC"
       ]
     },
     {
@@ -1130,6 +1411,33 @@
       ],
       "prefers": [
         "Oracle"
+      ]
+    },
+    {
+      "id": "1002046-sap-프로젝트-관리자-pm-im",
+      "role": "SAP 프로젝트 관리자(PM/IM)",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002046",
+      "requires": [
+        "Project Management"
+      ],
+      "prefers": [
+        "S/4HANA"
+      ]
+    },
+    {
+      "id": "1002046-sap-모듈-컨설턴트-운영",
+      "role": "SAP 모듈 컨설턴트 / 운영",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002046",
+      "requires": [
+        "SAP",
+        "S/4HANA"
+      ],
+      "prefers": [
+        "Fiori"
       ]
     },
     {
@@ -1191,6 +1499,18 @@
       "prefers": []
     },
     {
+      "id": "1001427-global-core-banking-business-analyst",
+      "role": "Global Core Banking Business Analyst",
+      "company": "LG CNS",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001427",
+      "requires": [],
+      "prefers": [
+        "Cloud",
+        "Machine Learning"
+      ]
+    },
+    {
       "id": "1001371-infrastructure-architect",
       "role": "Infrastructure Architect",
       "company": "LG CNS",
@@ -1200,6 +1520,7 @@
         "Kubernetes"
       ],
       "prefers": [
+        "Cloud",
         "MSA"
       ]
     },
@@ -1214,9 +1535,12 @@
       ],
       "prefers": [
         "Database",
+        "Cloud",
         "AWS",
         "Azure",
-        "GCP"
+        "GCP",
+        "Machine Learning",
+        "Data Analysis"
       ]
     },
     {
@@ -1226,6 +1550,7 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1001371",
       "requires": [
+        "Cloud",
         "Terraform",
         "Jenkins",
         "Kubernetes"
@@ -1254,8 +1579,8 @@
       "url": "https://careers.lg.com/apply/detail?id=1000834",
       "requires": [],
       "prefers": [
-        "Deep Learning",
         "Machine Learning",
+        "Deep Learning",
         "Prompt Engineering"
       ]
     },
@@ -1272,7 +1597,20 @@
         "Agile",
         "React",
         "Spring",
-        "DevOps"
+        "DevOps",
+        "Cloud"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1000834-erp",
+      "role": "ERP",
+      "company": "LG CNS",
+      "career_type": "인턴",
+      "url": "https://careers.lg.com/apply/detail?id=1000834",
+      "requires": [
+        "ERP",
+        "Machine Learning"
       ],
       "prefers": []
     },
@@ -1282,7 +1620,9 @@
       "company": "HSAD",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002146",
-      "requires": [],
+      "requires": [
+        "Machine Learning"
+      ],
       "prefers": [
         "LLM",
         "SQL"
@@ -1296,8 +1636,17 @@
       "url": "https://careers.lg.com/apply/detail?id=1002117",
       "requires": [],
       "prefers": [
+        "Statistics",
+        "Optimization",
         "Python",
-        "C++"
+        "VBA",
+        "C++",
+        "SmartSpice",
+        "Cadence Spectre",
+        "SPEOS",
+        "LightTools",
+        "FDTD",
+        "Setfos"
       ]
     },
     {
@@ -1307,11 +1656,39 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002117",
       "requires": [
+        "Electrical Engineering",
+        "Algorithm",
         "C",
         "C++",
-        "Python"
+        "Python",
+        "MATLAB"
       ],
       "prefers": []
+    },
+    {
+      "id": "1002117-기구",
+      "role": "기구",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [],
+      "prefers": [
+        "Mechanical Design",
+        "Simulation",
+        "Python"
+      ]
+    },
+    {
+      "id": "1002117-광학",
+      "role": "광학",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [],
+      "prefers": [
+        "Simulation",
+        "Python"
+      ]
     },
     {
       "id": "1002118-panel-설계",
@@ -1321,8 +1698,17 @@
       "url": "https://careers.lg.com/apply/detail?id=1002118",
       "requires": [],
       "prefers": [
+        "Statistics",
+        "Optimization",
         "Python",
-        "C++"
+        "VBA",
+        "C++",
+        "SmartSpice",
+        "Cadence Spectre",
+        "SPEOS",
+        "LightTools",
+        "FDTD",
+        "Setfos"
       ]
     },
     {
@@ -1332,9 +1718,62 @@
       "career_type": "산학장학생",
       "url": "https://careers.lg.com/apply/detail?id=1002118",
       "requires": [
+        "Electrical Engineering",
+        "Algorithm",
         "C",
         "C++",
+        "Python",
+        "MATLAB"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002118-기구",
+      "role": "기구",
+      "company": "LG디스플레이",
+      "career_type": "산학장학생",
+      "url": "https://careers.lg.com/apply/detail?id=1002118",
+      "requires": [
+        "Mechanical Design",
+        "Simulation",
         "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002118-광학",
+      "role": "광학",
+      "company": "LG디스플레이",
+      "career_type": "산학장학생",
+      "url": "https://careers.lg.com/apply/detail?id=1002118",
+      "requires": [],
+      "prefers": [
+        "Simulation",
+        "Python"
+      ]
+    },
+    {
+      "id": "1002212-생산-제조-품질",
+      "role": "생산/제조/품질",
+      "company": "LG전자",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002212",
+      "requires": [],
+      "prefers": [
+        "Mechanical Engineering",
+        "Electrical Engineering"
+      ]
+    },
+    {
+      "id": "1002183-material-r-d",
+      "role": "Material R&D",
+      "company": "LG전자",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002183",
+      "requires": [
+        "Materials Engineering",
+        "Chemical Engineering",
+        "SEM"
       ],
       "prefers": []
     },
@@ -1357,8 +1796,11 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002176",
       "requires": [
+        "Machine Learning",
         "Deep Learning",
-        "Python"
+        "Python",
+        "PyTorch",
+        "TensorFlow"
       ],
       "prefers": []
     },
@@ -1369,6 +1811,7 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002176",
       "requires": [
+        "PyTorch",
         "Python",
         "C++"
       ],
@@ -1404,6 +1847,20 @@
         "Deep Learning",
         "Python"
       ],
+      "prefers": [
+        "Digital Twin"
+      ]
+    },
+    {
+      "id": "1002176-physical-ai",
+      "role": "Physical AI",
+      "company": "LG에너지솔루션",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002176",
+      "requires": [
+        "ROS",
+        "ROS2"
+      ],
       "prefers": []
     },
     {
@@ -1413,8 +1870,69 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002176",
       "requires": [
+        "Machine Learning",
         "Optimization",
-        "Python"
+        "Python",
+        "PyTorch",
+        "TensorFlow"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-cell개발-각형전지",
+      "role": "Cell개발(각형전지)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Chemical Engineering",
+        "Mechanical Engineering",
+        "Materials Engineering",
+        "Electrochemistry"
+      ],
+      "prefers": [
+        "Mechanical Design"
+      ]
+    },
+    {
+      "id": "1002075-pack개발-자동차",
+      "role": "Pack개발(자동차)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering"
+      ],
+      "prefers": [
+        "CATIA",
+        "Creo"
+      ]
+    },
+    {
+      "id": "1002075-원통형cell개발",
+      "role": "원통형Cell개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Simulation"
+      ],
+      "prefers": [
+        "Materials Engineering",
+        "Rheology"
+      ]
+    },
+    {
+      "id": "1002075-원통형pack개발",
+      "role": "원통형Pack개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Design",
+        "CATIA",
+        "Creo"
       ],
       "prefers": []
     },
@@ -1426,7 +1944,21 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "C",
+        "Electrical Engineering",
         "Statistics"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-cell개발-ess",
+      "role": "Cell개발(ESS)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Chemical Engineering",
+        "Data Analysis"
       ],
       "prefers": []
     },
@@ -1437,7 +1969,11 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
-        "Data Analysis"
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "Mechanical Design",
+        "Data Analysis",
+        "PLC"
       ],
       "prefers": [
         "Programming"
@@ -1454,7 +1990,22 @@
         "Problem Solving"
       ],
       "prefers": [
+        "Mechanical Design",
         "Programming"
+      ]
+    },
+    {
+      "id": "1002075-검사기술-전극",
+      "role": "검사기술(전극)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrical Engineering",
+        "Mechanical Engineering"
+      ],
+      "prefers": [
+        "Deep Learning"
       ]
     },
     {
@@ -1464,10 +2015,83 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "Machine Learning",
         "Deep Learning",
         "Python"
       ],
       "prefers": []
+    },
+    {
+      "id": "1002075-공정기술-원통형",
+      "role": "공정기술(원통형)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "minitab",
+        "Python",
+        "R"
+      ]
+    },
+    {
+      "id": "1002075-원통형dx",
+      "role": "원통형DX",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "R",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-제품기술-원통형",
+      "role": "제품기술(원통형)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Data Analysis"
+      ],
+      "prefers": [
+        "minitab"
+      ]
+    },
+    {
+      "id": "1002075-공정기술-pack",
+      "role": "공정기술(Pack)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Manufacturing"
+      ],
+      "prefers": [
+        "AutoCAD",
+        "SolidWorks",
+        "CATIA",
+        "Creo",
+        "minitab",
+        "SAP"
+      ]
+    },
+    {
+      "id": "1002075-설비기술-pack-제어",
+      "role": "설비기술(Pack, 제어)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "SolidWorks",
+        "PLC"
+      ],
+      "prefers": [
+        "Data Analysis"
+      ]
     },
     {
       "id": "1002075-제조지능화-디지털트윈",
@@ -1476,10 +2100,27 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "Mechanical Design",
         "Machine Learning",
         "Deep Learning"
       ],
       "prefers": []
+    },
+    {
+      "id": "1002075-제조지능화-로봇",
+      "role": "제조지능화(로봇)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Python",
+        "Robotics"
+      ],
+      "prefers": [
+        "ROS",
+        "ROS2",
+        "Digital Twin"
+      ]
     },
     {
       "id": "1002075-제조지능화-원격",
@@ -1496,6 +2137,70 @@
       "prefers": []
     },
     {
+      "id": "1002075-공무-생산인프라-에너지",
+      "role": "공무/생산인프라(에너지)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering",
+        "Electrical Engineering"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-설비기술-fa",
+      "role": "설비기술(FA)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering",
+        "Electrical Engineering"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-cell기반기술",
+      "role": "Cell기반기술",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Simulation",
+        "Machine Learning"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-소재기술",
+      "role": "소재기술",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Chemical Engineering"
+      ],
+      "prefers": [
+        "Communication"
+      ]
+    },
+    {
+      "id": "1002075-양극재기술",
+      "role": "양극재기술",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Materials Engineering",
+        "Chemical Engineering",
+        "Electrochemistry"
+      ],
+      "prefers": []
+    },
+    {
       "id": "1002075-ai진단솔루션개발",
       "role": "AI진단솔루션개발",
       "company": "LG에너지솔루션",
@@ -1505,7 +2210,10 @@
         "Python",
         "Data Analysis"
       ],
-      "prefers": []
+      "prefers": [
+        "PostgreSQL",
+        "PyTorch"
+      ]
     },
     {
       "id": "1002075-bms_sox-알고리즘-설계",
@@ -1514,11 +2222,26 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "MATLAB",
+        "Simulink",
         "Python"
       ],
       "prefers": [
         "C"
       ]
+    },
+    {
+      "id": "1002075-bms_sw개발",
+      "role": "BMS_SW개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "BMS",
+        "MATLAB",
+        "Simulink"
+      ],
+      "prefers": []
     },
     {
       "id": "1002075-data-engineering",
@@ -1527,10 +2250,12 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
+        "Cloud",
         "C",
         "JavaScript",
         "Python",
-        "Database"
+        "Database",
+        "PostgreSQL"
       ],
       "prefers": [
         "Terraform",
@@ -1540,12 +2265,27 @@
       ]
     },
     {
+      "id": "1002075-pack선행개발",
+      "role": "Pack선행개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering"
+      ],
+      "prefers": [
+        "Mechanical Design"
+      ]
+    },
+    {
       "id": "1002075-구조-시뮬레이션",
       "role": "구조 시뮬레이션",
       "company": "LG에너지솔루션",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
-      "requires": [],
+      "requires": [
+        "Simulation"
+      ],
       "prefers": [
         "Machine Learning",
         "Deep Learning"
@@ -1557,7 +2297,9 @@
       "company": "LG에너지솔루션",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
-      "requires": [],
+      "requires": [
+        "Simulation"
+      ],
       "prefers": [
         "Machine Learning",
         "Deep Learning"
@@ -1569,11 +2311,133 @@
       "company": "LG에너지솔루션",
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002075",
-      "requires": [],
+      "requires": [
+        "Simulation"
+      ],
       "prefers": [
         "Machine Learning",
         "Deep Learning"
       ]
+    },
+    {
+      "id": "1002075-진단기술개발",
+      "role": "진단기술개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Data Analysis",
+        "MATLAB",
+        "Simulink"
+      ],
+      "prefers": [
+        "Materials Engineering",
+        "Rheology"
+      ]
+    },
+    {
+      "id": "1002075-차세대전지-개발-소듐이온전지",
+      "role": "차세대전지 개발(소듐이온전지)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry"
+      ],
+      "prefers": [
+        "Chemical Engineering"
+      ]
+    },
+    {
+      "id": "1002075-특허-분석-개발-관리",
+      "role": "특허 분석/개발/관리",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "BMS",
+        "Mechanical Engineering"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002193-경력-반도체-기판-제품개발",
+      "role": "[경력] 반도체 기판 제품개발",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002193",
+      "requires": [],
+      "prefers": [
+        "SAP",
+        "Materials Engineering",
+        "JMP",
+        "Python"
+      ]
+    },
+    {
+      "id": "1002193-경력-반도체-기판-생산기술",
+      "role": "[경력] 반도체 기판 생산기술",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002193",
+      "requires": [],
+      "prefers": [
+        "JMP",
+        "Python"
+      ]
+    },
+    {
+      "id": "1001884-경력-반도체-기판-생산기술",
+      "role": "[경력] 반도체 기판 생산기술",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001884",
+      "requires": [
+        "JMP",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1001884-경력-반도체-기판-제품개발",
+      "role": "[경력] 반도체 기판 제품개발",
+      "company": "LG이노텍",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001884",
+      "requires": [
+        "SAP",
+        "Materials Engineering"
+      ],
+      "prefers": [
+        "Python",
+        "JMP"
+      ]
+    },
+    {
+      "id": "1002196-b2b영업",
+      "role": "B2B영업",
+      "company": "LG유플러스",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002196",
+      "requires": [
+        "Machine Learning",
+        "Cloud",
+        "Data Analysis"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002196-b2b영업-글로벌",
+      "role": "B2B영업(글로벌)",
+      "company": "LG유플러스",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002196",
+      "requires": [
+        "Machine Learning",
+        "Cloud",
+        "Data Analysis"
+      ],
+      "prefers": []
     },
     {
       "id": "1001202-software-architect",
@@ -1583,6 +2447,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1001202",
       "requires": [
         "Kubernetes",
+        "Cloud",
         "CI/CD",
         "Python",
         "TypeScript",
@@ -1597,6 +2462,7 @@
       "career_type": "경력",
       "url": "https://careers.lg.com/apply/detail?id=1002204",
       "requires": [
+        "Cloud",
         "DevOps",
         "Docker",
         "Kubernetes",
