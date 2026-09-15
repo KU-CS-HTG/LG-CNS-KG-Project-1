@@ -364,7 +364,6 @@
 1	AX 기술
 1	Agent 자동화 워크플로우
 1	PLC Programming
-1	Structural Analysis
 1	Dynamics Analysis
 1	CFD Analysis
 1	Plant Simulation
@@ -464,9 +463,7 @@
 1	IDC
 1	전기 공학 관련 학과
 1	공기조화
-1	열역학
 1	열전달
-1	유체역학
 1	열부하 계산
 1	열원설비
 1	공조설비

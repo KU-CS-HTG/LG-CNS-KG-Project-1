@@ -2101,6 +2101,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Mechanical Design",
+        "Mechanical Engineering",
         "Machine Learning",
         "Deep Learning"
       ],
@@ -2436,6 +2437,18 @@
         "Machine Learning",
         "Cloud",
         "Data Analysis"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002196-aidc엔지니어-기계",
+      "role": "AIDC엔지니어(기계)",
+      "company": "LG유플러스",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002196",
+      "requires": [
+        "Mechanical Engineering",
+        "AutoCAD"
       ],
       "prefers": []
     },
