@@ -23,9 +23,10 @@ from pydantic import BaseModel, Field
 
 from vocab import canonicalize
 
-CSV = Path("subject_cleaned.csv")
-CACHE = Path("majors_extracted.json")    # 전공별 LLM 원출력. 직무 쪽 extracted_raw.json 과 같은 역할
-GRAPH = Path("graph.json")
+DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
+CSV = DATA / "subject_cleaned.csv"
+CACHE = DATA / "majors_extracted.json"    # 전공별 LLM 원출력. 직무 쪽 extracted_raw.json 과 같은 역할
+GRAPH = DATA / "graph.json"
 
 # 대상 대학 — 월요일에 3개로 확정 (설계서 0절)
 TARGET_SCHOOLS: list[str] = []           # 빈 리스트면 전체. 확정되면 여기에 3개 적는다
@@ -139,8 +140,10 @@ def load_grouped() -> pd.DataFrame:
 
 def build(sample: int = 0) -> None:
     grouped = load_grouped()
+    SAMPLE_MAJORS = ["컴퓨터공학부", "산업공학과", "통계학과", "수리과학부", "경영학과"]
+
     if sample:
-        grouped = grouped.head(sample)
+        grouped = grouped[grouped["전공명"].isin(SAMPLE_MAJORS)]   # head(sample) 대신
 
     print(f"대상 전공 {len(grouped)}개 (대학 {grouped['학교명'].nunique()}곳)")
 

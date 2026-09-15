@@ -14,12 +14,14 @@ graph_store.py — graph.json 조회 전용 (담당: B)
 
 from __future__ import annotations
 
+from collections import Counter
 import json
 import math
 from functools import lru_cache
 from pathlib import Path
 
-GRAPH = Path("graph.json")
+DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
+GRAPH = DATA / "graph.json"
 
 
 @lru_cache(maxsize=1)
@@ -83,6 +85,9 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
 
     return unique[:limit]
 
+def count_majors() -> int:
+    """그래프에 올라간 전공 수 (전공명 기준, 중복 제외)."""
+    return len({m["name"] for m in _load().get("majors", [])})
 
 def find_jobs_by_skills(skills: list[str], limit: int = 5) -> list[dict]:
     """역량 태그 → 추천 직무. 갖춘 역량 / 채울 역량을 함께 돌려준다."""
@@ -103,7 +108,10 @@ def find_jobs_by_skills(skills: list[str], limit: int = 5) -> list[dict]:
             "url": j["url"],
             "have": have,                          # 갖춘 역량
             "gap": sorted(req - user),             # 채울 역량 — 필수 중 없는 것만
+            "total": len(all_skills),          # ← 추가
+            "covered_count": len(have),        # ← 추가
             "score": _score(user, all_skills),
+            
         })
 
     ranked.sort(key=lambda x: -x["score"])
@@ -117,6 +125,26 @@ def get_evidence(major_id: str, skill: str) -> list[str]:
             return m.get("develops", {}).get(skill, [])
     return []
 
+def subjects_for(major_id: str, skills: list[str], k: int = 3) -> list[dict]:
+    """주어진 역량들을 기르는 과목을, 많이 걸리는 순으로 k개.
+
+    한 과목이 여러 역량에 동시에 걸리면 위로 올라온다 — 자동으로 '가성비 과목'이 된다.
+    """
+    want = set(skills)
+    counter: Counter = Counter()
+    detail: dict[str, list[str]] = {}
+
+    for m in _load().get("majors", []):
+        if m["id"] != major_id:
+            continue
+        for skill, subjects in m.get("develops", {}).items():
+            if skill not in want:
+                continue
+            for sub in subjects:
+                counter[sub] += 1
+                detail.setdefault(sub, []).append(skill)
+
+    return [{"subject": n, "hits": c, "for": detail[n]} for n, c in counter.most_common(k)]
 
 def all_skills() -> list[str]:
     """통제 어휘 전체. app.py 가 LLM 출력을 대조할 때 쓴다."""

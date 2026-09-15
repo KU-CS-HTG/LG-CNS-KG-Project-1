@@ -25,6 +25,9 @@ from typing import Any
 import requests
 from bs4 import BeautifulSoup
 
+DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
+RAW = DATA / "raw_notices.json"
+
 # ─────────────────────────────────────────────────────────────
 # 1) API 기본 설정
 # ─────────────────────────────────────────────────────────────
@@ -152,26 +155,13 @@ if __name__ == "__main__":
     print(f"{first['job_name']}")
     print(first["main_tasks"][:600])
 
-    # (b) LG CNS 공고 전체 수집 → JSON 저장
-    results = []
-
+    # (b) LG CNS 공고 전체 수집 → data/raw_notices.json (API 응답 원본 = raw 층)
+    #     이후 단계(transform_v2.py)는 전부 이 파일에서 출발한다.
+    raw = []
     for item in list_job_notices(company_codes=["CNS"]):
-        jobs = parse_notice(
-            fetch_job_detail(item["jobNoticeId"])
-        )
-        results.extend(jobs)
-        time.sleep(0.5)
+        raw.append(fetch_job_detail(item["jobNoticeId"]))
+        time.sleep(0.5)                       # 요청 간격 (robots 예의)
 
-    with open("lg_cns_jobs.json", "w", encoding="utf-8") as f:
-        json.dump(
-            results,
-            f,
-            ensure_ascii=False,
-            indent=2
-        )
-    print(f"\n저장 완료: {len(results)}개 직무 → lg_cns_jobs.json")
-
-    raw = [fetch_job_detail(i["jobNoticeId"]) for i in list_job_notices(["CNS"])]
-    Path("raw_notices.json").write_text(
-    json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    RAW.parent.mkdir(exist_ok=True)
+    RAW.write_text(json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"\n저장 완료: 공고 {len(raw)}건 → {RAW}")

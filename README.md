@@ -35,3 +35,31 @@ main이 아니라면 git branch -M main
 4: git push -u origin main
 
 ※환경변수 .env 는 본인 파일을 복사해서 사용하세요.
+---
+
+## 폴더 구조 (2026-09-15 정리)
+
+```
+LG-CNS-KG-Project-1/
+├── data/                       ← 데이터는 전부 여기. 코드에서 DATA / "파일명" 으로 참조
+│   ├── subject_cleaned.csv     서울대 교육과정 (학교명·전공명·과목명, UTF-8, 105개 전공)
+│   ├── raw_notices.json        LG careers API 응답 원본 (raw 층)      ← lg_careers.py
+│   ├── staged_jobs.json        공고 → 직무 단위로 펼친 것 (LLM 없음)   ← transform_v2.py normalize
+│   ├── extracted_raw.json      직무별 LLM 원출력 캐시                 ← transform_v2.py extract
+│   ├── curated_jobs.jsonl      정규화·검증 결과                       ← transform_v2.py curate
+│   ├── majors_extracted.json   전공별 LLM 원출력 캐시                 ← build_graph_majors.py
+│   └── graph.json              최종 그래프 (skills / majors / jobs)   ← build_graph_*.py
+├── vocab.py                A  통제 어휘 (CANON, canonicalize)
+├── build_graph_jobs.py     C  직무 절반 → graph.json
+├── build_graph_majors.py   C  전공 절반 → graph.json   (LLM 호출: 전공당 1회)
+├── graph_store.py          B  graph.json 조회 함수 (LLM 없음)
+├── app.py                  D  온라인 파이프라인 (질문 3개 → 전공·과목·직무)
+├── check.py                D  확인 3건
+├── lg_careers.py              수집 (완료. 다시 돌릴 일 거의 없음)
+├── transform_v2.py            직무 데이터 가공 파이프라인
+└── skeleton.py                walking skeleton (전부 가짜, 흐름 확인용)
+```
+
+- 경로는 각 스크립트 위치 기준(`Path(__file__).parent / "data"`)이라 **어느 폴더에서 실행해도 동일**하게 동작합니다.
+- LLM 캐시(`extracted_raw.json`, `majors_extracted.json`)는 **커밋 대상**입니다. 공유하면 다른 사람은 LLM을 다시 부르지 않아도 됩니다. 재추출이 필요할 때만 지웁니다.
+- 실행 순서: `lg_careers.py` → `transform_v2.py normalize / extract / curate` → `build_graph_jobs.py` → `build_graph_majors.py sample` (눈으로 확인) → `build_graph_majors.py` → `app.py` / `check.py`

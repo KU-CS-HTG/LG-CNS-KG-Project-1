@@ -22,10 +22,11 @@ from pathlib import Path
 
 from vocab import canonicalize_all
 
-STAGED = Path("staged_jobs.json")
-EXTRACTED = Path("extracted_raw.json")
-CURATED_V1 = Path("curated_jobs.jsonl")
-GRAPH = Path("graph.json")
+DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
+STAGED = DATA / "staged_jobs.json"
+EXTRACTED = DATA / "extracted_raw.json"
+CURATED_V1 = DATA / "curated_jobs.jsonl"
+GRAPH = DATA / "graph.json"
 
 
 def load_job_rows() -> list[dict]:

@@ -29,10 +29,11 @@ from typing import Any, Literal
 from bs4 import BeautifulSoup, NavigableString
 from pydantic import BaseModel, Field, field_validator
 
-RAW = Path("raw_notices.json")
-STAGED = Path("staged_jobs.json")
-EXTRACTED = Path("extracted_raw.json")
-CURATED = Path("curated_jobs.jsonl")
+DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
+RAW = DATA / "raw_notices.json"
+STAGED = DATA / "staged_jobs.json"
+EXTRACTED = DATA / "extracted_raw.json"
+CURATED = DATA / "curated_jobs.jsonl"
 
 # ═════════════════════════════════════════════════════════════
 # 0) 스키마
