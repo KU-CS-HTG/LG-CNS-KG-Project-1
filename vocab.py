@@ -86,6 +86,48 @@ CANON: dict[str, str] = {
     "신호처리": "Signal Processing", "디지털신호처리": "Signal Processing", "signal processing": "Signal Processing",
     "수치해석": "Numerical Analysis", "수리모델링": "Numerical Analysis", "numerical analysis": "Numerical Analysis",
 
+    # ── 기존 대표 표기의 별칭 보강 (2단계, 2026-09-15 canon_candidates.txt 2회 이상 119개 검토)
+    "data 분석": "Data Analysis", "big data": "Data Analysis", "빅데이터": "Data Analysis",
+    "빅데이터 기반 예측 모델링": "Machine Learning", "ai": "Machine Learning", "인공지능": "Machine Learning",
+    "public cloud": "Cloud", "hybrid cloud": "Cloud", "cloud infrastructure": "Cloud", "container": "Cloud",
+    "iac": "Cloud", "serverless": "Cloud", "virtualization": "Cloud", "가상화": "Cloud",
+    "최적화 방법론": "Optimization", "최적화 기법": "Optimization",
+    "알고리즘 개발": "Algorithm",
+    "실험계획법": "Statistics", "통계 분석": "Statistics",
+    "postgresql": "PostgreSQL", "r": "R", "minitab": "minitab", "jmp": "JMP",
+    "pytorch": "PyTorch", "tensorflow": "TensorFlow", "matlab": "MATLAB", "vba": "VBA",
+
+    # ── 2단계 클러스터 ① 배터리·화학·재료 (LGES·LGC 직무 ↔ 화학부·화학생물공학부·재료공학부)
+    "전기화학": "Electrochemistry", "전기 화학": "Electrochemistry", "배터리": "Electrochemistry",
+    "bms": "BMS",
+    "화학": "Chemical Engineering", "화학공학": "Chemical Engineering", "화학 공학": "Chemical Engineering",
+    "재료공학": "Materials Engineering", "소재": "Materials Engineering", "고분자 소재": "Materials Engineering",
+    "원소재 개발": "Materials Engineering", "재료": "Materials Engineering",
+    "유변학": "Rheology", "sem": "SEM",
+
+    # ── 2단계 클러스터 ② 기계·설계·시뮬레이션·전기 HW (LGES·LGD·LGE 직무 ↔ 기계·전기정보·조선해양)
+    "기계공학": "Mechanical Engineering", "기계 공학": "Mechanical Engineering", "기계": "Mechanical Engineering",
+    "메카트로닉스": "Mechanical Engineering",
+    "기구설계": "Mechanical Design", "3d 설계": "Mechanical Design", "3d cad": "Mechanical Design", "cad": "Mechanical Design",
+    "3d 설계 tool": "Mechanical Design", "설계최적화": "Mechanical Design",
+    "catia": "CATIA", "creo": "Creo", "solidworks": "SolidWorks", "autocad": "AutoCAD", "inventor": "Inventor",
+    "시뮬레이션": "Simulation", "cae": "Simulation", "simulator": "Simulation",
+    "simulink": "Simulink", "fdtd": "FDTD", "speos": "SPEOS", "lighttools": "LightTools", "setfos": "Setfos",
+    "전기": "Electrical Engineering", "전기공학": "Electrical Engineering", "전기 공학": "Electrical Engineering",
+    "전자공학": "Electrical Engineering", "전자 공학": "Electrical Engineering",
+    "회로 설계": "Electrical Engineering", "회로설계": "Electrical Engineering", "display 제품 회로 설계": "Electrical Engineering",
+    "회로 시뮬레이션 tool": "Electrical Engineering",
+    "smartspice": "SmartSpice", "cadence spectre": "Cadence Spectre",
+
+    # ── 2단계 클러스터 ③ 로봇·생산·ERP (LGES 공정/설비, CNS Robotics·ERP ↔ 산업공학·기계·경영)
+    "로봇 제어": "Robotics", "robotics sw": "Robotics", "로봇팔": "Robotics", "robotics": "Robotics",
+    "ros": "ROS", "ros2": "ROS2", "자율주행": "Autonomous Driving", "plc 제어": "PLC", "amr": "AMR",
+    "공정기술": "Manufacturing", "생산운영": "Manufacturing", "설비": "Manufacturing", "smart factory": "Manufacturing",
+    "생산기술": "Manufacturing", "제조": "Manufacturing", "manufacturing": "Manufacturing",
+    "디지털 트윈": "Digital Twin", "digital twin": "Digital Twin",
+    "erp": "ERP", "sap": "SAP", "s/4hana": "S/4HANA", "s/4hana public cloud": "S/4HANA", "s/4hana cloud private": "S/4HANA",
+    "fiori": "Fiori", "abap": "ABAP",
+
     # ── 비기술 역량 (전공 쪽에서 자주 나온다)
     "커뮤니케이션": "Communication", "의사소통": "Communication",
     "문제해결": "Problem Solving", "문제 해결": "Problem Solving",
@@ -128,6 +170,25 @@ PARENT: dict[str, str] = {
     "LangGraph": "Machine Learning", "Prompt Engineering": "Machine Learning",
     # 방법론
     "Agile": "Project Management",
+
+    # ── 2단계 (2026-09-15): 기존 부모에 붙는 도구
+    "PyTorch": "Deep Learning", "TensorFlow": "Deep Learning",
+    "PostgreSQL": "Database",
+    "R": "Statistics", "minitab": "Statistics", "JMP": "Statistics",
+    "MATLAB": "Numerical Analysis",
+    "VBA": "Programming",
+    # ── 2단계 클러스터 ① 배터리·화학·재료
+    "BMS": "Electrochemistry",
+    "Rheology": "Materials Engineering", "SEM": "Materials Engineering",
+    # ── 2단계 클러스터 ② 기계·설계·시뮬레이션·전기 HW
+    "CATIA": "Mechanical Design", "Creo": "Mechanical Design", "SolidWorks": "Mechanical Design",
+    "AutoCAD": "Mechanical Design", "Inventor": "Mechanical Design",
+    "Simulink": "Simulation", "FDTD": "Simulation", "SPEOS": "Simulation", "LightTools": "Simulation", "Setfos": "Simulation",
+    "SmartSpice": "Electrical Engineering", "Cadence Spectre": "Electrical Engineering",
+    # ── 2단계 클러스터 ③ 로봇·생산·ERP
+    "ROS": "Robotics", "ROS2": "Robotics", "Autonomous Driving": "Robotics", "PLC": "Robotics", "AMR": "Robotics",
+    "Digital Twin": "Manufacturing",
+    "SAP": "ERP", "S/4HANA": "ERP", "Fiori": "ERP", "ABAP": "ERP",
 }
 
 _canon_values = set(CANON.values())
