@@ -96,6 +96,7 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
             "school": m["school"],
             "name": m["name"],
             "matched_skills": matched,
+            "skills": sorted(develops),                    # 이 전공이 기르는 역량 전체 — 직무 검색은 이걸로 한다 (설계서 4절 ②)
             "family": family,                              # {사용자 태그: 그것을 커버한 전공 역량}
             # 각 역량이 어느 과목에서 나왔는지 — 출력 2칸의 "근거 과목". 계열 커버는 상위 개념의 과목이 근거
             "evidence": {s: develops[s] for s in matched + covered_by},
@@ -127,12 +128,18 @@ def count_majors() -> int:
     """그래프에 올라간 전공 수 (전공명 기준, 중복 제외)."""
     return len({m["name"] for m in _load().get("majors", [])})
 
-def find_jobs_by_skills(skills: list[str], limit: int = 5) -> list[dict]:
-    """역량 태그 → 추천 직무. 갖춘 역량 / 채울 역량을 함께 돌려준다."""
+def find_jobs_by_skills(skills: list[str], limit: int = 5, career_type: str | None = None) -> list[dict]:
+    """역량 태그 → 추천 직무. 갖춘 역량 / 채울 역량을 함께 돌려준다.
+
+    career_type="신입" 이면 신입 공고만. 서비스 정의가 'LG 계열사 **신입** 직무 진로 추천' 이라
+    취준생에게 경력·석박사 산학장학 공고가 1위로 나오는 걸 막는다 (실측 9/15: 웹/자바 입력에 '보험 SE (경력)' 이 1위).
+    """
     user = set(skills)
     ranked = []
 
     for j in _load().get("jobs", []):
+        if career_type and career_type not in (j.get("career_type") or ""):
+            continue
         req, pref = set(j["requires"]), set(j["prefers"])
         all_skills = req | pref
         # 직무 요구(need)를 전공 역량(have)에 맞춘다. 요구 'Oracle' 은 전공의 'Database' 로 계열 커버.
@@ -188,8 +195,20 @@ def subjects_for(major_id: str, skills: list[str], k: int = 3) -> list[dict]:
     return [{"subject": n, "hits": c, "for": detail[n]} for n, c in counter.most_common(k)]
 
 def all_skills() -> list[str]:
-    """통제 어휘 전체. app.py 가 LLM 출력을 대조할 때 쓴다."""
+    """그래프에 있는 Skill 노드 전체 (전공·직무·상위 개념)."""
     return _load().get("skills", [])
+
+
+def taggable_skills() -> list[str]:
+    """사용자 태그 후보 — 전공이 기르는 역량 + 그 하위 개념(IS_A 자식).
+
+    직무 쪽에만 있는 역량(예: 직무 required 에 적힌 Problem Solving, Excel)이 태그가 되면 어느 전공과도 안 맞으면서
+    커버리지 분모만 키운다 (9/15 실측). 태그는 전공 매칭의 입력이므로 "전공이 기를 수 있는 것" 으로 제한한다.
+    하위 개념을 포함하는 이유: 'Java' 태그는 전공의 'Programming' 으로 계열 커버되므로 유효한 태그다.
+    """
+    developed = {s for m in _load().get("majors", []) for s in m.get("develops", {})}
+    children = {c for c, p in _is_a().items() if p in developed}
+    return sorted(developed | children)
 
 
 def exists(name: str) -> bool:
