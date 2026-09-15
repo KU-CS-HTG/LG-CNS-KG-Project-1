@@ -38,12 +38,14 @@ _Q1_EXAMPLES = _korean_examples(
     [s for s in ["Data Analysis", "Machine Learning", "Software Engineering", "Cloud", "Security", "Network",
                  "Signal Processing", "Statistics"] if s in TAGS], limit=6)
 
+# 페르소나: 진로를 탐색하는 고등학생 (팀 결정 2026-09-15). 말투는 user_analysis/profile_config.py 의 질문 톤에 맞춘다.
 QUESTIONS = [
-    f"관심 있는 분야나 하고 싶은 일을 적어주세요. (예: {_Q1_EXAMPLES})",
-    "수업·프로젝트·도구 중 직접 해본 것을 적어주세요. (예: 파이썬으로 데이터 정리, 통계 수업, 웹사이트 만들기)",
+    f"요즘 관심 있거나 해보고 싶은 분야가 있어? (예: {_Q1_EXAMPLES})",
+    "수업이나 프로젝트, 써 본 도구 중에 직접 해본 게 있으면 알려줘. (예: 파이썬으로 데이터 정리, 통계 수업, 웹사이트 만들기)",
     "다음 중 더 끌리는 쪽은? ① 데이터를 파고들어 패턴 찾기 "
     "② 시스템을 설계하고 만들기 ③ 사람과 일정을 조율해 프로젝트 굴리기",
 ]
+FOLLOWUP_PREFIX = "조금 더 알려줄래? "
 
 class Tags(BaseModel):
     # 하한을 두지 않는다 — "최대 5개"만 있어도 모델은 5개를 채우려 든다 (9/15 실측: '숫자에 강해요' → Cloud까지 채움).
@@ -89,7 +91,11 @@ def normalize_to_tags(answers: list[str]) -> list[str]:
     return list(dict.fromkeys(llm_tags + q3_to_tags(q3)))     # 순서 유지 + 중복 제거
 
 
-def run(answers: list[str], session: dict) -> dict:
+TRAIT_TAG_WEIGHT = 0.5   # 성향에서 추정한 태그 — 근거가 아니라 연관에서 온 것이라 절반만 믿는다 (vocab.TRAIT_TO_SKILL 참고)
+
+
+def run(answers: list[str], session: dict, trait_tags: list[str] | None = None) -> dict:
+    """answers: [Q1, Q2, Q3(, 재질문 답)].  trait_tags: 인터뷰 모드에서 성향→역량으로 추정한 태그 (선택)."""
     tags = normalize_to_tags(answers)
 
     if len(tags) < 2 and not session.get("asked_again"):     # 조건부 분기, 1회
@@ -99,8 +105,12 @@ def run(answers: list[str], session: dict) -> dict:
     session["tags"] = list(dict.fromkeys(session.get("tags", []) + tags))
     tags = session["tags"]
 
+    # 성향 태그: 근거 태그와 겹치지 않는 것만 0.5 로 추가. 화면에는 따로 표시한다
+    inferred = [t for t in (trait_tags or []) if t in set(TAGS) and t not in tags]
+    weights = {t: TRAIT_TAG_WEIGHT for t in inferred}
+
     # ① 전공 — limit을 크게 줘서 순위를 전부 받는다
-    ranking = find_majors_by_skills(tags, limit=100)
+    ranking = find_majors_by_skills(tags + inferred, limit=100, tag_weights=weights)
     if not ranking:
         return {"tags": tags, "empty": True}
     major = ranking[0]
@@ -124,7 +134,7 @@ def run(answers: list[str], session: dict) -> dict:
     if len(subjects) < 3:                                      # 다리 과목이 부족하면 전공 역량 전체로 보강
         subjects = subjects_for(major["id"], major_skills, k=3)
 
-    return {"tags": tags, "ranking": ranking, "total_majors": count_majors(),
+    return {"tags": tags, "inferred_tags": inferred, "ranking": ranking, "total_majors": count_majors(),
             "major": major, "job": job, "jobs": jobs, "subjects": subjects}
 
 
@@ -132,7 +142,10 @@ def render(r: dict) -> str:
     if r.get("empty"):
         return "입력하신 내용으로는 IT 역량이 검출되지 않았습니다. 다시 답해 보시겠어요?"
 
-    L = [f"[프로필]  {' · '.join(r['tags'])}", ""]
+    profile = " · ".join(r["tags"])
+    if r.get("inferred_tags"):                                             # 성향에서 추정한 태그는 근거 태그와 구분해 보여준다
+        profile += "   (성향에서 추정: " + " · ".join(r["inferred_tags"]) + ")"
+    L = [f"[프로필]  {profile}", ""]
 
     m, rk = r["major"], r["ranking"]
     L.append(f"[전공]    {m['school']} {m['name']}")
@@ -260,13 +273,27 @@ async def explain(r: dict) -> None:
 DEBUG = os.environ.get("DEBUG", "0") == "1"
 if __name__ == "__main__":
     import asyncio
+    import sys
 
     session: dict = {}
-    answers = [input(f"\n{q}\n> ") for q in QUESTIONS]
-    result = run(answers, session)
+    trait_tags: list[str] = []
+
+    if "--interview" in sys.argv:
+        # 대화형 모드: 자기소개 → 부족한 영역만 질문 (user_analysis 어댑터). Q3 는 그대로 묻는다
+        from interview import interview
+        iv = interview()
+        q3 = input(f"\n{QUESTIONS[2]}\n> ")
+        answers = iv["answers"] + [q3]
+        trait_tags = iv["trait_tags"]
+        if iv["trait_evidence"]:
+            print("\n(성향에서 추정한 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["trait_evidence"].items()) + ")")
+    else:
+        answers = [input(f"\n{q}\n> ") for q in QUESTIONS]
+
+    result = run(answers, session, trait_tags=trait_tags)
     if "followup" in result:
-        answers.append(input(f"\n조금 더 알려주세요. {result['followup']}\n> "))
-        result = run(answers, session)
+        answers.append(input(f"\n{FOLLOWUP_PREFIX}{result['followup']}\n> "))
+        result = run(answers, session, trait_tags=trait_tags)
 
     if result.get("empty"):
         print("\n추천할 만한 전공을 찾지 못했습니다. 다른 관심사로 다시 시도해보세요.")

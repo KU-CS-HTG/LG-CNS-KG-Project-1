@@ -207,6 +207,30 @@ def parent_of(skill: str) -> str | None:
 
 
 # ═════════════════════════════════════════════════════════════
+# TRAIT_TO_SKILL — 성향(user_analysis.STANDARD_TRAITS) → 역량. IS_A 와 **다른 종류**의 관계
+# ═════════════════════════════════════════════════════════════
+# IS_A 는 분류("Oracle 은 Database 의 한 종류", 위로 올리면 항상 참).
+# 이건 연관("수리적사고는 Statistics 를 시사한다", 경향일 뿐 틀릴 수 있음). 그래프로 그리면
+#   (:Trait)-[:SUGGESTS]->(:Skill) — 새 노드 종류, 새 엣지. IS_A 와 섞지 않는다.
+# 근거가 없다는 점이 결정적이다: 과목명은 성향을 가르치지 않는다 (그래서 전공 쪽에서 소프트 스킬을 뺐다).
+# 그러므로 여기서 나온 태그는 **가중치 0.5** 로만 반영하고, 화면에 "성향에서 추정" 으로 표시한다.
+# 30개 성향 중 역량으로 이을 근거가 있는 7개만. 창의성·공감·경청·안정지향 등은 잇지 않는다 — 억지로 이으면
+# 9/15 소프트 스킬 사태(성악과 → Communication)의 재현이다.
+
+TRAIT_TO_SKILL: dict[str, str] = {
+    "수리적사고": "Statistics",
+    "분석성": "Data Analysis",
+    "논리성": "Algorithm",
+    "탐구성": "Machine Learning",          # 약함 — A 판단으로 뺄 수 있음
+    "조정능력": "Project Management",
+    "주도성": "Project Management",
+    "계획성": "Project Management",
+}
+_bad_t = [v for v in TRAIT_TO_SKILL.values() if v not in _canon_values]
+assert not _bad_t, f"TRAIT_TO_SKILL 에 CANON 대표 표기가 아닌 이름이 있다: {_bad_t}"
+
+
+# ═════════════════════════════════════════════════════════════
 # NOT_A_SKILL — 이름이 아니라 문장인 것을 걸러내는 신호어
 # ═════════════════════════════════════════════════════════════
 # "생성형 AI를 활용한 프로젝트 경험이 있으신 분" 같은 서술은 역량 이름이 아니다.

@@ -122,13 +122,19 @@ def _match(need: set[str], have: set[str]) -> tuple[set[str], dict[str, str]]:
 
 # ═════════════════════════════════════════════════════════════
 
-def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
+def find_majors_by_skills(skills: list[str], limit: int = 10,
+                          tag_weights: dict[str, float] | None = None) -> list[dict]:
     """역량 태그 → 추천 전공.
 
     같은 전공명이 여러 대학에 있으면 **최상위 1개만** 남긴다 (설계서 2절).
     안 그러면 추천 3개가 전부 컴퓨터공학과가 된다 — 확인 항목 2번.
+
+    tag_weights: 태그별 신뢰 가중치 (기본 1.0). 성향에서 추정한 태그(vocab.TRAIT_TO_SKILL)는 0.5 로 들어온다 —
+    근거(과목명·공고)가 아니라 연관에서 온 태그라 절반만 믿는다. 분자·분모에 같이 곱하므로 비율 의미는 유지된다.
     """
     user = set(skills)
+    tw = tag_weights or {}
+    w = lambda s: _weight(s) * tw.get(s, 1.0)                 # 태그 무게 = √idf × 신뢰 가중치
     ranked = []
 
     for m in _load().get("majors", []):
@@ -155,9 +161,9 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
             #     흔한 태그가 동점을 양산한다. 시험 계산(9/15): "신호처리·데이터분석" 에서 Data Analysis 만 있는
             #     첨단융합학부가 0.50 → 0.12 로 내려가고, 희귀 역량을 갖춘 전공이 위로 온다.
             #   태그가 전부 흔한 것뿐이면(분모가 작으면) 결과는 가중 전과 같다 — 해가 되는 경우가 없다.
-            "score": (sum(_weight(s) * _strength(len(develops[s])) for s in exact)
-                      + FAMILY_WEIGHT * sum(_weight(s) * _strength(len(develops[p])) for s, p in family.items()))
-                     / sum(_weight(s) for s in user) if user else 0.0,
+            "score": (sum(w(s) * _strength(len(develops[s])) for s in exact)
+                      + FAMILY_WEIGHT * sum(w(s) * _strength(len(develops[p])) for s, p in family.items()))
+                     / sum(w(s) for s in user) if user else 0.0,
             # 동점 처리 — 매칭된 역량의 근거 과목 수. 같은 커버리지면 그 역량을 더 깊게 다루는 전공이 위로.
             #   (작업 가이드 B-3 "2차 기준". 통계학과는 Statistics 근거 과목이 19개, 식물생산과학부는 2개)
             "evidence_count": sum(len(develops[s]) for s in matched + covered_by),

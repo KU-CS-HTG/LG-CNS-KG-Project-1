@@ -49,3 +49,27 @@ for c in cases:
           f"{'' if ok_major else '← 전공 기대: ' + '/'.join(c['expect_major_top3'])} "
           f"{'' if ok_job else '← 직무 기대: ' + '/'.join(c['expect_job_role_contains'])}  {c['note'][:30]}")
 print(f"통과 {passed}/{len(cases)}")
+
+# ═════════════════════════════════════════════════════════════
+# 인터뷰 모드 (evals/interview_cases.json) — user_analysis 어댑터를 대본으로 자동 실행
+#   ask() 에 대본을 주입하므로 키보드 입력 없이 돈다. 건당 LLM 최대 3회 + 태거 1회.
+# ═════════════════════════════════════════════════════════════
+from interview import interview
+
+icases = json.loads((Path(__file__).resolve().parent / "evals" / "interview_cases.json").read_text(encoding="utf-8"))
+ipassed = 0
+print(f"\n인터뷰 모드 {len(icases)}건")
+for c in icases:
+    lines = iter(c["script"])
+    iv = interview(ask=lambda _prompt="": next(lines), say=lambda _m: None)
+    r = run(iv["answers"] + [c["q3"]], {}, trait_tags=iv["trait_tags"])
+    if "followup" in r or r.get("empty"):
+        print(f"  ✗ {c['id']} 결과 없음 ({'재질문' if 'followup' in r else '미검출'})"); continue
+    top3 = [x["name"].replace("?", "·") for x in r["ranking"][:3]]
+    ok_major = any(m in top3 for m in c["expect_major_top3"])
+    ok_trait = set(c["expect_trait_tags_subset"]) <= set(iv["trait_tags"]) | set(r["tags"])
+    ok = ok_major and ok_trait
+    ipassed += ok
+    print(f"  {'✓' if ok else '✗'} {c['id']} 전공 {top3[0]:<12} LLM {iv['llm_calls']}회 성향태그 {iv['trait_tags']} "
+          f"{'' if ok_major else '← 전공 기대: ' + '/'.join(c['expect_major_top3'])} {'' if ok_trait else '← 성향 기대 미충족'}  {c['note'][:28]}")
+print(f"통과 {ipassed}/{len(icases)}")
