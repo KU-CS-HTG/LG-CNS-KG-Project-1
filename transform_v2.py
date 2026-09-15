@@ -22,6 +22,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from collections import Counter
 from datetime import date
 from pathlib import Path
 from typing import Any, Literal
@@ -30,7 +31,7 @@ from bs4 import BeautifulSoup, NavigableString
 from pydantic import BaseModel, Field, field_validator
 
 DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
-RAW = DATA / "raw_notices.json"
+RAW_DIR = DATA / "raw"                     # 계열사별·날짜별 스냅샷 {CODE}_{YYYYMMDD}.json — lg_careers.py 가 만든다
 STAGED = DATA / "staged_jobs.json"
 EXTRACTED = DATA / "extracted_raw.json"
 CURATED = DATA / "curated_jobs.jsonl"
@@ -177,11 +178,30 @@ def flatten_notice(detail: dict[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
+def load_raw() -> list[dict[str, Any]]:
+    """data/raw/*.json 을 전부 읽어 공고 목록으로 합친다. 같은 jobNoticeId 는 파일명 날짜가 늦은 쪽을 쓴다.
+
+    파일명 규칙 {CODE}_{YYYYMMDD}.json 덕에 정렬만으로 '최신 우선' 이 된다.
+    닫힌 공고(예: CNS 9/11 신입)는 옛 스냅샷에만 있으므로 그대로 살아남는다 — 스냅샷을 지우지 않는 이유.
+    """
+    files = sorted(RAW_DIR.glob("*.json"))          # 이름순 = 날짜순 (같은 계열사 안에서)
+    if not files:
+        raise FileNotFoundError(f"{RAW_DIR} 에 raw 스냅샷이 없다. 먼저 lg_careers.py 를 실행")
+    by_id: dict[str, dict[str, Any]] = {}
+    for f in files:
+        for d in json.loads(f.read_text(encoding="utf-8")):
+            by_id[str(d["jobNoticesDetail"]["jobNoticeId"])] = d     # 뒤(=최신)가 덮어쓴다
+        print(f"   raw: {f.name}")
+    return list(by_id.values())
+
+
 def run_normalize() -> None:
-    raw = json.loads(RAW.read_text(encoding="utf-8"))
+    raw = load_raw()
     rows = [r for d in raw for r in flatten_notice(d)]
     STAGED.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
+    by_company = Counter(r["company"] for r in rows)
     print(f"① normalize: 공고 {len(raw)}건 → 직무 {len(rows)}건 → {STAGED}")
+    print("   회사별 직무:", dict(by_company))
 
 
 # ═════════════════════════════════════════════════════════════

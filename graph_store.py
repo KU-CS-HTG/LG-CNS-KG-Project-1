@@ -49,6 +49,36 @@ def _score(user: set[str], target: set[str]) -> float:
 FAMILY_WEIGHT = 0.5   # 계열 일치(상위 개념으로 커버)는 정확 일치의 절반으로 센다
 
 
+@lru_cache(maxsize=1)
+def _idf() -> dict[str, float]:
+    """역량별 IDF (inverse document frequency) — 전공 쪽 기준.
+
+    전공 63개 중 42개가 Data Analysis 를 기르고 3개만 Signal Processing 을 기른다. 둘을 똑같이 1점으로 세면
+    "데이터 분석" 태그는 42개 전공을 동점으로 만들고, 정작 변별력 있는 희귀 역량은 묻힌다 (9/15 실측).
+    검색엔진의 TF-IDF 와 같은 발상: 흔한 단어(the, 데이터)는 덜 세고 드문 단어는 더 센다.
+
+        idf(s) = log( 전공 수 / s 를 기르는 전공 수 )     ← 흔할수록 0 에 가깝고, 드물수록 커진다
+
+    예 (전공 63개): Data Analysis 0.41 · Statistics 0.92 · Machine Learning 1.84 · Signal Processing 3.04
+    """
+    majors = _load().get("majors", [])
+    n = max(len(majors), 1)
+    df: dict[str, int] = {}
+    for m in majors:
+        for s in m.get("develops", {}):
+            df[s] = df.get(s, 0) + 1
+    return {s: math.log(n / c) for s, c in df.items()}
+
+
+def _weight(skill: str) -> float:
+    """태그 하나의 가중치. 전공 쪽에 없는 태그(IS_A 자식, 예: Java)는 부모(Programming)의 IDF 를 쓴다."""
+    idf = _idf()
+    if skill in idf:
+        return idf[skill]
+    parent = _is_a().get(skill)
+    return idf.get(parent, 1.0) if parent else 1.0
+
+
 def _is_a() -> dict[str, str]:
     """IS_A 엣지 (자식 → 부모). graph.json 의 "is_a". 없으면 빈 dict — 계층 없이도 동작한다."""
     return _load().get("is_a", {})
@@ -96,14 +126,19 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
             "school": m["school"],
             "name": m["name"],
             "matched_skills": matched,
+            "skills": sorted(develops),                    # 이 전공이 기르는 역량 전체 — 직무 검색은 이걸로 한다 (설계서 4절 ②)
             "family": family,                              # {사용자 태그: 그것을 커버한 전공 역량}
             # 각 역량이 어느 과목에서 나왔는지 — 출력 2칸의 "근거 과목". 계열 커버는 상위 개념의 과목이 근거
             "evidence": {s: develops[s] for s in matched + covered_by},
-            # 전공 점수 = 사용자 태그 중 이 전공이 기르는 비율 (커버리지). 계열 일치는 절반.
-            #   직무처럼 집합 코사인을 쓰면 역량이 '적은' 전공이 이긴다 — 실측(9/15): "데이터 분석·통계" 에
-            #   식물생산과학부·의예과·화학부(역량 2개)가 1.0 으로 공동 1위, 통계학과(역량 3개)는 0.82 로 밀렸다.
-            #   전공은 역량이 많다고 나쁠 이유가 없으므로 분모에 전공 쪽 크기를 넣지 않는다.
-            "score": (len(exact) + FAMILY_WEIGHT * len(family)) / len(user) if user else 0.0,
+            # 전공 점수 = IDF 가중 커버리지. "사용자 태그의 무게 중 이 전공이 채운 무게의 비율". 계열 일치는 절반.
+            #   - 왜 분모에 전공 쪽 크기를 넣지 않나: 직무처럼 집합 코사인을 쓰면 역량이 '적은' 전공이 이긴다.
+            #     실측(9/15): "데이터 분석·통계" 에 식물생산과학부·의예과·화학부(역량 2개)가 1.0 공동 1위, 통계학과는 0.82.
+            #   - 왜 IDF 가중: 42개 전공이 가진 Data Analysis 와 3개만 가진 Signal Processing 을 같은 1점으로 세면
+            #     흔한 태그가 동점을 양산한다. 시험 계산(9/15): "신호처리·데이터분석" 에서 Data Analysis 만 있는
+            #     첨단융합학부가 0.50 → 0.12 로 내려가고, 희귀 역량을 갖춘 전공이 위로 온다.
+            #   태그가 전부 흔한 것뿐이면(분모가 작으면) 결과는 가중 전과 같다 — 해가 되는 경우가 없다.
+            "score": (sum(_weight(s) for s in exact) + FAMILY_WEIGHT * sum(_weight(s) for s in family))
+                     / sum(_weight(s) for s in user) if user else 0.0,
             # 동점 처리 — 매칭된 역량의 근거 과목 수. 같은 커버리지면 그 역량을 더 깊게 다루는 전공이 위로.
             #   (작업 가이드 B-3 "2차 기준". 통계학과는 Statistics 근거 과목이 19개, 식물생산과학부는 2개)
             "evidence_count": sum(len(develops[s]) for s in matched + covered_by),
@@ -127,12 +162,18 @@ def count_majors() -> int:
     """그래프에 올라간 전공 수 (전공명 기준, 중복 제외)."""
     return len({m["name"] for m in _load().get("majors", [])})
 
-def find_jobs_by_skills(skills: list[str], limit: int = 5) -> list[dict]:
-    """역량 태그 → 추천 직무. 갖춘 역량 / 채울 역량을 함께 돌려준다."""
+def find_jobs_by_skills(skills: list[str], limit: int = 5, career_type: str | None = None) -> list[dict]:
+    """역량 태그 → 추천 직무. 갖춘 역량 / 채울 역량을 함께 돌려준다.
+
+    career_type="신입" 이면 신입 공고만. 서비스 정의가 'LG 계열사 **신입** 직무 진로 추천' 이라
+    취준생에게 경력·석박사 산학장학 공고가 1위로 나오는 걸 막는다 (실측 9/15: 웹/자바 입력에 '보험 SE (경력)' 이 1위).
+    """
     user = set(skills)
     ranked = []
 
     for j in _load().get("jobs", []):
+        if career_type and career_type not in (j.get("career_type") or ""):
+            continue
         req, pref = set(j["requires"]), set(j["prefers"])
         all_skills = req | pref
         # 직무 요구(need)를 전공 역량(have)에 맞춘다. 요구 'Oracle' 은 전공의 'Database' 로 계열 커버.
@@ -188,8 +229,20 @@ def subjects_for(major_id: str, skills: list[str], k: int = 3) -> list[dict]:
     return [{"subject": n, "hits": c, "for": detail[n]} for n, c in counter.most_common(k)]
 
 def all_skills() -> list[str]:
-    """통제 어휘 전체. app.py 가 LLM 출력을 대조할 때 쓴다."""
+    """그래프에 있는 Skill 노드 전체 (전공·직무·상위 개념)."""
     return _load().get("skills", [])
+
+
+def taggable_skills() -> list[str]:
+    """사용자 태그 후보 — 전공이 기르는 역량 + 그 하위 개념(IS_A 자식).
+
+    직무 쪽에만 있는 역량(예: 직무 required 에 적힌 Problem Solving, Excel)이 태그가 되면 어느 전공과도 안 맞으면서
+    커버리지 분모만 키운다 (9/15 실측). 태그는 전공 매칭의 입력이므로 "전공이 기를 수 있는 것" 으로 제한한다.
+    하위 개념을 포함하는 이유: 'Java' 태그는 전공의 'Programming' 으로 계열 커버되므로 유효한 태그다.
+    """
+    developed = {s for m in _load().get("majors", []) for s in m.get("develops", {})}
+    children = {c for c, p in _is_a().items() if p in developed}
+    return sorted(developed | children)
 
 
 def exists(name: str) -> bool:

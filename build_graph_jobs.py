@@ -87,8 +87,9 @@ def build_jobs() -> tuple[list[dict], set[str], list[str]]:
         # 필수에 이미 있는 건 우대에서 뺀다 (같은 역량이 양쪽에 뜨면 출력이 지저분해진다)
         pref = [s for s in pref if s not in set(req)]
 
-        if not req and not pref:
-            continue                       # 역량이 하나도 없는 직무는 그래프에 올려도 안 이어진다
+        if len(req) + len(pref) < 2:
+            continue                       # 역량 0~1개 직무는 제외. 1개짜리('영업마케팅: Data Analysis')는 집합 코사인에서
+                                           # 항상 만점이 나와 AI 직무(10개)를 밀어내는데, 추천 근거로는 너무 빈약하다 (9/15 실측)
 
         jobs.append({
             "id": r["job_id"],
@@ -134,7 +135,16 @@ def build() -> None:
     via_parent = {s for s in job_skills - major_skills if PARENT.get(s) in major_skills}
     print(f"  ★ 정확히는 안 겹치지만 IS_A 한 홉으로 전공과 이어지는 직무 역량: {len(via_parent)}개 {sorted(via_parent)[:12]}")
     print(f"    ↑ 이 숫자가 0이면 추천 결과도 0이다. 어휘집이 갈렸다는 뜻.")
-    print(f"\n  CANON 추가 후보 {len(candidates)}개 → A에게 전달")
+    from collections import Counter
+    by_company = Counter(j["company"] for j in jobs)
+    print(f"  회사별 Job: {dict(by_company)}")
+
+    # CANON 추가 후보 → 파일. A 가 이걸 보고 어휘집에 넣을지 결정한다 (작업 가이드 A-5 'unmapped.txt')
+    cand_path = DATA / "canon_candidates.txt"
+    counts = Counter(t.strip() for r in load_job_rows() for t in r["required"] + r["preferred"])
+    ranked = sorted(candidates, key=lambda t: -counts.get(t, 0))          # 많이 나온 후보부터 — A 가 위에서부터 보면 된다
+    cand_path.write_text("\n".join(f"{counts.get(t, 0)}\t{t}" for t in ranked), encoding="utf-8")
+    print(f"\n  CANON 추가 후보 {len(candidates)}개 → {cand_path.name} (A에게 전달)")
     for t in candidates[:12]:
         print(f"    - {t}")
 

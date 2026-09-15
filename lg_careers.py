@@ -26,7 +26,11 @@ import requests
 from bs4 import BeautifulSoup
 
 DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
-RAW = DATA / "raw_notices.json"
+RAW_DIR = DATA / "raw"                              # 계열사별·날짜별 API 응답 원본. 예: raw/LGES_20260915.json
+
+# 공고는 닫히면 API 에서 사라진다 (실측: CNS 신입 공고가 9/11 → 9/15 사이에 닫혀 13공고 → 12공고).
+# 그래서 raw 는 "덮어쓰기" 가 아니라 "날짜별 스냅샷 추가" 다. 같은 계열사를 다시 받으면 새 날짜 파일이 하나 더 생기고,
+# transform_v2 가 전부 읽어서 jobNoticeId 로 중복을 없앤다 (같은 공고면 최신 파일 우선).
 
 # ─────────────────────────────────────────────────────────────
 # 1) API 기본 설정
@@ -143,25 +147,30 @@ def parse_notice(detail: dict) -> list[dict]:
 # 4) 실행 예시
 # ─────────────────────────────────────────────────────────────
 
+def collect(company_codes: list[str], stamp: str | None = None) -> list[Path]:
+    """계열사별로 공고 상세를 전부 받아 data/raw/{CODE}_{YYYYMMDD}.json 에 저장한다. 저장한 파일 경로 목록을 돌려준다."""
+    from datetime import date
+    stamp = stamp or date.today().strftime("%Y%m%d")
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
+    saved = []
+    for code in company_codes:
+        raw = []
+        for item in list_job_notices(company_codes=[code]):
+            raw.append(fetch_job_detail(item["jobNoticeId"]))
+            time.sleep(0.5)                   # 요청 간격 (robots 예의)
+        out = RAW_DIR / f"{code}_{stamp}.json"
+        out.write_text(json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"  {code:12} 공고 {len(raw):3}건 → {out.name}")
+        saved.append(out)
+    return saved
+
+
 if __name__ == "__main__":
-
-    # (a) 단일 공고 테스트
-    detail = fetch_job_detail(1002196)
-    jobs = parse_notice(detail)
-    print(f"포함 직무 {len(jobs)}개\n")
-
-    first = jobs[0]
-    print(f"[{first['company']}]")
-    print(f"{first['job_name']}")
-    print(first["main_tasks"][:600])
-
-    # (b) LG CNS 공고 전체 수집 → data/raw_notices.json (API 응답 원본 = raw 층)
-    #     이후 단계(transform_v2.py)는 전부 이 파일에서 출발한다.
-    raw = []
-    for item in list_job_notices(company_codes=["CNS"]):
-        raw.append(fetch_job_detail(item["jobNoticeId"]))
-        time.sleep(0.5)                       # 요청 간격 (robots 예의)
-
-    RAW.parent.mkdir(exist_ok=True)
-    RAW.write_text(json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\n저장 완료: 공고 {len(raw)}건 → {RAW}")
+    import sys
+    # 사용법:  python lg_careers.py LGES LGU LGD        (계열사 코드를 나열. 생략하면 CNS 를 제외한 전부)
+    # 계열사 코드: LGE LGD LGIT LGC LGES LGHH LGU HELLOVISION CNS SVO GIIR
+    # ★ CNS 는 기본에서 뺐다 — 9/11 스냅샷(raw/CNS_20260911.json)에 신입 공고 9건이 있고 그 공고는 이미 닫혔다.
+    #   CNS 를 다시 받고 싶으면 명시적으로 적는다. 스냅샷은 지우지 않는다.
+    codes = sys.argv[1:] or ["LGE", "LGD", "LGIT", "LGC", "LGES", "LGHH", "LGU", "HELLOVISION", "SVO", "GIIR"]
+    print(f"수집: {codes}")
+    collect(codes)

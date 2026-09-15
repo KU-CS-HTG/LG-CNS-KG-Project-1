@@ -1,0 +1,647 @@
+17	AI
+11	Excel
+10	영어
+8	TOEIC Speaking
+8	OPIc
+8	중국어
+6	PowerPoint
+6	기계공학
+5	시뮬레이션
+5	화학
+5	전기화학
+4	전기
+4	Creo
+4	SAP
+4	Salesforce
+4	Pytorch
+4	산업공학
+4	Simulink
+4	JMP
+4	Confluence
+4	정보보안기사
+3	로봇 제어
+3	Container
+3	기계
+3	AX
+3	일본어
+3	Public Cloud
+3	Matlab
+3	3D CAD
+3	화학공학
+3	CATIA
+3	3D 설계 Tool
+3	전기 관련 자격증
+3	전기 공학
+3	ISMS-P
+2	MCP
+2	자율주행
+2	디지털 트윈
+2	Robotics SW
+2	Robot Foundation Model
+2	Fiori
+2	AutoCAD
+2	SolidWorks
+2	PLC 제어
+2	S/4HANA Public Cloud
+2	S/4HANA Cloud Private
+2	Hybrid Cloud
+2	자동화 도구
+2	Serverless
+2	ERP
+2	실험계획법
+2	최적화 방법론
+2	VBA
+2	SmartSpice
+2	Cadence Spectre
+2	SPEOS
+2	LightTools
+2	FDTD
+2	Setfos
+2	회로 설계
+2	Display 제품 회로 설계
+2	알고리즘 개발
+2	회로 시뮬레이션 Tool
+2	CAE
+2	Simulator
+2	메카트로닉스
+2	3D 설계
+2	재료공학
+2	SEM
+2	Tensorflow
+2	Digital Twin
+2	ROS
+2	ROS2
+2	기구설계
+2	설계최적화
+2	부품 개발
+2	제2외국어 회화 능통
+2	전기 화학
+2	Simulation
+2	고분자 소재
+2	유변학
+2	PPT
+2	컴퓨터공학
+2	Data 분석
+2	지표 분석
+2	협업
+2	CAD
+2	전기공학
+2	전자공학
+2	엑셀
+2	minitab
+2	R
+2	기계 공학
+2	전자 공학
+2	PostgreSQL
+2	MATLAB
+2	BMS
+2	Cloud Infrastructure
+2	IaC
+2	빅데이터 기반 예측 모델링
+2	FCBGA
+2	FCCSP
+2	CSP
+2	RF-SiP
+2	AiP
+2	AP 모듈
+2	Fine Pattern
+2	Small via
+2	ETS
+2	Msap
+2	노광기술
+2	도금기술
+2	표면처리기술
+2	원소재 개발
+2	Big Data
+2	MS Teams
+2	Word
+2	CISSP
+2	전산 회계 관련 자격증
+1	Function Calling
+1	Vector DB
+1	AMR
+1	로봇팔
+1	AI Transformation
+1	Digital Transformation
+1	Smart Factory
+1	Data Governance
+1	최적화 기법
+1	데이터/AI 관련 자격증
+1	AI 기반 개발 도구
+1	생성형 AI 기반 개발 도구
+1	AI Agent 기술
+1	Agent
+1	Cloud Architecture
+1	Virtualization
+1	Automation Tools
+1	Infrastructure Automation
+1	Cloud Operations
+1	SAP ERP
+1	ABAP
+1	데이터 기술
+1	Web UI
+1	3D UI
+1	Unity
+1	데이터베이스 기술
+1	AI 기반 개발 기술
+1	건축
+1	설비
+1	냉공조
+1	데이터센터 설비
+1	Inventor
+1	Catia
+1	B2B Marketing
+1	Content Planning
+1	Storytelling
+1	IT Industry Knowledge
+1	Event Planning
+1	서버
+1	스토리지
+1	백업
+1	가상화
+1	제안
+1	견적
+1	입찰
+1	계약
+1	IBM
+1	HP
+1	Cisco
+1	IM
+1	제안서 작성
+1	New Install
+1	Conversion
+1	GSI
+1	Pre-Sales
+1	S/4HANA
+1	SAP ECC6.0
+1	SD
+1	MM
+1	FI
+1	TR
+1	CO
+1	PP
+1	SAP PCE
+1	BPT
+1	Clean Core
+1	SAP Embedded AI
+1	Custom AI
+1	J4C
+1	J4D
+1	Sales Cloud
+1	Service Cloud
+1	Marketing Cloud
+1	Agentforce
+1	Salesforce 관련 자격증
+1	MS Active Directory
+1	MECM
+1	DNS
+1	DHCP
+1	RADIUS
+1	Windows Server
+1	MS Entra ID
+1	Powershell
+1	ProFrame C 4.0
+1	ProFrame C 5.0
+1	증권 Core 업무
+1	SI개발
+1	금융 프로젝트 매니저
+1	프로젝트 리더
+1	해외 사업
+1	보험 프로젝트 이행
+1	Application Architecture
+1	AI 관련 솔루션 구축
+1	AI 관련 기술
+1	AI 관련 전공
+1	PMO
+1	비즈니스 커뮤니케이션
+1	은행 계정계 분석
+1	은행 계정계 설계
+1	은행 계정계 개발
+1	글로벌 패키지 개발
+1	글로벌 시스템 구축
+1	글로벌 금융 프로젝트 참여
+1	고객사 의사결정 리딩 전문성
+1	여신 코어 설계 전문성
+1	은행/카드 계정계 분석
+1	여신 설계
+1	수신 설계
+1	외환 설계
+1	대형 차세대 프로젝트 설계
+1	리팩토링
+1	은행 IT업무
+1	On-Premise Server
+1	Storage
+1	Backup
+1	Private Cloud IaaS
+1	PaaS
+1	Vmware
+1	OpenShift
+1	Enterprise Architecture
+1	Cloud Native
+1	데이터 표준화
+1	빅데이터
+1	HelmChart
+1	Gitlab
+1	ArgoCD
+1	CICD Pipeline
+1	오픈소스 S/W
+1	웹개발
+1	메신저 구축
+1	대량의 실시간 트랜잭션 S8 구현
+1	AI Vision
+1	강화학습
+1	최적화 알고리즘
+1	3D Simulation
+1	제2외국어
+1	Generative AI
+1	클라우드 아키텍처
+1	Private Cloud
+1	5G 특화망
+1	AI 인프라(HPC)
+1	DX
+1	SDA
+1	Data
+1	브랜딩
+1	광고
+1	디지털 플랫폼
+1	소셜 플랫폼
+1	소비자 트렌드
+1	AI Tool
+1	디자인 Tool
+1	데이터 분석·시각화 도구
+1	디지털 기술
+1	커머스 플랫폼
+1	Google Analytics
+1	Adobe Analytic
+1	Google Search Console
+1	GA
+1	Tableau
+1	Figma
+1	채용 프로세스 기획
+1	AI 기반 인재 소싱 Tool
+1	ATS
+1	영어 회화
+1	공인회계사
+1	CFA
+1	세무사
+1	공인노무사
+1	경영지도사
+1	근로감독
+1	IC 아키텍처 개발
+1	산업설비 자동화
+1	로봇공학
+1	용접
+1	금형
+1	냉동 사이클 설계
+1	비즈니스 영어
+1	세라믹
+1	무기소재
+1	실험 설계
+1	XRD
+1	EDS
+1	ICP
+1	DSC
+1	TGA
+1	유리 조성 개발
+1	용융·성형 공정
+1	재료 기반 AX 방법론
+1	소재 분야 특허 출원
+1	B2B 사업기획
+1	전략기획
+1	신사업기획
+1	사업개발
+1	데이터센터
+1	HVAC
+1	에너지
+1	전략 컨설팅
+1	Quantum Computing
+1	Quantum Algorithm Design
+1	Quantum Machine Learning
+1	Quantum Circuit Compiler
+1	Qiskit
+1	PennyLane
+1	Rust
+1	양자 정보 이론
+1	양자 네트워크
+1	양자 키 분배
+1	양자 통신 프로토콜
+1	고전 오류정정 부호
+1	양자 채널 분석
+1	내결함성 양자 컴퓨팅
+1	양자 컴퓨팅 아키텍처
+1	Multimodal 데이터
+1	Multiphysics 해석 기법
+1	Modern C++
+1	Classification
+1	Detection
+1	Segmentation
+1	OpenCV
+1	Robot Vision
+1	Camera Geometric
+1	VLM
+1	Generative Model
+1	Anomaly Detection
+1	FastAPI
+1	SFT
+1	DPO
+1	Virtual Validation
+1	Graph Neural Network
+1	Neural PDE Solver
+1	MLIP
+1	로봇 시스템
+1	로봇–AI–IT/OT 통합 아키텍처
+1	로봇 제어 로직
+1	산업 환경 Vision AI
+1	2D/3D Vision
+1	데이터 파이프라인
+1	센서 특성
+1	통계학
+1	컴퓨팅
+1	수학
+1	Gurobi
+1	Xpress
+1	에너지공학
+1	신소재공학
+1	고분자공학
+1	2차전지 소재 개발 및 평가
+1	2차전지 부품 개발
+1	Cell Design
+1	Electrochemical Modeling
+1	Performance Simulation
+1	Teamwork
+1	Proactive Problem Solving
+1	2차전지 소재 개발
+1	Cell 설계
+1	3D CAD tool
+1	용접 재료
+1	강도설계
+1	회계
+1	재무
+1	원재료 특성 및 구조 설계
+1	이차전지 소재
+1	전극 형성
+1	공정 및 공법
+1	DX system
+1	Business English
+1	Chinese
+1	Japanese
+1	B2B Sales Experience
+1	Data Center Knowledge
+1	전원 회로 설계
+1	측정 회로 설계
+1	제어 회로 설계
+1	기능 안전 회로 설계
+1	HW 성능 검증
+1	디버깅
+1	Embedded 시스템
+1	데이터사이언스
+1	응용소프트웨어공학
+1	인공지능공학
+1	외국어 (영어)
+1	외국어 (중국어)
+1	이차전지
+1	재료 공학
+1	화학 공학
+1	화공계열 전공
+1	신소재 전공
+1	3D Tool
+1	AC/DC 회로 이론
+1	전력변환기기 동작원리
+1	소통
+1	제어
+1	PLC
+1	광학
+1	통계 소프트웨어
+1	머신 비전
+1	자동화 검사 장비
+1	데이터 분석 툴
+1	전극 설비
+1	기계 설계
+1	전기 설계
+1	Vision 광학 Tool
+1	비파괴 검사
+1	CT
+1	X-ray
+1	2D 설계
+1	Solid Works
+1	전기회로 설계
+1	제어 프로그램 설계
+1	EDX
+1	XRF
+1	SAS
+1	Spotfire
+1	Spss
+1	Origin
+1	AI 프로그램
+1	전기화학 분석장비 (EIS)
+1	공정기술
+1	공정 데이터 분석
+1	기계기사
+1	전기기사
+1	품질경영기사
+1	생산관리기사
+1	ADsP
+1	6시그마 GB
+1	6시그마 BB
+1	3DCS
+1	GD&T
+1	AutoCad
+1	Minitab
+1	MES
+1	Auto CAD
+1	Solidworks
+1	PC 제어
+1	지멘스
+1	미쓰비시
+1	기계 관련 자격증
+1	전자 관련 자격증
+1	메카트로닉스 관련 자격증
+1	산업공학 관련 자격증
+1	AX 기술
+1	Agent 자동화 워크플로우
+1	PLC Programming
+1	Structural Analysis
+1	Dynamics Analysis
+1	CFD Analysis
+1	Plant Simulation
+1	Programming Development
+1	UI Programming
+1	Rockwell Emulate 3D
+1	NX-MCD
+1	Process Simulate
+1	C/C++
+1	Linux
+1	Vision 기반 로봇 인지 프로젝트
+1	로봇 경로/동작 계획
+1	로봇 simulation
+1	Robot Learning
+1	임베디드
+1	센서 및 Device 연동
+1	웹·앱
+1	통신
+1	센서 연동
+1	설비 제어
+1	로봇 컨트롤
+1	데이터 수집
+1	공조냉동기사
+1	전기(공사)기사
+1	에너지관리기사
+1	기계/전기/안전/산업공학 자격증
+1	물리모델링
+1	인공지능
+1	데이터 사이언스
+1	Lab Automation
+1	소재 데이터 분석
+1	재료 기계
+1	재료
+1	소재
+1	MongoDB
+1	Apache Spark
+1	Delta Lake
+1	DCDC 설계
+1	통신 회로 설계
+1	OrCAD
+1	EMC 설계 평가
+1	Kalman Filter
+1	RLS
+1	Adaptive Filter
+1	전기차
+1	자동차 전장 시스템
+1	MCU
+1	센서 데이터 처리
+1	Data Pipeline
+1	RDS
+1	No-SQL
+1	Data Lake
+1	Data Warehouse
+1	Network Security
+1	Security Certification
+1	Vulnerability Detection
+1	RESTful API
+1	자동차공학
+1	구조 해석기술
+1	배터리 관련 시뮬레이션
+1	열유동 해석
+1	전지 모델링
+1	Battery Modeling
+1	예측 알고리즘 개발
+1	시계열 데이터 분석
+1	Simulator 개발
+1	2D 도면 작성
+1	기계 전공
+1	전기전자 전공
+1	재료 전공
+1	메카트로닉스 전공
+1	소재 기반 연구
+1	HW
+1	SW
+1	전기전자공학
+1	영미권 변호사 자격
+1	전극 믹싱
+1	전극 코팅
+1	R2R 공정
+1	전극 코터 검사기
+1	계측기 운영
+1	물성 측정
+1	설비 유지보수
+1	지게차 운전
+1	R2R 필름 성형
+1	FCBGA 기판 또는 반도체 패키징 양산 공정
+1	ABF 등 패키지용 소재 공정기술
+1	영어 커뮤니케이션
+1	FCBGA 기판
+1	반도체 패키징 양산 공정
+1	OSAT 후공정 생산기술
+1	검사공정 설비
+1	ABF 패키지용 소재 공정기술
+1	정밀도 제어
+1	ABF
+1	AOI
+1	AVI
+1	전력 계통
+1	전기 설비
+1	IDC
+1	전기 공학 관련 학과
+1	공기조화
+1	열역학
+1	열전달
+1	유체역학
+1	열부하 계산
+1	열원설비
+1	공조설비
+1	기계 공학 전공
+1	공조냉동기계기사
+1	건축설비기사
+1	일반기계기사
+1	Teams
+1	AI 도구
+1	통신 공학
+1	5G
+1	LTE
+1	CCNA
+1	CCNP
+1	정보통신산업기사
+1	광통신공학
+1	노동관계 법령 해석
+1	임단협 합의서 작성
+1	문서 작성 및 보고
+1	Microsoft 365
+1	Entra
+1	SaaS
+1	SSO
+1	Fabric
+1	Lakehouse
+1	Warehouse
+1	MS 공인 자격증
+1	보안 솔루션
+1	보안 관제
+1	클라우드 보안 정책
+1	3GPP
+1	GSMA
+1	SrsLTE
+1	Open5GS
+1	조직 운영
+1	유관 조직 커뮤니케이션
+1	보안 서비스 기획
+1	정보보안 아키텍쳐 수립
+1	보안 서비스 품질 지표 수립
+1	장애 및 운영 이슈 분석
+1	B2B 고객 기술 지원
+1	고객 이슈 조정
+1	ITIL
+1	정보보호 관리체계
+1	기술보안 컨설팅
+1	고객 인터뷰
+1	현황 분석
+1	갭 분석
+1	보안 솔루션 도입 컨설팅
+1	개선과제 우선순위화
+1	로드맵 수립
+1	기술적 개선사항 제안
+1	이해관계자 간 이슈 조정
+1	EDR
+1	백신
+1	DLP
+1	NAC
+1	방화벽
+1	IPS
+1	VPN
+1	WAF
+1	OA
+1	사무업무 관련 전공
+1	Office
+1	사무지원
+1	정산
+1	CS 업무
+1	Application Deployment
+1	ECS
+1	AI Development Tools
+1	Network Design
+1	Computing
+1	Container Management
+1	Database Management
+1	Access Control
+1	DevSecOps
+1	Cost Optimization
+1	Project Planning
+1	Collaboration
