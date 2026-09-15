@@ -7,6 +7,7 @@
     "Azure",
     "C",
     "C#",
+    "C++",
     "CI/CD",
     "Cloud",
     "Computer Architecture",
@@ -36,6 +37,7 @@
     "Operating Systems",
     "Optimization",
     "Oracle",
+    "Problem Solving",
     "Programming",
     "Project Management",
     "Prompt Engineering",
@@ -1131,17 +1133,6 @@
       ]
     },
     {
-      "id": "1002046-sap-프로젝트-관리자-pm-im",
-      "role": "SAP 프로젝트 관리자(PM/IM)",
-      "company": "LG CNS",
-      "career_type": "경력",
-      "url": "https://careers.lg.com/apply/detail?id=1002046",
-      "requires": [
-        "Project Management"
-      ],
-      "prefers": []
-    },
-    {
       "id": "1001677-생명보험-업무전문가-및-시스템엔지니어",
       "role": "생명보험 업무전문가 및 시스템엔지니어",
       "company": "LG CNS",
@@ -1198,39 +1189,6 @@
         "Java"
       ],
       "prefers": []
-    },
-    {
-      "id": "1001432-application-architect",
-      "role": "Application Architect",
-      "company": "LG CNS",
-      "career_type": "경력",
-      "url": "https://careers.lg.com/apply/detail?id=1001432",
-      "requires": [
-        "MSA"
-      ],
-      "prefers": []
-    },
-    {
-      "id": "1001427-global-core-banking-pm-pmo",
-      "role": "Global Core Banking PM / PMO",
-      "company": "LG CNS",
-      "career_type": "경력",
-      "url": "https://careers.lg.com/apply/detail?id=1001427",
-      "requires": [
-        "Project Management"
-      ],
-      "prefers": []
-    },
-    {
-      "id": "1001427-global-core-banking-business-analyst",
-      "role": "Global Core Banking Business Analyst",
-      "company": "LG CNS",
-      "career_type": "경력",
-      "url": "https://careers.lg.com/apply/detail?id=1001427",
-      "requires": [],
-      "prefers": [
-        "Cloud"
-      ]
     },
     {
       "id": "1001371-infrastructure-architect",
@@ -1315,6 +1273,334 @@
         "React",
         "Spring",
         "DevOps"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002146-디지털-기획",
+      "role": "디지털 기획",
+      "company": "HSAD",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002146",
+      "requires": [],
+      "prefers": [
+        "LLM",
+        "SQL"
+      ]
+    },
+    {
+      "id": "1002117-panel-설계",
+      "role": "Panel 설계",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [],
+      "prefers": [
+        "Python",
+        "C++"
+      ]
+    },
+    {
+      "id": "1002117-회로",
+      "role": "회로",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [
+        "C",
+        "C++",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002118-panel-설계",
+      "role": "Panel 설계",
+      "company": "LG디스플레이",
+      "career_type": "산학장학생",
+      "url": "https://careers.lg.com/apply/detail?id=1002118",
+      "requires": [],
+      "prefers": [
+        "Python",
+        "C++"
+      ]
+    },
+    {
+      "id": "1002118-회로",
+      "role": "회로",
+      "company": "LG디스플레이",
+      "career_type": "산학장학생",
+      "url": "https://careers.lg.com/apply/detail?id=1002118",
+      "requires": [
+        "C",
+        "C++",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002160-sw-r-d_양자컴퓨팅-활용-및-원천기술-확보",
+      "role": "SW R&D_양자컴퓨팅 활용 및 원천기술 확보",
+      "company": "LG전자",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002160",
+      "requires": [
+        "Python",
+        "C++"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002176-ai기술개발",
+      "role": "AI기술개발",
+      "company": "LG에너지솔루션",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002176",
+      "requires": [
+        "Deep Learning",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002176-비전ai기술개발",
+      "role": "비전AI기술개발",
+      "company": "LG에너지솔루션",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002176",
+      "requires": [
+        "Python",
+        "C++"
+      ],
+      "prefers": [
+        "Computer Vision",
+        "LLM"
+      ]
+    },
+    {
+      "id": "1002176-ai-agent-개발",
+      "role": "AI Agent 개발",
+      "company": "LG에너지솔루션",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002176",
+      "requires": [
+        "LangChain",
+        "RAG",
+        "NLP"
+      ],
+      "prefers": [
+        "LangGraph",
+        "LLM"
+      ]
+    },
+    {
+      "id": "1002176-소재개발ai",
+      "role": "소재개발AI",
+      "company": "LG에너지솔루션",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002176",
+      "requires": [
+        "Machine Learning",
+        "Deep Learning",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002176-data-science",
+      "role": "Data Science",
+      "company": "LG에너지솔루션",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002176",
+      "requires": [
+        "Optimization",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-bms-sw개발",
+      "role": "BMS SW개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "C",
+        "Statistics"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-설비관리-전극",
+      "role": "설비관리(전극)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Data Analysis"
+      ],
+      "prefers": [
+        "Programming"
+      ]
+    },
+    {
+      "id": "1002075-생산운영-전극",
+      "role": "생산운영(전극)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Data Analysis",
+        "Problem Solving"
+      ],
+      "prefers": [
+        "Programming"
+      ]
+    },
+    {
+      "id": "1002075-검사기술-원통형",
+      "role": "검사기술(원통형)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Deep Learning",
+        "Python"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-제조지능화-디지털트윈",
+      "role": "제조지능화(디지털트윈)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Machine Learning",
+        "Deep Learning"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-제조지능화-원격",
+      "role": "제조지능화(원격)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Python",
+        "Database",
+        "Network",
+        "Data Analysis"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-ai진단솔루션개발",
+      "role": "AI진단솔루션개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Python",
+        "Data Analysis"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002075-bms_sox-알고리즘-설계",
+      "role": "BMS_SOX 알고리즘 설계",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Python"
+      ],
+      "prefers": [
+        "C"
+      ]
+    },
+    {
+      "id": "1002075-data-engineering",
+      "role": "Data Engineering",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "C",
+        "JavaScript",
+        "Python",
+        "Database"
+      ],
+      "prefers": [
+        "Terraform",
+        "AWS",
+        "GCP",
+        "MSA"
+      ]
+    },
+    {
+      "id": "1002075-구조-시뮬레이션",
+      "role": "구조 시뮬레이션",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Machine Learning",
+        "Deep Learning"
+      ]
+    },
+    {
+      "id": "1002075-열유동-시뮬레이션-안전성",
+      "role": "열유동 시뮬레이션(안전성)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Machine Learning",
+        "Deep Learning"
+      ]
+    },
+    {
+      "id": "1002075-열유동-시뮬레이션-전지",
+      "role": "열유동 시뮬레이션(전지)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Machine Learning",
+        "Deep Learning"
+      ]
+    },
+    {
+      "id": "1001202-software-architect",
+      "role": "Software Architect",
+      "company": "LG유플러스",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1001202",
+      "requires": [
+        "Kubernetes",
+        "CI/CD",
+        "Python",
+        "TypeScript",
+        "Java"
+      ],
+      "prefers": []
+    },
+    {
+      "id": "1002204-ax기획",
+      "role": "AX기획",
+      "company": "D&O",
+      "career_type": "경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002204",
+      "requires": [
+        "DevOps",
+        "Docker",
+        "Kubernetes",
+        "CI/CD"
       ],
       "prefers": []
     }
