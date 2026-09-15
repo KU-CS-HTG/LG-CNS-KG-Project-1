@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
@@ -167,9 +168,11 @@ def render(r: dict) -> str:
                      f"요구 {alt['total']}개 중 {alt['covered_count']}개 커버")
     return "\n".join(L)
 
-EXPLAIN_SYSTEM = """너는 대학생 진로 상담 전문가다.
+EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
 아래 [근거]에 주어진 사실만 사용해서, 학생에게 보여줄 "진로 추천" 문단을 작성하라.
-이 문단이 사용자가 보는 전부이므로, 전공명·과목명·직무명·회사명을 문장 안에 자연스럽게 모두 포함해야 한다.
+이 문단은 화면 위쪽의 추천 카드(전공 순위·과목·직무 요구 역량 커버 현황) **아래에 붙는 설명**이다.
+숫자와 근거는 카드가 이미 보여주므로 다시 나열하지 말고, 카드의 항목들이 왜 그렇게 이어지는지 풀어 쓴다.
+전공명·과목명·직무명·회사명은 문장 안에 자연스럽게 포함한다.
 
 절대 규칙:
 1. [근거]에 없는 과목명, 역량명, 회사명, 직무명을 절대 지어내지 않는다.
@@ -177,6 +180,9 @@ EXPLAIN_SYSTEM = """너는 대학생 진로 상담 전문가다.
    (예: "데이터마이닝 방법 및 실습"은 대량의 데이터에서 패턴을 찾아내는 방법을 배우는
    과목이라는 일반 상식 수준의 설명). [근거]에 없는 회사의 구체적인 프로젝트나 사실을
    지어내는 것과는 다르다 — 이건 하지 않는다.
+3. 직무가 어떤 일을 하는지는 **[근거]에 적힌 요구 역량으로만** 말한다. 그 회사·직무의 실제 업무 내용은
+   우리 데이터에 없으므로 상상해서 쓰지 않는다.
+4. 문장 수를 채우려고 내용을 늘리지 않는다. 할 말이 적으면 짧게 쓴다.
 
 작성 순서 (총 4단락, 각 단락 사이 줄바꿈):
 
@@ -185,13 +191,13 @@ EXPLAIN_SYSTEM = """너는 대학생 진로 상담 전문가다.
 예: "당신은 서울대학교 통계학과에 진학하여 '데이터마이닝 방법 및 실습', '실험계획 및 실습',
 '함수추정의 응용 및 실습' 과목들을 듣는 것을 추천합니다."
 
-[2단락 - 과목이 역량을 기르는 이유, 반드시 3문장 이상]
+[2단락 - 과목이 역량을 기르는 이유, 2~3문장]
 [근거]의 과목들이 왜, 어떻게 해당 역량(Skill)을 길러주는지 고등학생도 이해할 수 있는
-쉬운 말로 구체적으로 설명한다. 각 과목이 다루는 일반적인 내용을 하나씩 짚어가며 설명한다.
+쉬운 말로 설명한다. 각 과목이 다루는 일반적인 내용을 하나씩 짚는다.
 
-[3단락 - 역량이 직무에 필요한 이유, 반드시 3문장 이상]
-그 역량이 왜 해당 회사·직무에서 실제로 필요한지, 그 직무가 어떤 일을 하는 자리인지
-일반적인 상식 수준에서 구체적으로 설명한다.
+[3단락 - 역량이 직무에 필요한 이유, 2~3문장]
+[근거]의 "직무 요구 중 전공이 커버하는 역량"과 "상위 개념으로 커버하는 역량"을 근거로,
+그 전공에서 기른 역량이 직무의 어떤 요구와 이어지는지 설명한다. (직무의 실제 업무는 서술하지 않는다 — 규칙 3)
 
 [4단락 - 부족한 역량, 있을 때만 1~2문장]
 gap(부족한 역량)이 있다면 "다만 ~도 직무에서 요구되는 핵심 역량인데, 전공 과목에서
@@ -248,10 +254,12 @@ async def explain(r: dict) -> None:
         print(chunk.content, end="", flush=True)
     print()
 
-DEBUG = 1  #0이면 사용자가 보는 화면대로만 출력, 1이면 세부사항 전부 출력
+# 화면 = 추천 카드(render) + 설명 문단(explain). 카드가 근거(순위·커버리지·출처)이고 문단은 그 풀이다 — 둘 다 사용자에게 보인다.
+#   설계서 2절: "우리의 차이(실제 데이터·재현성·출처)는 화면에 드러내지 않으면 보이지 않는다".
+# DEBUG=1 (환경변수) 이면 상위 순위 내부값(점수·근거 수)을 추가로 찍는다 — 팀 내부 확인용.
+DEBUG = os.environ.get("DEBUG", "0") == "1"
 if __name__ == "__main__":
     import asyncio
-    import os
 
     session: dict = {}
     answers = [input(f"\n{q}\n> ") for q in QUESTIONS]
@@ -260,12 +268,11 @@ if __name__ == "__main__":
         answers.append(input(f"\n조금 더 알려주세요. {result['followup']}\n> "))
         result = run(answers, session)
 
-    # 팀 내부 디버그용 — 실제 서비스 화면엔 노출하지 않는다.
-    # 환경변수 DEBUG=1일 때만 개발자가 확인할 수 있도록 분리.
-    if DEBUG:
-        print("\n[내부 디버그]\n" + render(result))
-
-    if result.get("major") and result.get("job"):
-        asyncio.run(explain(result))
-    elif result.get("empty"):
-        print("추천할 만한 전공을 찾지 못했습니다. 다른 관심사로 다시 시도해보세요.")
+    if result.get("empty"):
+        print("\n추천할 만한 전공을 찾지 못했습니다. 다른 관심사로 다시 시도해보세요.")
+    else:
+        print("\n" + render(result))                      # ① 추천 카드 — 근거 (항상 보인다)
+        if DEBUG:                                          # 내부 확인: 상위 5개 점수·근거 수
+            print("\n[DEBUG 순위]", [(x["name"], round(x["score"], 2), x["evidence_count"]) for x in result["ranking"][:5]])
+        if result.get("major") and result.get("job"):
+            asyncio.run(explain(result))                   # ② 설명 문단 — 카드의 풀이
