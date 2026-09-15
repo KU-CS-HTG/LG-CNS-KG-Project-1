@@ -101,15 +101,37 @@ def render(r: dict) -> str:
     return "\n".join(L)
 
 EXPLAIN_SYSTEM = """너는 대학생 진로 상담 전문가다.
-아래 [근거]에 주어진 사실만 사용해서 "추천 이유"를 2~4문장으로 설명하라.
+아래 [근거]에 주어진 사실만 사용해서, 학생에게 보여줄 "진로 추천" 문단을 작성하라.
+이 문단이 사용자가 보는 전부이므로, 전공명·과목명·직무명·회사명을 문장 안에 자연스럽게 모두 포함해야 한다.
 
-규칙:
-1. [근거]에 없는 과목명, 역량명, 회사명을 절대 만들어내지 않는다.
-2. 각 과목이 어떤 역량(Skill)을 기르는지, 그 역량이 직무의 어떤 요구사항과
-   연결되는지 구체적으로 설명한다.
-3. gap(부족한 역량)이 있다면 "다만 ~는 교과 밖에서 별도로 채워야 한다"처럼
-   자연스럽게 한 문장으로 언급한다.
-4. 근거가 부족하면 신중하게 설명하되, 확신에 찬 어조를 쓰지 않는다."""
+절대 규칙:
+1. [근거]에 없는 과목명, 역량명, 회사명, 직무명을 절대 지어내지 않는다.
+2. 단, 주어진 과목명·역량명이 일반적으로 무엇을 다루는지 설명하는 것은 허용한다
+   (예: "데이터마이닝 방법 및 실습"은 대량의 데이터에서 패턴을 찾아내는 방법을 배우는
+   과목이라는 일반 상식 수준의 설명). [근거]에 없는 회사의 구체적인 프로젝트나 사실을
+   지어내는 것과는 다르다 — 이건 하지 않는다.
+
+작성 순서 (총 4단락, 각 단락 사이 줄바꿈):
+
+[1단락 - 도입, 1~2문장]
+전공 진학과 수강할 과목을 직접 추천하는 문장으로 시작한다.
+예: "당신은 서울대학교 통계학과에 진학하여 '데이터마이닝 방법 및 실습', '실험계획 및 실습',
+'함수추정의 응용 및 실습' 과목들을 듣는 것을 추천합니다."
+
+[2단락 - 과목이 역량을 기르는 이유, 반드시 3문장 이상]
+[근거]의 과목들이 왜, 어떻게 해당 역량(Skill)을 길러주는지 고등학생도 이해할 수 있는
+쉬운 말로 구체적으로 설명한다. 각 과목이 다루는 일반적인 내용을 하나씩 짚어가며 설명한다.
+
+[3단락 - 역량이 직무에 필요한 이유, 반드시 3문장 이상]
+그 역량이 왜 해당 회사·직무에서 실제로 필요한지, 그 직무가 어떤 일을 하는 자리인지
+일반적인 상식 수준에서 구체적으로 설명한다.
+
+[4단락 - 부족한 역량, 있을 때만 1~2문장]
+gap(부족한 역량)이 있다면 "다만 ~도 직무에서 요구되는 핵심 역량인데, 전공 과목에서
+다루어지지 않으므로 교과 밖에서 별도로 학습해야 한다"처럼 언급한다. gap이 없으면 이
+단락은 생략한다.
+
+전체적으로 확신에 찬 어조보다는 신중하고 친절한 설명 어조를 유지한다."""
 
 def build_explain_prompt(r: dict) -> str:
     """run()의 결과 dict에서 근거만 뽑아 프롬프트 텍스트로 만든다.
@@ -139,12 +161,12 @@ def build_explain_prompt(r: dict) -> str:
     return "\n".join(lines)
 
 async def explain(r: dict) -> None:
-    """추천 이유를 스트리밍으로 출력. run() 결과에 major/job/subjects가 있을 때만 호출."""
+    """진로 추천 문단을 스트리밍으로 출력. run() 결과에 major/job/subjects가 있을 때만 호출."""
     from langchain_core.prompts import ChatPromptTemplate
     from langchain_openai import ChatOpenAI
 
     if not r.get("major") or not r.get("job"):
-        return  # 매칭 결과가 없으면 설명할 근거 자체가 없다
+        return
 
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, timeout=20, max_retries=2)
     prompt = ChatPromptTemplate.from_messages([
@@ -153,14 +175,15 @@ async def explain(r: dict) -> None:
     ])
     chain = prompt | llm
 
-    print("\n[추천 이유] ", end="", flush=True)
+    print("[진로 추천] ", end="", flush=True)
     async for chunk in chain.astream({"evidence": build_explain_prompt(r)}):
         print(chunk.content, end="", flush=True)
     print()
 
-
+DEBUG = 1  #0이면 사용자가 보는 화면대로만 출력, 1이면 세부사항 전부 출력
 if __name__ == "__main__":
     import asyncio
+    import os
 
     session: dict = {}
     answers = [input(f"\n{q}\n> ") for q in QUESTIONS]
@@ -168,7 +191,13 @@ if __name__ == "__main__":
     if "followup" in result:
         answers.append(input(f"\n조금 더 알려주세요. {result['followup']}\n> "))
         result = run(answers, session)
-    print("\n" + render(result))
+
+    # 팀 내부 디버그용 — 실제 서비스 화면엔 노출하지 않는다.
+    # 환경변수 DEBUG=1일 때만 개발자가 확인할 수 있도록 분리.
+    if DEBUG:
+        print("\n[내부 디버그]\n" + render(result))
 
     if result.get("major") and result.get("job"):
         asyncio.run(explain(result))
+    elif result.get("empty"):
+        print("추천할 만한 전공을 찾지 못했습니다. 다른 관심사로 다시 시도해보세요.")
