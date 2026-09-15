@@ -42,6 +42,13 @@ TARGET_SCHOOLS: list[str] = []           # 빈 리스트면 전체. 확정되면
 
 MAX_SUBJECTS = 80                        # 한 전공에서 LLM에 보여줄 과목 수 상한 (토큰 방어)
 
+# 전공 쪽에서는 쓰지 않는 역량. CANON 에는 남겨 둔다 (직무 쪽은 계속 쓴다).
+#   Communication / Problem Solving — 과목명으로 근거를 댈 수 없는 소프트 스킬. 9/15 전체 배치에서
+#     각각 50·59개 전공(성악과·관현악과 포함)에 붙었고, 이 둘만 있는 전공이 10개였다.
+#     기술 오분류를 막았더니 LLM 이 "뭐라도 고르기"의 출구를 여기로 옮긴 것. 사용자 태그에 들어오면 59개 전공 동점.
+#   Knowledge Graph — 서울대에 지식그래프 과목이 없다. 인문계 7곳에 붙은 것은 전부 환각.
+MAJOR_SKIP: set[str] = {"Communication", "Problem Solving", "Knowledge Graph"}
+
 
 # ═════════════════════════════════════════════════════════════
 # LLM 출력 스키마
@@ -99,7 +106,7 @@ def build_chain():
     from vocab import CANON
 
     load_dotenv()
-    vocab_list = ", ".join(sorted(set(CANON.values())))
+    vocab_list = ", ".join(sorted(set(CANON.values()) - MAJOR_SKIP))   # 전공 쪽 제외 역량은 목록에서도 뺀다
 
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     prompt = ChatPromptTemplate.from_messages([
@@ -159,7 +166,7 @@ def filter_skills(raw: list[dict], subjects: list[str]) -> list[dict]:
             continue                     # 근거 0개 → 버린다.  (예전: 2개 미만이면 버림 → 대학 과목은 주제당 1개라 거의 다 탈락했다)
         # ② skill 이 통제 어휘인가
         canon = canonicalize(item.get("skill", ""), strict=True)
-        if not canon:
+        if not canon or canon in MAJOR_SKIP:   # 통제 어휘 밖이거나 전공 쪽 제외 역량이면 버린다
             continue
         out.append({"skill": canon, "via": real_via})
 

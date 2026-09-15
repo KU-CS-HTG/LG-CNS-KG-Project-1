@@ -69,10 +69,18 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
             "matched_skills": matched,
             # 각 역량이 어느 과목에서 나왔는지 — 출력 2칸의 "근거 과목"
             "evidence": {s: develops[s] for s in matched},
-            "score": _score(user, set(develops)),
+            # 전공 점수 = 사용자 태그 중 이 전공이 기르는 비율 (커버리지).
+            #   직무처럼 집합 코사인을 쓰면 역량이 '적은' 전공이 이긴다 — 실측(9/15): "데이터 분석·통계" 에
+            #   식물생산과학부·의예과·화학부(역량 2개)가 1.0 으로 공동 1위, 통계학과(역량 3개)는 0.82 로 밀렸다.
+            #   전공은 역량이 많다고 나쁠 이유가 없으므로 분모에 전공 쪽 크기를 넣지 않는다.
+            "score": len(matched) / len(user) if user else 0.0,
+            # 동점 처리 — 매칭된 역량의 근거 과목 수. 같은 커버리지면 그 역량을 더 깊게 다루는 전공이 위로.
+            #   (작업 가이드 B-3 "2차 기준". 통계학과는 Statistics 근거 과목이 19개, 식물생산과학부는 2개)
+            "evidence_count": sum(len(develops[s]) for s in matched),
         })
 
-    ranked.sort(key=lambda x: -x["score"])
+    # 정렬 기준을 튜플로 주면 앞에서부터 차례로 비교한다: 커버리지 → 근거 과목 수
+    ranked.sort(key=lambda x: (-x["score"], -x["evidence_count"]))
 
     # 전공명 기준 중복 제거. 이미 점수순이므로 먼저 나온 것이 최상위다.
     seen: set[str] = set()

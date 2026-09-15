@@ -7,9 +7,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel
 
-from vocab import CANON
 from graph_store import (find_majors_by_skills, find_jobs_by_skills,
-                         subjects_for, count_majors)
+                         subjects_for, count_majors, all_skills)
 
 load_dotenv()
 
@@ -19,7 +18,10 @@ QUESTIONS = [
     "다음 중 더 끌리는 쪽은? ① 데이터를 파고들어 패턴 찾기 "
     "② 시스템을 설계하고 만들기 ③ 사람과 일정을 조율해 프로젝트 굴리기",
 ]
-TAGS: list[str] = sorted(set(CANON.values()))
+# 태그 목록은 사전(CANON) 전체가 아니라 **그래프에 실제로 있는 역량**만.
+#   사전에는 있지만 그래프엔 없는 역량(Problem Solving, Communication, Knowledge Graph — 전공 쪽 제외)이 태그가 되면
+#   어느 전공과도 안 맞으면서 커버리지 분모만 키운다. 실측(9/15): 3태그 중 1개가 그런 태그라 상위권이 전부 0.82 동점.
+TAGS: list[str] = sorted(all_skills())
 
 class Tags(BaseModel):
     tags: list[str]
