@@ -29,7 +29,7 @@ from pathlib import Path
 import pandas as pd                      # pandas: 표 형태 데이터를 다루는 표준 라이브러리
 from pydantic import BaseModel, Field
 
-from vocab import canonicalize
+from vocab import canonicalize, PARENT
 
 DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
 CSV = DATA / "subject_cleaned.csv"
@@ -255,14 +255,17 @@ def build(sample: int = 0) -> None:
 
     graph = json.loads(GRAPH.read_text(encoding="utf-8")) if GRAPH.exists() else {"jobs": []}
     graph["majors"] = majors
+    graph["is_a"] = dict(PARENT)          # IS_A 엣지 — build_graph_jobs.py 와 같은 출처(vocab.PARENT)
     major_skills = {s for m in majors for s in m["develops"]}
     job_skills = {s for j in graph.get("jobs", []) for s in j["requires"] + j["prefers"]}
-    graph["skills"] = sorted(major_skills | job_skills)
+    graph["skills"] = sorted(major_skills | job_skills | set(PARENT.values()))
     GRAPH.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
 
     both = major_skills & job_skills
     print(f"\nMajor {len(majors)}개 / Job {len(graph.get('jobs', []))}개 / Skill {len(graph['skills'])}개")
     print(f"★ 양쪽 공통 Skill {len(both)}개: {sorted(both)}")
+    via_parent = {s for s in job_skills - major_skills if PARENT.get(s) in major_skills}
+    print(f"★ IS_A 한 홉으로 전공과 이어지는 직무 역량 {len(via_parent)}개: {sorted(via_parent)}")
     print("  이 숫자가 5개 미만이면 추천이 거의 안 된다. 어휘집을 먼저 손봐야 한다.")
 
 
