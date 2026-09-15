@@ -94,9 +94,15 @@ def normalize_to_tags(answers: list[str]) -> list[str]:
 TRAIT_TAG_WEIGHT = 0.5   # 성향에서 추정한 태그 — 근거가 아니라 연관에서 온 것이라 절반만 믿는다 (vocab.TRAIT_TO_SKILL 참고)
 
 
-def run(answers: list[str], session: dict, trait_tags: list[str] | None = None) -> dict:
-    """answers: [Q1, Q2, Q3(, 재질문 답)].  trait_tags: 인터뷰 모드에서 성향→역량으로 추정한 태그 (선택)."""
-    tags = normalize_to_tags(answers)
+def run(answers: list[str], session: dict, trait_tags: list[str] | None = None,
+        stated_tags: list[str] | None = None, soft_traits: list[str] | None = None) -> dict:
+    """answers: [Q1, Q2, Q3(, 재질문 답)].
+    인터뷰 모드 전용 (선택):
+      stated_tags  — 관심 분야를 사전으로 직접 바꾼 태그. 학생이 말한 것이므로 근거 태그와 같은 무게(1.0)
+      trait_tags   — 성향→기술 역량으로 추정한 태그. 연관일 뿐이라 0.5
+      soft_traits  — 강점 성향(한글). 직무의 요구 태도와 대조 (동점 처리 전용, 점수 아님)
+    """
+    tags = list(dict.fromkeys([t for t in (stated_tags or []) if t in set(TAGS)] + normalize_to_tags(answers)))
 
     if len(tags) < 2 and not session.get("asked_again"):     # 조건부 분기, 1회
         session["asked_again"] = True
@@ -119,9 +125,9 @@ def run(answers: list[str], session: dict, trait_tags: list[str] | None = None) 
     #    evidence 는 태그와 매칭된 역량만 담고 있어서 그걸 넘기면 직무 추천이 태그에 끌려간다.
     #    실측(9/15): 태그 1개(Data Analysis)만 넘어가 역량 2개짜리 Consulting 이 매번 1위 — 전공의 나머지 5개 역량이 버려졌다.
     major_skills = major["skills"]
-    jobs = find_jobs_by_skills(major_skills, limit=2, career_type="신입")   # 정의: 신입 직무 추천
+    jobs = find_jobs_by_skills(major_skills, limit=2, career_type="신입", soft_traits=soft_traits)   # 정의: 신입 직무 추천
     if not jobs:                                                            # 신입 공고와 안 이어지면 전체에서
-        jobs = find_jobs_by_skills(major_skills, limit=2)
+        jobs = find_jobs_by_skills(major_skills, limit=2, soft_traits=soft_traits)
     job = jobs[0] if jobs else None
 
     # ③ 다리 과목 — 직무가 요구하고 전공도 가진 역량 기준.
@@ -175,6 +181,9 @@ def render(r: dict) -> str:
                 L.append(f"          ≈ {parent} 계열로 커버 — {', '.join(children)}")
         if j["gap"]:
             L.append(f"          ✗ 교과 밖에서 채울 것 — {', '.join(j['gap'])}")   # ② 갭
+        if j.get("soft_wanted"):                                               # 직무가 요구하는 태도 — 데이터가 있을 때만 (없으면 줄 자체가 없다)
+            marks = [f"{sk} ✓" if sk in j.get("soft_match", []) else sk for sk in j["soft_wanted"]]
+            L.append(f"          요구 태도: {' · '.join(marks)}" + ("   (✓ = 너의 강점 성향과 맞음)" if j.get("soft_match") else ""))
         # 2위 직무 한 줄 — 신입 공고가 적어(23개) 1위가 몰리기 쉬우므로 다음 후보를 같이 보여준다
         for alt in r.get("jobs", [])[1:2]:
             L.append(f"          다음 후보: {alt['company']} {alt['role']} ({alt['career_type']}) — "
@@ -284,16 +293,20 @@ if __name__ == "__main__":
         iv = interview()
         q3 = input(f"\n{QUESTIONS[2]}\n> ")
         answers = iv["answers"] + [q3]
-        trait_tags = iv["trait_tags"]
+        trait_tags, stated_tags, soft_traits = iv["trait_tags"], iv["interest_tags"], iv["soft_traits"]
+        if iv["interest_evidence"]:
+            print("\n(관심에서 읽은 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["interest_evidence"].items()) + ")")
         if iv["trait_evidence"]:
-            print("\n(성향에서 추정한 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["trait_evidence"].items()) + ")")
+            print("(성향에서 추정한 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["trait_evidence"].items()) + ")")
     else:
         answers = [input(f"\n{q}\n> ") for q in QUESTIONS]
+        stated_tags, soft_traits = [], []
 
-    result = run(answers, session, trait_tags=trait_tags)
+    kw = dict(trait_tags=trait_tags, stated_tags=stated_tags, soft_traits=soft_traits)
+    result = run(answers, session, **kw)
     if "followup" in result:
         answers.append(input(f"\n{FOLLOWUP_PREFIX}{result['followup']}\n> "))
-        result = run(answers, session, trait_tags=trait_tags)
+        result = run(answers, session, **kw)
 
     if result.get("empty"):
         print("\n추천할 만한 전공을 찾지 못했습니다. 다른 관심사로 다시 시도해보세요.")

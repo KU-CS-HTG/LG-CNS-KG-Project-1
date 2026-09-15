@@ -62,14 +62,20 @@ print(f"\n인터뷰 모드 {len(icases)}건")
 for c in icases:
     lines = iter(c["script"])
     iv = interview(ask=lambda _prompt="": next(lines), say=lambda _m: None)
-    r = run(iv["answers"] + [c["q3"]], {}, trait_tags=iv["trait_tags"])
+    r = run(iv["answers"] + [c["q3"]], {}, trait_tags=iv["trait_tags"],
+            stated_tags=iv["interest_tags"], soft_traits=iv["soft_traits"])
     if "followup" in r or r.get("empty"):
         print(f"  ✗ {c['id']} 결과 없음 ({'재질문' if 'followup' in r else '미검출'})"); continue
     top3 = [x["name"].replace("?", "·") for x in r["ranking"][:3]]
     ok_major = any(m in top3 for m in c["expect_major_top3"])
     ok_trait = set(c["expect_trait_tags_subset"]) <= set(iv["trait_tags"]) | set(r["tags"])
-    ok = ok_major and ok_trait
+    ok_stated = set(c.get("expect_stated_tags_subset", [])) <= set(iv["interest_tags"])        # 관심 → 사전 직행
+    job = r.get("job") or {}
+    ok_soft = (not c.get("expect_soft_match")) or bool(job.get("soft_match"))                  # 요구 태도 ✓ 가 떠야 하는 케이스
+    ok = ok_major and ok_trait and ok_stated and ok_soft
     ipassed += ok
-    print(f"  {'✓' if ok else '✗'} {c['id']} 전공 {top3[0]:<12} LLM {iv['llm_calls']}회 성향태그 {iv['trait_tags']} "
-          f"{'' if ok_major else '← 전공 기대: ' + '/'.join(c['expect_major_top3'])} {'' if ok_trait else '← 성향 기대 미충족'}  {c['note'][:28]}")
+    soft = f"{job.get('role','-')} 태도 {job.get('soft_match', [])}" if job else "-"
+    print(f"  {'✓' if ok else '✗'} {c['id']} 전공 {top3[0]:<10} LLM {iv['llm_calls']}회 관심→{iv['interest_tags']} 성향→{iv['trait_tags']} 직무 {soft} "
+          f"{'' if ok_major else '← 전공 기대: ' + '/'.join(c['expect_major_top3'])}{'' if ok_trait else ' ← 성향 기대 미충족'}"
+          f"{'' if ok_stated else ' ← 관심 태그 미충족'}{'' if ok_soft else ' ← 요구 태도 ✓ 없음'}")
 print(f"통과 {ipassed}/{len(icases)}")

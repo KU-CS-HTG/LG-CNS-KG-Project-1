@@ -1,14 +1,43 @@
 [
-  {"id": "I1",
-   "script": ["안녕하세요. 저는 수학이랑 통계를 좋아하고, 친구들이랑 데이터로 뭔가 분석해서 발표하는 게 재밌어요. 숫자 보면 패턴 찾는 걸 잘한다고 친구들이 말해요.",
-              "통계 수업에서 배운 걸로 학교 설문 데이터를 파이썬으로 분석해 봤어요.",
-              "동아리에서 발표 자료 만들고 정리하는 걸 자주 맡아요."],
-   "q3": "1", "expect_major_top3": ["통계학과"], "expect_trait_tags_subset": ["Statistics", "Data Analysis"],
-   "note": "풍부한 자기소개 → 추가 질문 없이 LLM 1회. 수리적사고 → Statistics"},
-  {"id": "I2",
-   "script": ["저는 고2고요, 아직 뭘 하고 싶은지 잘 모르겠어요.",
-              "친구들이랑 뭔가 만드는 건 좋아해요. 게임도 좋고 웹사이트 같은 것도 한번 만들어보고 싶어요.",
-              "모둠 활동 하면 제가 역할 나누고 일정 정리하는 편이에요. 친구들이 그런 건 저한테 맡겨요."],
-   "q3": "2", "expect_major_top3": ["컴퓨터공학부", "전기·정보공학부"], "expect_trait_tags_subset": ["Project Management"],
-   "note": "빈약한 자기소개 → interest·strength 추가 질문 2회. 주도성 → Project Management"}
+  {
+    "id": "I1",
+    "script": [
+      "안녕하세요. 저는 수학이랑 통계를 좋아하고, 친구들이랑 데이터로 뭔가 분석해서 발표하는 게 재밌어요. 숫자 보면 패턴 찾는 걸 잘한다고 친구들이 말해요.",
+      "통계 수업에서 배운 걸로 학교 설문 데이터를 파이썬으로 분석해 봤어요.",
+      "동아리에서 발표 자료 만들고 정리하는 걸 자주 맡아요."
+    ],
+    "q3": "1",
+    "expect_major_top3": [
+      "통계학과"
+    ],
+    "expect_trait_tags_subset": [
+      "Statistics",
+      "Data Analysis"
+    ],
+    "note": "풍부한 자기소개 → 추가 질문 없이 LLM 1회. 수리적사고 → Statistics",
+    "expect_stated_tags_subset": [
+      "Statistics"
+    ]
+  },
+  {
+    "id": "I2",
+    "script": [
+      "저는 고2고요, 아직 뭘 하고 싶은지 잘 모르겠어요.",
+      "친구들이랑 뭔가 만드는 건 좋아해요. 게임도 좋고 웹사이트 같은 것도 한번 만들어보고 싶어요. 데이터 분석 같은 것도 궁금하고요.",
+      "모둠 활동 하면 제가 역할 나누고 일정 정리하는 편이에요. 친구들이 그런 건 저한테 맡겨요. 문제 생기면 해결책 찾는 것도 좋아해요."
+    ],
+    "q3": "2",
+    "expect_major_top3": [
+      "컴퓨터공학부",
+      "전기·정보공학부"
+    ],
+    "expect_trait_tags_subset": [
+      "Project Management"
+    ],
+    "note": "빈약한 자기소개 → 추가 질문 2회. 관심 '데이터 분석' 은 사전 직행. 조정능력·문제해결 → DX Engineer 요구 태도 ✓",
+    "expect_stated_tags_subset": [
+      "Data Analysis"
+    ],
+    "expect_soft_match": true
+  }
 ]

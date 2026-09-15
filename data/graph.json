@@ -1253,7 +1253,8 @@
         "Git",
         "Docker",
         "Kubernetes"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002127-robotics-rx",
@@ -1275,6 +1276,10 @@
       ],
       "prefers": [
         "Computer Vision"
+      ],
+      "soft": [
+        "Initiative",
+        "Growth Mindset"
       ]
     },
     {
@@ -1289,7 +1294,11 @@
         "Data Analysis",
         "Optimization"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Communication",
+        "Problem Solving"
+      ]
     },
     {
       "id": "1002127-dx-engineer",
@@ -1308,6 +1317,10 @@
       ],
       "prefers": [
         "LLM"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Collaboration"
       ]
     },
     {
@@ -1329,7 +1342,8 @@
       "prefers": [
         "LLM",
         "RAG"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002127-architect",
@@ -1344,7 +1358,8 @@
       ],
       "prefers": [
         "Security"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002127-erp",
@@ -1360,7 +1375,8 @@
       ],
       "prefers": [
         "LLM"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002127-smart-factory",
@@ -1377,7 +1393,8 @@
       ],
       "prefers": [
         "LLM"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002127-convergence-engineer",
@@ -1397,7 +1414,8 @@
         "SolidWorks",
         "CATIA",
         "PLC"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002098-클라우드-인프라-사업-개발",
@@ -1411,6 +1429,9 @@
       ],
       "prefers": [
         "Oracle"
+      ],
+      "soft": [
+        "Communication"
       ]
     },
     {
@@ -1424,7 +1445,8 @@
       ],
       "prefers": [
         "S/4HANA"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002046-sap-모듈-컨설턴트-운영",
@@ -1438,6 +1460,9 @@
       ],
       "prefers": [
         "Fiori"
+      ],
+      "soft": [
+        "Initiative"
       ]
     },
     {
@@ -1461,7 +1486,8 @@
         "React",
         "Vue.js",
         "AngularJS"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1001677-손해보험-업무전문가-및-시스템엔지니어",
@@ -1484,7 +1510,8 @@
         "React",
         "Vue.js",
         "AngularJS"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1001677-증권-업무전문가-및-시스템엔지니어",
@@ -1496,7 +1523,11 @@
         "C",
         "Java"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Communication",
+        "Leadership"
+      ]
     },
     {
       "id": "1001427-global-core-banking-business-analyst",
@@ -1508,6 +1539,9 @@
       "prefers": [
         "Cloud",
         "Machine Learning"
+      ],
+      "soft": [
+        "Communication"
       ]
     },
     {
@@ -1522,7 +1556,8 @@
       "prefers": [
         "Cloud",
         "MSA"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1001371-data-architect",
@@ -1541,7 +1576,8 @@
         "GCP",
         "Machine Learning",
         "Data Analysis"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1001371-cloud-devops-architect",
@@ -1557,7 +1593,8 @@
       ],
       "prefers": [
         "MSA"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1001361-메신저-서비스-개발-운영",
@@ -1569,7 +1606,11 @@
         "Node.js",
         "JavaScript"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Collaboration",
+        "Communication"
+      ]
     },
     {
       "id": "1000834-ai",
@@ -1582,7 +1623,8 @@
         "Machine Learning",
         "Deep Learning",
         "Prompt Engineering"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1000834-cloud-application-modernization",
@@ -1600,7 +1642,12 @@
         "DevOps",
         "Cloud"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Communication",
+        "Problem Solving",
+        "Creativity"
+      ]
     },
     {
       "id": "1000834-erp",
@@ -1612,7 +1659,11 @@
         "ERP",
         "Machine Learning"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Communication",
+        "Problem Solving"
+      ]
     },
     {
       "id": "1002146-디지털-기획",
@@ -1626,6 +1677,9 @@
       "prefers": [
         "LLM",
         "SQL"
+      ],
+      "soft": [
+        "Communication"
       ]
     },
     {
@@ -1647,7 +1701,8 @@
         "LightTools",
         "FDTD",
         "Setfos"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002117-회로",
@@ -1663,7 +1718,8 @@
         "Python",
         "MATLAB"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002117-기구",
@@ -1676,7 +1732,8 @@
         "Mechanical Design",
         "Simulation",
         "Python"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002117-광학",
@@ -1688,7 +1745,8 @@
       "prefers": [
         "Simulation",
         "Python"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002118-panel-설계",
@@ -1709,7 +1767,8 @@
         "LightTools",
         "FDTD",
         "Setfos"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002118-회로",
@@ -1725,7 +1784,8 @@
         "Python",
         "MATLAB"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002118-기구",
@@ -1738,7 +1798,8 @@
         "Simulation",
         "Python"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002118-광학",
@@ -1750,7 +1811,8 @@
       "prefers": [
         "Simulation",
         "Python"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002212-생산-제조-품질",
@@ -1762,7 +1824,8 @@
       "prefers": [
         "Mechanical Engineering",
         "Electrical Engineering"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002183-material-r-d",
@@ -1775,7 +1838,10 @@
         "Chemical Engineering",
         "SEM"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Collaboration"
+      ]
     },
     {
       "id": "1002160-sw-r-d_양자컴퓨팅-활용-및-원천기술-확보",
@@ -1787,7 +1853,8 @@
         "Python",
         "C++"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002176-ai기술개발",
@@ -1802,7 +1869,8 @@
         "PyTorch",
         "TensorFlow"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002176-비전ai기술개발",
@@ -1818,7 +1886,8 @@
       "prefers": [
         "Computer Vision",
         "LLM"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002176-ai-agent-개발",
@@ -1834,7 +1903,8 @@
       "prefers": [
         "LangGraph",
         "LLM"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002176-소재개발ai",
@@ -1849,7 +1919,8 @@
       ],
       "prefers": [
         "Digital Twin"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002176-physical-ai",
@@ -1861,7 +1932,8 @@
         "ROS",
         "ROS2"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002176-data-science",
@@ -1876,7 +1948,8 @@
         "PyTorch",
         "TensorFlow"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-cell개발-각형전지",
@@ -1892,7 +1965,8 @@
       ],
       "prefers": [
         "Mechanical Design"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002075-pack개발-자동차",
@@ -1906,6 +1980,10 @@
       "prefers": [
         "CATIA",
         "Creo"
+      ],
+      "soft": [
+        "Communication",
+        "Collaboration"
       ]
     },
     {
@@ -1921,7 +1999,8 @@
       "prefers": [
         "Materials Engineering",
         "Rheology"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002075-원통형pack개발",
@@ -1934,7 +2013,8 @@
         "CATIA",
         "Creo"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-bms-sw개발",
@@ -1947,7 +2027,10 @@
         "Electrical Engineering",
         "Statistics"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Responsibility"
+      ]
     },
     {
       "id": "1002075-cell개발-ess",
@@ -1960,7 +2043,8 @@
         "Chemical Engineering",
         "Data Analysis"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-설비관리-전극",
@@ -1977,6 +2061,11 @@
       ],
       "prefers": [
         "Programming"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Communication",
+        "Collaboration"
       ]
     },
     {
@@ -1992,6 +2081,11 @@
       "prefers": [
         "Mechanical Design",
         "Programming"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Communication",
+        "Collaboration"
       ]
     },
     {
@@ -2006,6 +2100,10 @@
       ],
       "prefers": [
         "Deep Learning"
+      ],
+      "soft": [
+        "Collaboration",
+        "Problem Solving"
       ]
     },
     {
@@ -2019,7 +2117,11 @@
         "Deep Learning",
         "Python"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Problem Solving",
+        "Communication"
+      ]
     },
     {
       "id": "1002075-공정기술-원통형",
@@ -2032,6 +2134,10 @@
         "minitab",
         "Python",
         "R"
+      ],
+      "soft": [
+        "Collaboration",
+        "Communication"
       ]
     },
     {
@@ -2044,7 +2150,10 @@
         "R",
         "Python"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Problem Solving"
+      ]
     },
     {
       "id": "1002075-제품기술-원통형",
@@ -2057,6 +2166,10 @@
       ],
       "prefers": [
         "minitab"
+      ],
+      "soft": [
+        "Communication",
+        "Collaboration"
       ]
     },
     {
@@ -2075,6 +2188,10 @@
         "Creo",
         "minitab",
         "SAP"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Collaboration"
       ]
     },
     {
@@ -2091,7 +2208,8 @@
       ],
       "prefers": [
         "Data Analysis"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002075-제조지능화-디지털트윈",
@@ -2105,7 +2223,8 @@
         "Machine Learning",
         "Deep Learning"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-제조지능화-로봇",
@@ -2121,7 +2240,8 @@
         "ROS",
         "ROS2",
         "Digital Twin"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002075-제조지능화-원격",
@@ -2135,7 +2255,8 @@
         "Network",
         "Data Analysis"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-공무-생산인프라-에너지",
@@ -2147,7 +2268,8 @@
         "Mechanical Engineering",
         "Electrical Engineering"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-설비기술-fa",
@@ -2159,7 +2281,8 @@
         "Mechanical Engineering",
         "Electrical Engineering"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-cell기반기술",
@@ -2172,7 +2295,8 @@
         "Simulation",
         "Machine Learning"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-소재기술",
@@ -2186,7 +2310,8 @@
       ],
       "prefers": [
         "Communication"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002075-양극재기술",
@@ -2199,7 +2324,8 @@
         "Chemical Engineering",
         "Electrochemistry"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-ai진단솔루션개발",
@@ -2214,6 +2340,10 @@
       "prefers": [
         "PostgreSQL",
         "PyTorch"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Growth Mindset"
       ]
     },
     {
@@ -2229,6 +2359,9 @@
       ],
       "prefers": [
         "C"
+      ],
+      "soft": [
+        "Problem Solving"
       ]
     },
     {
@@ -2242,7 +2375,8 @@
         "MATLAB",
         "Simulink"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002075-data-engineering",
@@ -2263,7 +2397,8 @@
         "AWS",
         "GCP",
         "MSA"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002075-pack선행개발",
@@ -2276,6 +2411,10 @@
       ],
       "prefers": [
         "Mechanical Design"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Communication"
       ]
     },
     {
@@ -2290,6 +2429,9 @@
       "prefers": [
         "Machine Learning",
         "Deep Learning"
+      ],
+      "soft": [
+        "Communication"
       ]
     },
     {
@@ -2304,6 +2446,9 @@
       "prefers": [
         "Machine Learning",
         "Deep Learning"
+      ],
+      "soft": [
+        "Communication"
       ]
     },
     {
@@ -2318,6 +2463,9 @@
       "prefers": [
         "Machine Learning",
         "Deep Learning"
+      ],
+      "soft": [
+        "Communication"
       ]
     },
     {
@@ -2334,6 +2482,9 @@
       "prefers": [
         "Materials Engineering",
         "Rheology"
+      ],
+      "soft": [
+        "Communication"
       ]
     },
     {
@@ -2347,7 +2498,8 @@
       ],
       "prefers": [
         "Chemical Engineering"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002075-특허-분석-개발-관리",
@@ -2359,7 +2511,11 @@
         "BMS",
         "Mechanical Engineering"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Communication",
+        "Analytical Thinking"
+      ]
     },
     {
       "id": "1002193-경력-반도체-기판-제품개발",
@@ -2373,7 +2529,8 @@
         "Materials Engineering",
         "JMP",
         "Python"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002193-경력-반도체-기판-생산기술",
@@ -2385,7 +2542,8 @@
       "prefers": [
         "JMP",
         "Python"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1001884-경력-반도체-기판-생산기술",
@@ -2397,7 +2555,8 @@
         "JMP",
         "Python"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1001884-경력-반도체-기판-제품개발",
@@ -2412,7 +2571,8 @@
       "prefers": [
         "Python",
         "JMP"
-      ]
+      ],
+      "soft": []
     },
     {
       "id": "1002196-b2b영업",
@@ -2425,7 +2585,11 @@
         "Cloud",
         "Data Analysis"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Communication",
+        "Collaboration"
+      ]
     },
     {
       "id": "1002196-b2b영업-글로벌",
@@ -2438,7 +2602,10 @@
         "Cloud",
         "Data Analysis"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Communication"
+      ]
     },
     {
       "id": "1002196-aidc엔지니어-기계",
@@ -2450,7 +2617,11 @@
         "Mechanical Engineering",
         "AutoCAD"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Problem Solving",
+        "Communication"
+      ]
     },
     {
       "id": "1001202-software-architect",
@@ -2466,7 +2637,11 @@
         "TypeScript",
         "Java"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Problem Solving",
+        "Communication"
+      ]
     },
     {
       "id": "1002204-ax기획",
@@ -2481,7 +2656,11 @@
         "Kubernetes",
         "CI/CD"
       ],
-      "prefers": []
+      "prefers": [],
+      "soft": [
+        "Problem Solving",
+        "Leadership"
+      ]
     }
   ]
 }
