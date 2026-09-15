@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from vocab import canonicalize_all
+from vocab import canonicalize_all, PARENT
 
 DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
 STAGED = DATA / "staged_jobs.json"
@@ -114,7 +114,11 @@ def build() -> None:
     major_skills = {s for m in majors for s in m.get("develops", {})}
 
     graph = {
-        "skills": sorted(job_skills | major_skills),
+        # 상위 개념(PARENT 의 값)도 Skill 노드다 — 전공이 아직 안 기르더라도 태그 후보에는 있어야 한다
+        "skills": sorted(job_skills | major_skills | set(PARENT.values())),
+        # IS_A 엣지: (:Skill 자식)-[:IS_A]->(:Skill 부모). 어휘집(vocab.PARENT)을 그래프 데이터로 옮긴 것.
+        # graph_store 는 이걸로 "직무가 요구하는 Oracle ≈ 전공이 기르는 Database" 를 잇는다 (위로만).
+        "is_a": dict(PARENT),
         "majors": majors,
         "jobs": jobs,
     }
@@ -127,6 +131,8 @@ def build() -> None:
     print(f"  Major {len(majors)}개")
     print(f"  Skill {len(graph['skills'])}개")
     print(f"  ★ 전공·직무 양쪽에 모두 등장한 Skill: {len(both)}개 {sorted(both)[:10]}")
+    via_parent = {s for s in job_skills - major_skills if PARENT.get(s) in major_skills}
+    print(f"  ★ 정확히는 안 겹치지만 IS_A 한 홉으로 전공과 이어지는 직무 역량: {len(via_parent)}개 {sorted(via_parent)[:12]}")
     print(f"    ↑ 이 숫자가 0이면 추천 결과도 0이다. 어휘집이 갈렸다는 뜻.")
     print(f"\n  CANON 추가 후보 {len(candidates)}개 → A에게 전달")
     for t in candidates[:12]:

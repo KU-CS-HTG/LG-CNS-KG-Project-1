@@ -46,6 +46,32 @@ def _score(user: set[str], target: set[str]) -> float:
     return len(user & target) / math.sqrt(len(user) * len(target))
 
 
+FAMILY_WEIGHT = 0.5   # 계열 일치(상위 개념으로 커버)는 정확 일치의 절반으로 센다
+
+
+def _is_a() -> dict[str, str]:
+    """IS_A 엣지 (자식 → 부모). graph.json 의 "is_a". 없으면 빈 dict — 계층 없이도 동작한다."""
+    return _load().get("is_a", {})
+
+
+def _match(need: set[str], have: set[str]) -> tuple[set[str], dict[str, str]]:
+    """'need' 쪽 역량 하나하나를 'have' 쪽이 커버하는지 — 정확 일치와 계열 일치로 나눠 돌려준다.
+
+    exact  : need 의 역량이 have 에 그대로 있다                          (Data Analysis)
+    family : need 의 역량은 없지만 그 **상위 개념**이 have 에 있다        (Oracle ← Database)
+             {need 의 역량: 그것을 커버한 have 의 상위 개념}
+
+    ★ 방향: need 를 위로 올려서 비교한다. have 를 아래로 내리지 않는다.
+      "직무가 Oracle 을 요구 → Database 계열을 요구" 는 참이지만,
+      "전공이 Database 를 가르침 → Oracle 을 가르침" 은 근거 없는 구체화(환각)다.
+      Neo4j 로 쓰면 (need)-[:IS_A*0..1]->(have) — 0홉이 exact, 1홉이 family.
+    """
+    is_a = _is_a()
+    exact = need & have
+    family = {s: is_a[s] for s in need - exact if is_a.get(s) in have}
+    return exact, family
+
+
 # ═════════════════════════════════════════════════════════════
 
 def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
@@ -59,24 +85,28 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
 
     for m in _load().get("majors", []):
         develops = m.get("develops", {})
-        matched = sorted(user & set(develops))
-        if not matched:
+        # 사용자 태그(need)를 전공 역량(have)에 맞춘다. 태그 'Java' 는 전공의 'Programming' 으로 계열 커버.
+        exact, family = _match(user, set(develops))
+        if not exact and not family:
             continue
+        matched = sorted(exact)
+        covered_by = sorted(set(family.values()))          # 계열 커버에 쓰인 전공 쪽 상위 개념
         ranked.append({
             "id": m["id"],
             "school": m["school"],
             "name": m["name"],
             "matched_skills": matched,
-            # 각 역량이 어느 과목에서 나왔는지 — 출력 2칸의 "근거 과목"
-            "evidence": {s: develops[s] for s in matched},
-            # 전공 점수 = 사용자 태그 중 이 전공이 기르는 비율 (커버리지).
+            "family": family,                              # {사용자 태그: 그것을 커버한 전공 역량}
+            # 각 역량이 어느 과목에서 나왔는지 — 출력 2칸의 "근거 과목". 계열 커버는 상위 개념의 과목이 근거
+            "evidence": {s: develops[s] for s in matched + covered_by},
+            # 전공 점수 = 사용자 태그 중 이 전공이 기르는 비율 (커버리지). 계열 일치는 절반.
             #   직무처럼 집합 코사인을 쓰면 역량이 '적은' 전공이 이긴다 — 실측(9/15): "데이터 분석·통계" 에
             #   식물생산과학부·의예과·화학부(역량 2개)가 1.0 으로 공동 1위, 통계학과(역량 3개)는 0.82 로 밀렸다.
             #   전공은 역량이 많다고 나쁠 이유가 없으므로 분모에 전공 쪽 크기를 넣지 않는다.
-            "score": len(matched) / len(user) if user else 0.0,
+            "score": (len(exact) + FAMILY_WEIGHT * len(family)) / len(user) if user else 0.0,
             # 동점 처리 — 매칭된 역량의 근거 과목 수. 같은 커버리지면 그 역량을 더 깊게 다루는 전공이 위로.
             #   (작업 가이드 B-3 "2차 기준". 통계학과는 Statistics 근거 과목이 19개, 식물생산과학부는 2개)
-            "evidence_count": sum(len(develops[s]) for s in matched),
+            "evidence_count": sum(len(develops[s]) for s in matched + covered_by),
         })
 
     # 정렬 기준을 튜플로 주면 앞에서부터 차례로 비교한다: 커버리지 → 근거 과목 수
@@ -105,21 +135,24 @@ def find_jobs_by_skills(skills: list[str], limit: int = 5) -> list[dict]:
     for j in _load().get("jobs", []):
         req, pref = set(j["requires"]), set(j["prefers"])
         all_skills = req | pref
-        have = sorted(user & all_skills)
-        if not have:
+        # 직무 요구(need)를 전공 역량(have)에 맞춘다. 요구 'Oracle' 은 전공의 'Database' 로 계열 커버.
+        exact, family = _match(all_skills, user)
+        if not exact and not family:
             continue
+        have = sorted(exact)
         ranked.append({
             "id": j["id"],
             "role": j["role"],
             "company": j["company"],
             "career_type": j["career_type"],
             "url": j["url"],
-            "have": have,                          # 갖춘 역량
-            "gap": sorted(req - user),             # 채울 역량 — 필수 중 없는 것만
-            "total": len(all_skills),          # ← 추가
-            "covered_count": len(have),        # ← 추가
-            "score": _score(user, all_skills),
-            
+            "have": have,                                        # 정확히 갖춘 역량
+            "family": family,                                    # {직무 요구: 그것을 커버한 전공 역량}  예: {"Oracle": "Database"}
+            "gap": sorted(req - exact - set(family)),            # 채울 역량 — 필수 중 정확·계열 어느 쪽으로도 안 되는 것
+            "total": len(all_skills),
+            "covered_count": len(exact) + len(family),
+            # 집합 코사인에 계열 일치를 절반으로 얹는다. 분모 √(|user|×|직무 역량|) 는 역량을 길게 나열한 공고 보정 (기존 그대로)
+            "score": (len(exact) + FAMILY_WEIGHT * len(family)) / math.sqrt(len(user) * len(all_skills)),
         })
 
     ranked.sort(key=lambda x: -x["score"])

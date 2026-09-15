@@ -65,9 +65,15 @@ def run(answers: list[str], session: dict) -> dict:
     jobs = find_jobs_by_skills(major_skills, limit=2)
     job = jobs[0] if jobs else None
 
-    # ③ 다리 과목 — 직무가 요구하고 전공도 가진 역량 기준
-    bridge = sorted(set(major_skills) & set(job["have"])) if job else major_skills
+    # ③ 다리 과목 — 직무가 요구하고 전공도 가진 역량 기준.
+    #    정확 일치(have) + 계열 일치에 쓰인 전공 쪽 상위 개념(family 의 값. 예: Oracle 을 커버한 Database)
+    if job:
+        bridge = sorted(set(major_skills) & (set(job["have"]) | set(job["family"].values())))
+    else:
+        bridge = major_skills
     subjects = subjects_for(major["id"], bridge, k=3)
+    if len(subjects) < 3:                                      # 다리 과목이 부족하면 전공 역량 전체로 보강
+        subjects = subjects_for(major["id"], major_skills, k=3)
 
     return {"tags": tags, "ranking": ranking, "total_majors": count_majors(),
             "major": major, "job": job, "subjects": subjects}
@@ -88,14 +94,23 @@ def render(r: dict) -> str:
 
     L.append("[과목]")
     for s in r["subjects"]:
-        L.append(f"          {s['subject']} → {', '.join(s['for'])}  [서울대 개설]")  # ③ 출처
+        L.append(f"          {s['subject']} → {', '.join(s['for'])}  [{m['school']} 개설]")  # ③ 출처 — 데이터에서, 하드코딩 금지
     L.append("")
 
     j = r["job"]
     if j:
         L.append(f"[직무]    {j['company']} {j['role']} ({j['career_type']})")
-        L.append(f"          요구 역량 {j['total']}개 중 {j['covered_count']}개 커버")
-        L.append(f"          ✓ {', '.join(j['have'])}")
+        fam = j.get("family", {})
+        L.append(f"          요구 역량 {j['total']}개 중 {j['covered_count']}개 커버"
+                 + (f" (정확 {len(j['have'])} · 계열 {len(fam)})" if fam else ""))
+        if j["have"]:
+            L.append(f"          ✓ {', '.join(j['have'])}")
+        if fam:                                                                # 계열 커버 — IS_A 한 홉
+            by_parent: dict[str, list[str]] = {}                               # 상위 개념별로 묶어서 보여준다
+            for child, parent in sorted(fam.items()):
+                by_parent.setdefault(parent, []).append(child)
+            for parent, children in by_parent.items():
+                L.append(f"          ≈ {parent} 계열로 커버 — {', '.join(children)}")
         if j["gap"]:
             L.append(f"          ✗ 교과 밖에서 채울 것 — {', '.join(j['gap'])}")   # ② 갭
     return "\n".join(L)
