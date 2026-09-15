@@ -45,7 +45,7 @@ CANON: dict[str, str] = {
     "llm": "LLM", "생성형 ai": "LLM", "거대언어모델": "LLM", "초거대언어모델": "LLM",
     "rag": "RAG", "프롬프트 엔지니어링": "Prompt Engineering", "prompt engineering": "Prompt Engineering",
     "랭체인": "LangChain", "langchain": "LangChain", "langgraph": "LangGraph",
-    "자연어처리": "NLP", "nlp": "NLP",
+    "자연어처리": "NLP", "nlp": "NLP", "natural language processing": "NLP",
     "컴퓨터비전": "Computer Vision", "computer vision": "Computer Vision",
 
     # ── 그래프 · 지식
@@ -107,7 +107,12 @@ CANON: dict[str, str] = {
 
     # ── 2단계 클러스터 ② 기계·설계·시뮬레이션·전기 HW (LGES·LGD·LGE 직무 ↔ 기계·전기정보·조선해양)
     "기계공학": "Mechanical Engineering", "기계 공학": "Mechanical Engineering", "기계": "Mechanical Engineering",
-    "메카트로닉스": "Mechanical Engineering",
+    "메카트로닉스": "Mechanical Engineering", "mechatronics": "Mechanical Engineering",
+    # 전공 과목명에서 LLM 이 영문으로 적는 기계 세부 분야 → 부모로 (2026-09-15 재추출 탈락 목록에서)
+    "fluid mechanics": "Mechanical Engineering", "thermodynamics": "Mechanical Engineering", "dynamics": "Mechanical Engineering",
+    "structural analysis": "Mechanical Engineering", "유체역학": "Mechanical Engineering", "열역학": "Mechanical Engineering",
+    "computer-aided design": "Mechanical Design", "machine design": "Mechanical Design", "기계설계": "Mechanical Design",
+    "computer simulation": "Simulation",
     "기구설계": "Mechanical Design", "3d 설계": "Mechanical Design", "3d cad": "Mechanical Design", "cad": "Mechanical Design",
     "3d 설계 tool": "Mechanical Design", "설계최적화": "Mechanical Design",
     "catia": "CATIA", "creo": "Creo", "solidworks": "SolidWorks", "autocad": "AutoCAD", "inventor": "Inventor",

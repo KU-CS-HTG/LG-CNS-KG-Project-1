@@ -71,12 +71,30 @@ def _idf() -> dict[str, float]:
 
 
 def _weight(skill: str) -> float:
-    """태그 하나의 가중치. 전공 쪽에 없는 태그(IS_A 자식, 예: Java)는 부모(Programming)의 IDF 를 쓴다."""
+    """태그 하나의 가중치 = √idf. 전공 쪽에 없는 태그(IS_A 자식, 예: Java)는 부모(Programming)의 IDF 를 쓴다.
+
+    √ 를 씌우는 이유 (2026-09-15 평가셋 회귀): idf 를 그대로 쓰면 전공 3곳에만 있는 Programming(3.0)이
+    Data Analysis + Statistics 를 합친 것보다 무거워져, "파이썬으로 데이터 정리" 한 마디가 관심 분야 둘을 눌렀다.
+    검색엔진도 희귀도를 준선형(sublinear)으로 눌러 쓴다. 순서는 유지하고 격차만 줄인다.
+    """
     idf = _idf()
     if skill in idf:
-        return idf[skill]
+        return math.sqrt(idf[skill])
     parent = _is_a().get(skill)
-    return idf.get(parent, 1.0) if parent else 1.0
+    return math.sqrt(idf[parent]) if parent in idf else 1.0
+
+
+EVIDENCE_FULL = 3   # 근거 과목이 이만큼이면 그 역량을 '확실히 기른다' 고 본다
+
+
+def _strength(n_via: int) -> float:
+    """전공이 역량을 얼마나 확실히 기르는가 — 근거 과목 수로. 1과목 0.33, 2과목 0.67, 3과목 이상 1.0.
+
+    "근거 2개 미만이면 버린다" 규칙을 1개로 완화한 대신(대학 과목은 주제당 1개가 보통), 그 차이를 가중치로 남긴다.
+    실측(2026-09-15): 이게 없으면 '컴퓨터프로그래밍개론' 한 과목으로 Programming 을 얻은 농업생명과학대학이
+    Statistics 근거 14과목인 통계학과를 "데이터 분석·통계·파이썬" 입력에서 이겼다.
+    """
+    return min(1.0, n_via / EVIDENCE_FULL)
 
 
 def _is_a() -> dict[str, str]:
@@ -137,7 +155,8 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
             #     흔한 태그가 동점을 양산한다. 시험 계산(9/15): "신호처리·데이터분석" 에서 Data Analysis 만 있는
             #     첨단융합학부가 0.50 → 0.12 로 내려가고, 희귀 역량을 갖춘 전공이 위로 온다.
             #   태그가 전부 흔한 것뿐이면(분모가 작으면) 결과는 가중 전과 같다 — 해가 되는 경우가 없다.
-            "score": (sum(_weight(s) for s in exact) + FAMILY_WEIGHT * sum(_weight(s) for s in family))
+            "score": (sum(_weight(s) * _strength(len(develops[s])) for s in exact)
+                      + FAMILY_WEIGHT * sum(_weight(s) * _strength(len(develops[p])) for s, p in family.items()))
                      / sum(_weight(s) for s in user) if user else 0.0,
             # 동점 처리 — 매칭된 역량의 근거 과목 수. 같은 커버리지면 그 역량을 더 깊게 다루는 전공이 위로.
             #   (작업 가이드 B-3 "2차 기준". 통계학과는 Statistics 근거 과목이 19개, 식물생산과학부는 2개)
