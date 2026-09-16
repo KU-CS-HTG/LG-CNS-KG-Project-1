@@ -87,3 +87,21 @@ python webapp.py
 ```
 
 `http://localhost:5000` 접속. `app.py`(CLI)와 완전히 같은 로직(`run` / `render` / `explain_stream`)을 그대로 불러 쓰므로, 질문 흐름·전공/직무 판정·[진로 추천] 문단이 동일합니다. `.env`에 `OPENAI_API_KEY`가 있어야 합니다.
+
+## `app.py` 입력 방식 4가지
+
+```
+python app.py                     # 기본: 고정 3질문
+python app.py --interview         # 데모용 인터뷰 (관심·강점 2개 영역, 고정 질문 최대 1회)
+python app.py --full-interview    # user_analysis/main.py 와 완전히 같은 흐름 (7개 영역, 적응형 질문)
+python app.py --profile <path>    # main.py 가 저장한 프로필 JSON을 그대로 읽어서 바로 추천 (대화 없음)
+```
+
+`--profile`은 `user_analysis/main.py`를 따로 실행해서 만든 `output/student_profile.json`(또는 같은 스키마의 파일)을 받습니다:
+
+```
+cd user_analysis && python main.py        # → user_analysis/output/student_profile.json 저장
+cd .. && python app.py --profile user_analysis/output/student_profile.json
+```
+
+네 방식 모두 `interview.py`(`interview()` / `full_interview()` / `from_profile_file()`)를 거쳐 같은 모양의 입력으로 수렴하므로, 이후 파이프라인(`run`/`render`/`explain`)은 동일하게 동작합니다. `user_analysis/`의 7개 영역 중 매칭 근거가 있는 `interest`·`strength`만 쓰고(`interview.py`의 `profile_to_inputs()`), 나머지 5개는 그대로 보존만 됩니다.
