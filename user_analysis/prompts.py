@@ -109,16 +109,32 @@ INTRODUCTION_ANALYSIS_PROMPT = """
 
 - sufficient: 관심사를 파악하기에 정보가 충분한지
 - domains: 관심을 보이는 분야
-- activities: 해당 분야에서 좋아하는 활동
+- activities: 해당 분야에서 좋아하거나 실제로 하는 활동
 - evidence: 판단 근거가 된 학생의 발화
+- mapped_traits: 관심 분야 자체가 아닌, 관심과 관련된 구체적인 행동이나 경험에서 근거가 확인되는 STANDARD_TRAITS 성향
 
 관심과 능력을 혼동하지 마세요.
 
 예:
+
 "그림은 잘 못 그리지만 미술관 가는 것을 좋아해요."
 
-→ 미술에 대한 관심은 확인 가능
-→ 창의성이나 미술 능력이 높다고 판단하지 않음
+→ domains: ["미술"]
+→ activities: ["미술 작품 감상"]
+→ mapped_traits: []
+
+미술에 대한 관심은 확인 가능하지만,
+창의성이나 미술 능력이 높다고 판단하지 않음
+
+
+"새로운 AI 기술이 나오면 궁금해서 직접 찾아보고 공부해요."
+
+→ domains: ["AI", "기술"]
+→ activities: ["새로운 AI 기술 탐색", "관련 내용 학습"]
+→ mapped_traits: ["탐구성"]
+
+단순히 AI에 관심이 있어서가 아니라,
+'직접 찾아보고 공부한다'는 행동 근거가 있으므로 탐구성을 판단할 수 있음
 
 
 [나머지 6개 영역 분석]
@@ -190,12 +206,12 @@ neutral
 8. 근거가 부족한 경우 mapped_traits는 빈 리스트로 반환하세요.
 """
 
-INTEREST_ANALYSIS_PROMPT = """
+INTEREST_ANALYSIS_PROMPT = f"""
 다음 학생의 답변에서 관심사를 분석하세요.
 
 학생 답변:
 
-{answer}
+{{answer}}
 
 
 다음을 추출하세요.
@@ -207,23 +223,62 @@ INTEREST_ANALYSIS_PROMPT = """
    학생이 관심을 가지는 분야
 
 3. activities
-   해당 분야에서 학생이 좋아하는 활동
+   해당 분야에서 학생이 좋아하거나 실제로 하는 활동
 
 4. evidence
-   판단 근거
+   관심사를 판단한 근거가 되는 학생의 실제 발화
+
+5. mapped_traits
+   학생의 답변에서 STANDARD_TRAITS에 해당하는 성향이
+   행동이나 경험을 통해 명확하게 드러난 경우에만 추출하세요.
+
+   각 mapped_trait에는 다음 정보를 포함하세요.
+   - trait: STANDARD_TRAITS 중 하나
+   - direction: strength / weakness / neutral
+   - confidence: 해당 발화가 그 trait을 나타낸다고 판단하는 신뢰도 (0.0~1.0)
+   - evidence: 해당 trait을 판단한 학생의 실제 발화
+
+
+사용 가능한 STANDARD_TRAITS:
+
+{TRAIT_LIST_TEXT}
+
+
+매핑 규칙:
+
+{MAPPING_RULES}
 
 
 주의:
 
 좋아하는 것과 잘하는 것을 구분하세요.
 
-예:
+관심 분야 자체만으로 학생의 성향이나 능력을 추론하지 마세요.
+
+예를 들어:
 
 "그림 그리는 건 못하지만 미술관 가는 걸 좋아한다"
 
 → domains: ["미술", "문화예술"]
-
 → activities: ["미술 작품 감상"]
+→ mapped_traits: []
 
-→ 창의성이 높다고 추론하지 않습니다.
+단순히 미술을 좋아한다는 이유만으로
+창의성이 높다고 추론하지 않습니다.
+
+
+반면:
+
+"AI가 궁금해서 새로운 모델이나 기술이 나오면
+직접 찾아보고 공부하는 편이에요."
+
+→ domains: ["AI", "기술"]
+→ activities: ["AI 기술 탐색", "관련 내용 학습"]
+→ mapped_traits:
+   - trait: "탐구성"
+   - direction: "strength"
+
+이 경우에는 단순한 관심 표현을 넘어
+'직접 찾아보고 공부한다'는 행동 근거가 있기 때문에
+탐구성을 추출할 수 있습니다.
 """
