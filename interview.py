@@ -62,8 +62,9 @@ INTRO_PROMPT = ("안녕! 전공이나 진로를 추천하기 전에 너에 대�
                 "좋아하는 것, 잘하는 것, 해본 것 등 편하게 자기소개해 줘.")
 
 # 영역 이름 → 문단/성향 판단에 쓸 한국어 라벨. interest 는 domains/activities 를 따로 다루므로 여기 없다.
+# 약점(weakness)은 9/16 팀 결정으로 user_analysis 에서 영역 자체가 빠졌다 (묻지도, 프로필에 두지도 않는다).
 _AREA_LABELS = {
-    "study_style": "공부 스타일", "strength": "강점", "weakness": "어려워하는 것",
+    "study_style": "공부 스타일", "strength": "강점",
     "life_pattern": "생활 패턴", "social_style": "친구·모둠에서의 모습", "values": "중요하게 여기는 것",
 }
 
