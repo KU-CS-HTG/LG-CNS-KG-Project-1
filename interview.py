@@ -73,6 +73,10 @@ def profile_summary_text(profile: StudentProfileAnalysis, include_weakness: bool
 
     include_weakness=False 로 부르면 약점 줄을 뺀다 — 성향(데이터/시스템/사람) 판단에는
     약점을 근거로 쓰지 않는다 (user_analysis 규칙 14와 같은 이유: 약점 → 부적합 판단 금지).
+
+    getattr(..., None) 으로 읽는 이유: user_analysis/schemas.py 의 StudentProfileAnalysis 에서
+    영역을 빼거나 이름을 바꿀 수 있다(예: weakness 질문을 아예 없앤 경우) — 그때 pydantic은
+    없는 필드에 접근하면 AttributeError 를 던진다. 여기서는 있는 영역만 쓰고 없는 건 조용히 건너뛴다.
     """
     interest = profile.interest
     lines: list[str] = []
@@ -83,8 +87,8 @@ def profile_summary_text(profile: StudentProfileAnalysis, include_weakness: bool
     for area, label in _AREA_LABELS.items():
         if area == "weakness" and not include_weakness:
             continue
-        data = getattr(profile, area)
-        if data.sufficient and data.summary:
+        data = getattr(profile, area, None)
+        if data is not None and data.sufficient and data.summary:
             lines.append(f"{label}: {data.summary}")
 
     return "\n".join(lines)
