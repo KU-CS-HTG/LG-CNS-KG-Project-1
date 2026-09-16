@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>진로 추천</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 16px 80px;
+    font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background: #f6f7f9; color: #1a1a1a; line-height: 1.6;
+  }
+  .card {
+    max-width: 640px; margin: 0 auto; background: #fff;
+    border: 1px solid #e3e5e8; border-radius: 12px; padding: 32px;
+  }
+  h1 { font-size: 20px; margin: 0 0 24px; }
+  .question { font-weight: 600; margin-bottom: 12px; white-space: pre-line; }
+  textarea, input[type=text] {
+    width: 100%; padding: 10px 12px; border: 1px solid #d5d8dc; border-radius: 8px;
+    font-size: 15px; font-family: inherit; resize: vertical;
+  }
+  textarea { min-height: 80px; }
+  .choices { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .choice-btn {
+    text-align: left; padding: 12px 14px; border: 1px solid #d5d8dc; border-radius: 8px;
+    background: #fff; cursor: pointer; font-size: 15px; font-family: inherit;
+  }
+  .choice-btn:hover { border-color: #3b6ef6; background: #f2f6ff; }
+  .next-btn, .primary-btn {
+    margin-top: 16px; padding: 10px 20px; border: none; border-radius: 8px;
+    background: #3b6ef6; color: #fff; font-size: 15px; cursor: pointer;
+  }
+  .next-btn:disabled { background: #b9c3d6; cursor: not-allowed; }
+  .step-indicator { color: #8a8f98; font-size: 13px; margin-bottom: 8px; }
+  .hidden { display: none; }
+  .profile-box {
+    white-space: pre-wrap; background: #f6f7f9; border: 1px solid #e3e5e8;
+    border-radius: 8px; padding: 16px; font-size: 13px; color: #4a4f57;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace; margin-top: 20px;
+  }
+  .result-label { font-weight: 700; margin-top: 24px; margin-bottom: 8px; }
+  .explain-box { white-space: pre-wrap; }
+  .error { color: #c0392b; margin-top: 12px; font-size: 14px; }
+  .spinner { color: #8a8f98; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🎓 진로 추천</h1>
+
+  <div id="qa-flow"></div>
+  <div id="error" class="error hidden"></div>
+  <div id="result" class="hidden">
+    <div class="result-label">[프로필]</div>
+    <div id="profile-text" class="profile-box"></div>
+    <div class="result-label">[진로 추천]</div>
+    <div id="explain-text" class="explain-box"></div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = {{ questions | tojson }};
+// Q3는 "① .. ② .. ③ .." 형태의 객관식 — 질문 문구에서 선택지를 직접 뽑아낸다 (app.py QUESTIONS와 항상 일치)
+const CHOICES_Q3 = QUESTIONS[2].match(/[①②③][^①②③]+/g).map(s => s.trim());
+
+const answers = [];
+let step = 0;
+const flow = document.getElementById("qa-flow");
+const errorBox = document.getElementById("error");
+
+function showError(msg) {
+  errorBox.textContent = msg;
+  errorBox.classList.remove("hidden");
+}
+function clearError() { errorBox.classList.add("hidden"); }
+
+function renderStep() {
+  clearError();
+  flow.innerHTML = "";
+
+  const wrap = document.createElement("div");
+  wrap.innerHTML = `<div class="step-indicator">${step + 1} / ${QUESTIONS.length}</div>
+    <div class="question"></div>`;
+  wrap.querySelector(".question").textContent = QUESTIONS[step];
+  flow.appendChild(wrap);
+
+  if (step === 2) {
+    const box = document.createElement("div");
+    box.className = "choices";
+    CHOICES_Q3.forEach(choice => {
+      const btn = document.createElement("button");
+      btn.className = "choice-btn";
+      btn.textContent = choice;
+      btn.onclick = () => { answers.push(choice); advance(); };
+      box.appendChild(btn);
+    });
+    flow.appendChild(box);
+  } else {
+    const ta = document.createElement("textarea");
+    ta.placeholder = "여기에 답을 적어 주세요";
+    flow.appendChild(ta);
+
+    const btn = document.createElement("button");
+    btn.className = "next-btn";
+    btn.textContent = step === QUESTIONS.length - 1 ? "제출" : "다음";
+    btn.disabled = true;
+    ta.addEventListener("input", () => { btn.disabled = ta.value.trim() === ""; });
+    btn.onclick = () => { answers.push(ta.value.trim()); advance(); };
+    flow.appendChild(btn);
+  }
+}
+
+function advance() {
+  step += 1;
+  if (step < QUESTIONS.length) {
+    renderStep();
+  } else {
+    submitAnswers();
+  }
+}
+
+function renderFollowup(question) {
+  clearError();
+  flow.innerHTML = "";
+  const wrap = document.createElement("div");
+  wrap.innerHTML = `<div class="step-indicator">조금 더 알려주세요</div>
+    <div class="question"></div>`;
+  wrap.querySelector(".question").textContent = question;
+  flow.appendChild(wrap);
+
+  const ta = document.createElement("textarea");
+  flow.appendChild(ta);
+
+  const btn = document.createElement("button");
+  btn.className = "next-btn";
+  btn.textContent = "제출";
+  btn.disabled = true;
+  ta.addEventListener("input", () => { btn.disabled = ta.value.trim() === ""; });
+  btn.onclick = () => { answers.push(ta.value.trim()); submitAnswers(); };
+  flow.appendChild(btn);
+}
+
+async function submitAnswers() {
+  flow.innerHTML = `<div class="spinner">전공·직무를 찾는 중입니다…</div>`;
+  clearError();
+
+  let res;
+  try {
+    res = await fetch("/api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answers }),
+    });
+  } catch (e) {
+    flow.innerHTML = "";
+    showError("서버에 연결할 수 없습니다.");
+    return;
+  }
+
+  const data = await res.json();
+  if (!res.ok) {
+    flow.innerHTML = "";
+    showError(data.error || "요청을 처리하지 못했습니다.");
+    return;
+  }
+
+  if (data.status === "followup") {
+    renderFollowup(data.question);
+    return;
+  }
+
+  if (data.status === "empty") {
+    flow.innerHTML = "";
+    showError("입력하신 내용으로는 IT 역량이 검출되지 않았습니다. 새로고침해서 다시 답해 보시겠어요?");
+    return;
+  }
+
+  flow.innerHTML = "";
+  document.getElementById("profile-text").textContent = data.profile_text;
+  document.getElementById("result").classList.remove("hidden");
+  streamExplain(data.result_id);
+}
+
+function streamExplain(resultId) {
+  const box = document.getElementById("explain-text");
+  box.textContent = "";
+  const source = new EventSource(`/api/explain/${resultId}`);
+  source.onmessage = (event) => {
+    const payload = JSON.parse(event.data);
+    box.textContent += payload.chunk;
+  };
+  source.addEventListener("done", () => source.close());
+  source.onerror = () => {
+    source.close();
+    if (box.textContent === "") box.textContent = "추천 문단을 불러오지 못했습니다.";
+  };
+}
+
+renderStep();
+</script>
+</body>
+</html>

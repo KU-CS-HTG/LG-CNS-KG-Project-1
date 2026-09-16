@@ -218,22 +218,18 @@ CANON: dict[str, str] = {
     "열전달": "Mechanical Engineering", "heat transfer": "Mechanical Engineering",
     "구조해석": "Mechanical Engineering", "동역학 해석": "Mechanical Engineering", "dynamics analysis": "Mechanical Engineering",
     "fluid dynamics": "Mechanical Engineering",
-    "cfd": "CFD",                                                    # 전산 유체 — Simulation 의 자식 (팀원 안의 CFD→Fluid Dynamics→ME 는 두 단계)
+    "cfd": "CFD",                                                    # 전산 유체 — ME 의 자식 (팀원 최종안)
     "사출": "Injection Molding", "압출": "Extrusion",
-    # ✗ "자동화" → Automation(ME) 도 채택하지 않음: 공고의 '자동화' 는 전부 IT 자동화(Infrastructure Automation, 자동화 도구) 라 기계가 아니다
+    "자동화": "Automation",                                          # 팀원 안. 공고의 '자동화' 는 대부분 IT 자동화라 이 별칭이 실제로 걸리는 공고는 없다 (실측 0건)
     # ✗ catia/creo/solidworks/autocad → CAD 는 채택하지 않음: 2단계에서 도구 이름을 Mechanical Design 의 자식으로 두기로 했고
     #   (카드에 "CATIA (Mechanical Design 계열)" 로 보이게), 기계공학부가 Mechanical Design 을 정확히 기른다. "cad" 는 → Mechanical Design 유지
-    # ── 전기·전자: Electronics / Circuit Design 을 EE 의 자식으로. 팀원 안의 Circuit Design → Electronics → EE 는 두 단계라 EE 직결로 바꿈
-    "전자": "Electronics", "전자공학": "Electronics", "전자 공학": "Electronics",          # (2단계의 → EE 를 덮음)
-    "회로설계": "Circuit Design", "회로 설계": "Circuit Design", "circuit design": "Circuit Design",
-    "display 제품 회로 설계": "Circuit Design",
-    "전기회로 설계": "Circuit Design", "측정 회로 설계": "Circuit Design", "기능 안전 회로 설계": "Circuit Design",   # (3단계의 → EE 를 덮음)
-    "emc 설계 평가": "Circuit Design",
+    # ── 전기·전자: 팀원 최종안(821a617)대로 전자·회로설계·전장은 Electrical Engineering 별칭 (2단계와 같은 방식). 별도 노드 없음
+    "전자": "Electrical Engineering", "circuit design": "Electrical Engineering",
+    "자동차 전장 시스템": "Electrical Engineering", "전장": "Electrical Engineering",
     "에너지공학": "Energy Engineering", "energy engineering": "Energy Engineering",
-    "자동차 전장 시스템": "Automotive Electronics", "전장": "Automotive Electronics",
     # ── 디스플레이·광학·반도체
     "디스플레이": "Display", "display": "Display", "광학": "Optics", "반도체": "Semiconductor",
-    "반도체 패키징": "Semiconductor", "패키징": "Semiconductor",       # 별도 노드(Semiconductor Packaging)로 두면 EE 까지 두 홉이라 Semiconductor 로 합침
+    "반도체 패키징": "Semiconductor Packaging", "패키징": "Semiconductor Packaging",   # 팀원 안. Packaging→Semiconductor→EE 두 단계지만 PyTorch→DL→ML 과 같은 선례
     # ── 통신·데이터센터
     "데이터센터": "Data Center",
     # ── 데이터·AI 도구
@@ -324,10 +320,9 @@ PARENT: dict[str, str] = {
     "Polymer Engineering": "Materials Engineering", "Metallurgical Engineering": "Materials Engineering",
     "Ceramics": "Materials Engineering", "Glass": "Materials Engineering",
     "Injection Molding": "Mechanical Engineering", "Extrusion": "Mechanical Engineering",
-    "CFD": "Simulation",
-    "Electronics": "Electrical Engineering", "Circuit Design": "Electrical Engineering",
-    "Automotive Electronics": "Electrical Engineering", "Display": "Electrical Engineering",
-    "Energy Engineering": "Electrical Engineering", "Semiconductor": "Electrical Engineering",
+    "CFD": "Mechanical Engineering", "Automation": "Mechanical Engineering",
+    "Display": "Electrical Engineering", "Semiconductor": "Electrical Engineering", "Semiconductor Packaging": "Semiconductor",
+    "Energy Engineering": "Electrical Engineering",
     "Data Center": "Cloud",
     "Sales": "Marketing", "CRM": "Sales",
 }
