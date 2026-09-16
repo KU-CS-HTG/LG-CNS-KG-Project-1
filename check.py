@@ -20,3 +20,62 @@ leaked = [s for s in (all_subj - given) if s in text and not any(s in g for g in
 assert not leaked, f"주지 않은 과목이 등장: {leaked}"
 
 print("확인 3건 통과")
+# ═════════════════════════════════════════════════════════════
+# 평가셋 (evals/cases.json) — 매칭을 고칠 때마다 이걸로 판단한다. 눈으로 서너 개 보고 결정하지 않는다.
+#   기준은 느슨하게: 기대 전공이 상위 3위 안 / 기대 직무명 조각이 상위 2개 직무 중 하나에 포함.
+#   (태그는 LLM 이 뽑으므로 표현이 조금만 달라도 1위가 흔들릴 수 있다 — 그래서 top-3)
+# ═════════════════════════════════════════════════════════════
+import json
+from pathlib import Path
+
+cases = json.loads((Path(__file__).resolve().parent / "evals" / "cases.json").read_text(encoding="utf-8"))
+passed = 0
+print(f"\n평가셋 {len(cases)}건")
+for c in cases:
+    s: dict = {}
+    r = run(c["answers"], s)
+    if "followup" in r:                                   # 재질문이 나오면 첫 답을 한 번 더 준다
+        r = run(c["answers"] + [c["answers"][0]], s)
+    if r.get("empty"):
+        print(f"  ✗ #{c['id']:2} 역량 미검출  tags={r.get('tags')}")
+        continue
+    top3 = [x["name"].replace("?", "·") for x in r["ranking"][:3]]
+    jobs = [j["role"] for j in r.get("jobs", [])]
+    ok_major = any(m in top3 for m in c["expect_major_top3"])
+    ok_job = (not c["expect_job_role_contains"]) or any(k in j for k in c["expect_job_role_contains"] for j in jobs)
+    ok = ok_major and ok_job
+    passed += ok
+    print(f"  {'✓' if ok else '✗'} #{c['id']:2} 전공 {top3[0]:<14} 직무 {jobs[0] if jobs else '-':<22} "
+          f"{'' if ok_major else '← 전공 기대: ' + '/'.join(c['expect_major_top3'])} "
+          f"{'' if ok_job else '← 직무 기대: ' + '/'.join(c['expect_job_role_contains'])}  {c['note'][:30]}")
+print(f"통과 {passed}/{len(cases)}")
+
+# ═════════════════════════════════════════════════════════════
+# 인터뷰 모드 (evals/interview_cases.json) — user_analysis 어댑터를 대본으로 자동 실행
+#   ask() 에 대본을 주입하므로 키보드 입력 없이 돈다. 건당 LLM 최대 3회 + 태거 1회.
+# ═════════════════════════════════════════════════════════════
+from interview import interview
+
+icases = json.loads((Path(__file__).resolve().parent / "evals" / "interview_cases.json").read_text(encoding="utf-8"))
+ipassed = 0
+print(f"\n인터뷰 모드 {len(icases)}건")
+for c in icases:
+    lines = iter(c["script"])
+    iv = interview(ask=lambda _prompt="": next(lines), say=lambda _m: None)
+    r = run(iv["answers"] + [c["q3"]], {}, trait_tags=iv["trait_tags"],
+            stated_tags=iv["interest_tags"], soft_traits=iv["soft_traits"])
+    if "followup" in r or r.get("empty"):
+        print(f"  ✗ {c['id']} 결과 없음 ({'재질문' if 'followup' in r else '미검출'})"); continue
+    top3 = [x["name"].replace("?", "·") for x in r["ranking"][:3]]
+    ok_major = any(m in top3 for m in c["expect_major_top3"])
+    ok_trait = set(c["expect_trait_tags_subset"]) <= set(iv["trait_tags"]) | set(r["tags"])
+    ok_stated = set(c.get("expect_stated_tags_subset", [])) <= set(iv["interest_tags"])        # 관심 → 사전 직행
+    job = r.get("job") or {}
+    ok_soft = (not c.get("expect_soft_match")) or bool(job.get("soft_match"))                  # 요구 태도 ✓ 가 떠야 하는 케이스
+    ok = ok_major and ok_trait and ok_stated and ok_soft
+    ipassed += ok
+    soft = f"{job.get('role','-')} 태도 {job.get('soft_match', [])}" if job else "-"
+    print(f"  {'✓' if ok else '✗'} {c['id']} 전공 {top3[0]:<10} LLM {iv['llm_calls']}회 관심→{iv['interest_tags']} 성향→{iv['trait_tags']} 직무 {soft} "
+          f"{'' if ok_major else '← 전공 기대: ' + '/'.join(c['expect_major_top3'])}{'' if ok_trait else ' ← 성향 기대 미충족'}"
+          f"{'' if ok_stated else ' ← 관심 태그 미충족'}{'' if ok_soft else ' ← 요구 태도 ✓ 없음'}")
+print(f"통과 {ipassed}/{len(icases)}")

@@ -1,0 +1,147 @@
+[
+  {
+    "id": 1,
+    "answers": [
+      "데이터 분석이 재미있어요",
+      "통계 수업, 파이썬으로 데이터 정리",
+      "1"
+    ],
+    "expect_major_top3": [
+      "통계학과"
+    ],
+    "expect_job_role_contains": [
+      "AI",
+      "Data"
+    ],
+    "note": "가장 기본. 통계학과가 1위여야 한다 (근거 과목 19개)"
+  },
+  {
+    "id": 2,
+    "answers": [
+      "웹 서비스 만드는 일",
+      "자바로 게시판 만들어 봤어요",
+      "2"
+    ],
+    "expect_major_top3": [
+      "컴퓨터공학부"
+    ],
+    "expect_job_role_contains": [],
+    "note": "Java 는 Programming 계열 — 전공 재추출 전엔 Software Engineering 으로만 잡힌다"
+  },
+  {
+    "id": 3,
+    "answers": [
+      "이미지 인식, AI 모델 만들기",
+      "수학이랑 코딩",
+      "2"
+    ],
+    "expect_major_top3": [
+      "첨단융합학부",
+      "컴퓨터공학부",
+      "전기·정보공학부"
+    ],
+    "expect_job_role_contains": [
+      "AI"
+    ],
+    "note": "AI 직무가 나와야 한다"
+  },
+  {
+    "id": 4,
+    "answers": [
+      "회로나 신호 처리 쪽",
+      "전자회로 실험, 신호처리 수업",
+      "2"
+    ],
+    "expect_major_top3": [
+      "전기·정보공학부"
+    ],
+    "expect_job_role_contains": [],
+    "note": "희귀 역량(Signal Processing) — IDF 가 효과를 내야 하는 케이스"
+  },
+  {
+    "id": 5,
+    "answers": [
+      "수학적으로 최적화 문제 푸는 것",
+      "수치해석, 선형대수",
+      "1"
+    ],
+    "expect_major_top3": [
+      "수리과학부",
+      "산업공학과"
+    ],
+    "expect_job_role_contains": [],
+    "note": "Optimization · Numerical Analysis"
+  },
+  {
+    "id": 6,
+    "answers": [
+      "공장 생산 최적화, 스마트 팩토리",
+      "산업공학 수업, 시뮬레이션",
+      "1"
+    ],
+    "expect_major_top3": [
+      "산업공학과"
+    ],
+    "expect_job_role_contains": [],
+    "note": ""
+  },
+  {
+    "id": 7,
+    "answers": [
+      "사람들이랑 프로젝트 굴리는 게 좋아요",
+      "동아리 회장, 발표",
+      "3"
+    ],
+    "expect_major_top3": [
+      "경영학과",
+      "경영대학"
+    ],
+    "expect_job_role_contains": [],
+    "note": "기대값 재검토 필요(팀): PM 하나뿐인 입력. 재추출 후 경영학과의 창업 과목이 Entrepreneurship(어휘 밖)으로 가서 PM 근거 1개 → 건설 공정관리 3과목의 건설환경도시공학부가 1위. 근거대로면 틀린 답이 아님"
+  },
+  {
+    "id": 8,
+    "answers": [
+      "기계 설계랑 시뮬레이션",
+      "CAD, 열역학 수업",
+      "2"
+    ],
+    "expect_major_top3": [
+      "기계공학부"
+    ],
+    "expect_job_role_contains": [],
+    "note": "기계 어휘(2단계) 반영 후 통과 (2026-09-15)"
+  },
+  {
+    "id": 9,
+    "answers": [
+      "데이터 파이프라인 만드는 데이터 엔지니어링",
+      "SQL, 파이썬",
+      "1"
+    ],
+    "expect_major_top3": [
+      "첨단융합학부",
+      "컴퓨터공학부",
+      "통계학과"
+    ],
+    "expect_job_role_contains": [
+      "Data",
+      "AI"
+    ],
+    "note": "SQL 은 Database 계열 — 전공에 Database 가 붙기 전엔 Data Analysis 로만 이어진다"
+  },
+  {
+    "id": 10,
+    "answers": [
+      "보안이나 네트워크",
+      "네트워크 수업, 리눅스",
+      "2"
+    ],
+    "expect_major_top3": [
+      "컴퓨터공학부",
+      "전기·정보공학부"
+    ],
+    "expect_job_role_contains": [],
+    "note": "Security · Network"
+  }
+]

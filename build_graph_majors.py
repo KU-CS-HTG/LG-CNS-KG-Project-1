@@ -64,8 +64,8 @@ class MajorSkills(BaseModel):
     # "4~8개" 처럼 개수를 고정하면 모델이 개수를 맞추려고 내용을 지어낸다 (9/11 my_service "정확히 3개" 와 같은 함정).
     # 그래서 하한을 두지 않는다. 해당 없는 전공은 빈 리스트가 정답이다.
     skills: list[SkillEvidence] = Field(
-        description="이 전공이 기르는 역량. 해당하는 것이 없으면 빈 리스트. 최대 8개",
-        max_length=8,
+        description="이 전공이 기르는 역량. 해당하는 것이 없으면 빈 리스트. 최대 10개",
+        max_length=10,          # 8 → 10 (2026-09-15): 컴공 43과목에서 Database 가 8개 상한에 밀려 빠졌다
     )
 
 
@@ -90,9 +90,10 @@ EXTRACT_SYSTEM = """너는 대학 교육과정을 분석해 전공이 기르는 
      Cloud 는 클라우드 컴퓨팅이다. 에너지와 무관하다.
   ✗ 국어교육과 '한국문학교육론' → Knowledge Graph
 
-[이런 건 맞는 답이다]
+[이런 건 맞는 답이다 — 과목명이 직접 가리키면 한 전공에 역량이 여러 개인 것이 정상이다]
   ✓ 컴퓨터공학부 '데이터베이스' → Database
   ✓ 통계학과 '회귀분석 및 실습', '수리통계' → Statistics
+  ✓ 통계학과 '데이터마이닝 방법 및 실습' → Data Analysis  /  '기계학습과 계산금융' → Machine Learning
   ✓ 전기·정보공학부 '딥러닝의 기초' → Deep Learning
 
 [통제 어휘 목록]

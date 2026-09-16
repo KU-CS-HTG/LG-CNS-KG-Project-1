@@ -45,7 +45,7 @@ CANON: dict[str, str] = {
     "llm": "LLM", "생성형 ai": "LLM", "거대언어모델": "LLM", "초거대언어모델": "LLM",
     "rag": "RAG", "프롬프트 엔지니어링": "Prompt Engineering", "prompt engineering": "Prompt Engineering",
     "랭체인": "LangChain", "langchain": "LangChain", "langgraph": "LangGraph",
-    "자연어처리": "NLP", "nlp": "NLP",
+    "자연어처리": "NLP", "nlp": "NLP", "natural language processing": "NLP",
     "컴퓨터비전": "Computer Vision", "computer vision": "Computer Vision",
 
     # ── 그래프 · 지식
@@ -85,6 +85,53 @@ CANON: dict[str, str] = {
     "최적화": "Optimization", "optimization": "Optimization",
     "신호처리": "Signal Processing", "디지털신호처리": "Signal Processing", "signal processing": "Signal Processing",
     "수치해석": "Numerical Analysis", "수리모델링": "Numerical Analysis", "numerical analysis": "Numerical Analysis",
+
+    # ── 기존 대표 표기의 별칭 보강 (2단계, 2026-09-15 canon_candidates.txt 2회 이상 119개 검토)
+    "data 분석": "Data Analysis", "big data": "Data Analysis", "빅데이터": "Data Analysis",
+    "빅데이터 기반 예측 모델링": "Machine Learning", "ai": "Machine Learning", "인공지능": "Machine Learning",
+    "public cloud": "Cloud", "hybrid cloud": "Cloud", "cloud infrastructure": "Cloud", "container": "Cloud",
+    "iac": "Cloud", "serverless": "Cloud", "virtualization": "Cloud", "가상화": "Cloud",
+    "최적화 방법론": "Optimization", "최적화 기법": "Optimization",
+    "알고리즘 개발": "Algorithm",
+    "실험계획법": "Statistics", "통계 분석": "Statistics",
+    "postgresql": "PostgreSQL", "r": "R", "minitab": "minitab", "jmp": "JMP",
+    "pytorch": "PyTorch", "tensorflow": "TensorFlow", "matlab": "MATLAB", "vba": "VBA",
+
+    # ── 2단계 클러스터 ① 배터리·화학·재료 (LGES·LGC 직무 ↔ 화학부·화학생물공학부·재료공학부)
+    "전기화학": "Electrochemistry", "전기 화학": "Electrochemistry", "배터리": "Electrochemistry",
+    "bms": "BMS",
+    "화학": "Chemical Engineering", "화학공학": "Chemical Engineering", "화학 공학": "Chemical Engineering",
+    "재료공학": "Materials Engineering", "소재": "Materials Engineering", "고분자 소재": "Materials Engineering",
+    "원소재 개발": "Materials Engineering", "재료": "Materials Engineering",
+    "유변학": "Rheology", "sem": "SEM",
+
+    # ── 2단계 클러스터 ② 기계·설계·시뮬레이션·전기 HW (LGES·LGD·LGE 직무 ↔ 기계·전기정보·조선해양)
+    "기계공학": "Mechanical Engineering", "기계 공학": "Mechanical Engineering", "기계": "Mechanical Engineering",
+    "메카트로닉스": "Mechanical Engineering", "mechatronics": "Mechanical Engineering",
+    # 전공 과목명에서 LLM 이 영문으로 적는 기계 세부 분야 → 부모로 (2026-09-15 재추출 탈락 목록에서)
+    "fluid mechanics": "Mechanical Engineering", "thermodynamics": "Mechanical Engineering", "dynamics": "Mechanical Engineering",
+    "structural analysis": "Mechanical Engineering", "유체역학": "Mechanical Engineering", "열역학": "Mechanical Engineering",
+    "computer-aided design": "Mechanical Design", "machine design": "Mechanical Design", "기계설계": "Mechanical Design",
+    "computer simulation": "Simulation",
+    "기구설계": "Mechanical Design", "3d 설계": "Mechanical Design", "3d cad": "Mechanical Design", "cad": "Mechanical Design",
+    "3d 설계 tool": "Mechanical Design", "설계최적화": "Mechanical Design",
+    "catia": "CATIA", "creo": "Creo", "solidworks": "SolidWorks", "autocad": "AutoCAD", "inventor": "Inventor",
+    "시뮬레이션": "Simulation", "cae": "Simulation", "simulator": "Simulation",
+    "simulink": "Simulink", "fdtd": "FDTD", "speos": "SPEOS", "lighttools": "LightTools", "setfos": "Setfos",
+    "전기": "Electrical Engineering", "전기공학": "Electrical Engineering", "전기 공학": "Electrical Engineering",
+    "전자공학": "Electrical Engineering", "전자 공학": "Electrical Engineering",
+    "회로 설계": "Electrical Engineering", "회로설계": "Electrical Engineering", "display 제품 회로 설계": "Electrical Engineering",
+    "회로 시뮬레이션 tool": "Electrical Engineering",
+    "smartspice": "SmartSpice", "cadence spectre": "Cadence Spectre",
+
+    # ── 2단계 클러스터 ③ 로봇·생산·ERP (LGES 공정/설비, CNS Robotics·ERP ↔ 산업공학·기계·경영)
+    "로봇 제어": "Robotics", "robotics sw": "Robotics", "로봇팔": "Robotics", "robotics": "Robotics",
+    "ros": "ROS", "ros2": "ROS2", "자율주행": "Autonomous Driving", "plc 제어": "PLC", "amr": "AMR",
+    "공정기술": "Manufacturing", "생산운영": "Manufacturing", "설비": "Manufacturing", "smart factory": "Manufacturing",
+    "생산기술": "Manufacturing", "제조": "Manufacturing", "manufacturing": "Manufacturing",
+    "디지털 트윈": "Digital Twin", "digital twin": "Digital Twin",
+    "erp": "ERP", "sap": "SAP", "s/4hana": "S/4HANA", "s/4hana public cloud": "S/4HANA", "s/4hana cloud private": "S/4HANA",
+    "fiori": "Fiori", "abap": "ABAP",
 
     # ── 비기술 역량 (전공 쪽에서 자주 나온다)
     "커뮤니케이션": "Communication", "의사소통": "Communication",
@@ -211,6 +258,81 @@ assert not _bad, f"PARENT 에 CANON 대표 표기가 아닌 이름이 있다: {_
 def parent_of(skill: str) -> str | None:
     """상위 개념. 없으면 None. (한 단계만 — 규칙 ①)"""
     return PARENT.get(skill)
+
+
+# ═════════════════════════════════════════════════════════════
+# TRAIT_TO_SKILL — 성향(user_analysis.STANDARD_TRAITS) → 역량. IS_A 와 **다른 종류**의 관계
+# ═════════════════════════════════════════════════════════════
+# IS_A 는 분류("Oracle 은 Database 의 한 종류", 위로 올리면 항상 참).
+# 이건 연관("수리적사고는 Statistics 를 시사한다", 경향일 뿐 틀릴 수 있음). 그래프로 그리면
+#   (:Trait)-[:SUGGESTS]->(:Skill) — 새 노드 종류, 새 엣지. IS_A 와 섞지 않는다.
+# 근거가 없다는 점이 결정적이다: 과목명은 성향을 가르치지 않는다 (그래서 전공 쪽에서 소프트 스킬을 뺐다).
+# 그러므로 여기서 나온 태그는 **가중치 0.5** 로만 반영하고, 화면에 "성향에서 추정" 으로 표시한다.
+# 30개 성향 중 역량으로 이을 근거가 있는 7개만. 창의성·공감·경청·안정지향 등은 잇지 않는다 — 억지로 이으면
+# 9/15 소프트 스킬 사태(성악과 → Communication)의 재현이다.
+
+TRAIT_TO_SKILL: dict[str, str] = {
+    "수리적사고": "Statistics",
+    "분석성": "Data Analysis",
+    "논리성": "Algorithm",
+    "탐구성": "Machine Learning",          # 약함 — A 판단으로 뺄 수 있음
+    "조정능력": "Project Management",
+    "주도성": "Project Management",
+    "계획성": "Project Management",
+}
+_bad_t = [v for v in TRAIT_TO_SKILL.values() if v not in _canon_values]
+assert not _bad_t, f"TRAIT_TO_SKILL 에 CANON 대표 표기가 아닌 이름이 있다: {_bad_t}"
+
+
+# ═════════════════════════════════════════════════════════════
+# 소프트 스킬 — 직무가 요구하는 태도 (extracted_raw 의 soft_skills) ↔ 학생 성향
+# ═════════════════════════════════════════════════════════════
+# 세 번째 관계. (:Trait)-[:MATCHES]->(:SoftSkill)<-[:WANTS]-(:Job) — 전공을 거치지 않고 성향에서 직무로 바로 간다.
+# 양쪽이 "말한 것" 끼리 만난다: 공고가 "협업·문제해결" 을 직접 요구하고, 인터뷰가 "역할 나누고 일정 정리" 를 직접 관찰한다.
+# 그래서 TRAIT_TO_SKILL(추론, 0.5)보다 근거가 낫다. 단, 직무 84건 중 44건에만 soft 데이터가 있고 빈 값이
+# "요구 없음" 인지 "추출이 놓침" 인지 구분이 안 되므로 **점수에 더하지 않고 동점일 때만** 2차 기준으로 쓴다 (graph_store).
+# 약점(direction=weakness)은 쓰지 않는다 — user_analysis 규칙 14 "약점을 직무 부적합으로 판단하지 않는다".
+
+SOFT_CANON: dict[str, str] = {           # 공고 표현(소문자, 공백 제거) → 대표 표기. 실측 109개 표현 → 10개
+    "커뮤니케이션": "Communication", "소통": "Communication", "소통능력": "Communication", "의사소통": "Communication",
+    "설득": "Communication", "고객소통": "Communication", "협업커뮤니케이션": "Communication",
+    "고객지향적커뮤니케이션": "Communication", "비즈니스의사소통": "Communication",
+    "문제해결": "Problem Solving", "문제정의및해결": "Problem Solving", "문제해결과정즐김": "Problem Solving",
+    "논리적사고": "Analytical Thinking", "분석적사고": "Analytical Thinking",
+    "협업": "Collaboration", "협력": "Collaboration", "팀협업": "Collaboration", "협업문화에익숙함": "Collaboration", "팀워크": "Collaboration",
+    "리더십": "Leadership",
+    "적극성": "Initiative", "적극적인태도": "Initiative", "도전의지": "Initiative", "새로운시도즐김": "Initiative", "열정": "Initiative",
+    "책임감": "Responsibility",
+    "학습의지": "Growth Mindset", "성장의지": "Growth Mindset", "자기주도학습": "Growth Mindset",
+    "창의성": "Creativity", "크리에이티브역량": "Creativity", "아이디어제시": "Creativity",
+    "변화수용": "Adaptability", "변화대응": "Adaptability",
+}
+_SOFT_DROP = re.compile(r"영어|english|회화|능통|외국어")   # 어학은 태도가 아니다
+
+
+def canonicalize_soft(term: str) -> str | None:
+    """공고의 소프트 스킬 표현 → 대표 표기. 어학·미등록 표현은 None."""
+    key = re.sub(r"\s+", "", (term or "").replace("\xa0", " ")).lower()
+    if not key or _SOFT_DROP.search(key):
+        return None
+    return SOFT_CANON.get(key)
+
+
+TRAIT_TO_SOFT: dict[str, str] = {         # user_analysis 성향 → 소프트 스킬. 근거 있는 17개만 (30개 중)
+    "협력성": "Collaboration", "조정능력": "Collaboration",
+    "주도성": "Leadership",
+    "언어표현": "Communication", "설득력": "Communication", "발표력": "Communication", "경청": "Communication", "공감": "Communication",
+    "문제해결": "Problem Solving",
+    "분석성": "Analytical Thinking", "논리성": "Analytical Thinking",
+    "도전성": "Initiative", "실행력": "Initiative",
+    "지속성": "Responsibility",
+    "성장지향": "Growth Mindset",
+    "창의성": "Creativity",
+    "변화적응": "Adaptability",
+}
+_soft_values = set(SOFT_CANON.values())
+_bad_s = [v for v in TRAIT_TO_SOFT.values() if v not in _soft_values]
+assert not _bad_s, f"TRAIT_TO_SOFT 에 SOFT_CANON 대표 표기가 아닌 이름이 있다: {_bad_s}"
 
 
 # ═════════════════════════════════════════════════════════════
