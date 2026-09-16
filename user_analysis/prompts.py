@@ -15,13 +15,14 @@ SYSTEM_PROMPT = f"""
 학생의 자기소개와 대화를 통해 다음 7개 영역의 정보를 수집하고,
 자연어 답변을 구조화된 학생 프로필로 변환합니다.
 
-6개 영역:
+7개 영역:
 1. interest: 관심사
 2. study_style: 공부 스타일
 3. strength: 강점
-4. life_pattern: 생활 패턴
-5. social_style: 친구 관계 / 모둠 활동
-6. values: 성격 / 가치관
+4. weakness: 약점
+5. life_pattern: 생활 패턴
+6. social_style: 친구 관계 / 모둠 활동
+7. values: 성격 / 가치관
 
 분석 규칙:
 - 성향/역량 매핑에는 아래 STANDARD_TRAITS만 사용하세요.
@@ -44,43 +45,34 @@ STANDARD_TRAITS:
 """
 
 AREA_ANALYSIS_PROMPT = """
-현재 분석할 영역:
+다음 학생의 답변을 분석하세요.
 
+분석 대상 영역:
 {area}
 
-
 학생 답변:
-
 {answer}
 
+해야 할 일:
 
-학생의 답변을 분석하세요.
+1. 해당 영역에 대한 정보가 충분한지 판단하세요.
 
-규칙:
+2. 학생 답변의 핵심 의미를 짧게 요약하세요.
 
-1. 현재 영역에 대한 정보가 충분한지 판단하세요.
+3. 표준 키워드가 명확히 드러나는 경우에만
+   STANDARD_TRAITS 중 최대 3개를 선택하세요.
 
-2. 답변의 핵심 내용을 summary로 작성하세요.
+4. 각 키워드마다
+   - strength
+   - weakness
+   - neutral
+   중 하나를 지정하세요.
 
-3. STANDARD_TRAITS에 있는 키워드만 사용하세요.
+5. 각 판단에 대한 confidence를 0~1로 평가하세요.
 
-4. 관련된 표준 키워드는 최대 3개만 선택하세요.
+6. 판단 근거가 된 학생의 표현을 evidence에 작성하세요.
 
-5. 각 키워드에 대해 다음을 판단하세요.
-
-- trait
-- direction
-- confidence
-- evidence
-
-6. direction은 다음 중 하나입니다.
-
-- strength
-- neutral
-
-7. 학생이 직접 말하지 않은 내용은 추론하지 마세요.
-
-8. 근거가 부족한 경우 mapped_traits는 빈 리스트로 반환하세요.
+7. 근거가 부족한 경우 mapped_traits를 빈 리스트로 반환하세요.
 """
 
 INTRODUCTION_ANALYSIS_PROMPT = """
@@ -95,9 +87,10 @@ INTRODUCTION_ANALYSIS_PROMPT = """
 1. interest: 관심사
 2. study_style: 공부 스타일
 3. strength: 강점
-4. life_pattern: 생활 패턴
-5. social_style: 친구 관계 / 모둠 활동
-6. values: 성격 / 가치관
+4. weakness: 약점
+5. life_pattern: 생활 패턴
+6. social_style: 친구 관계 / 모둠 활동
+7. values: 성격 / 가치관
 
 
 [공통 판단]
@@ -156,7 +149,7 @@ life_pattern, social_style, values에 대해서는:
 각 mapped_trait에는 다음 정보를 포함하세요.
 
 - trait: STANDARD_TRAITS 중 하나
-- direction: strength / neutral 중 하나
+- direction: strength / weakness / neutral 중 하나
 - confidence: 판단 신뢰도 0~1
 - evidence: 해당 키워드를 판단한 학생 발화 근거
 
@@ -168,7 +161,49 @@ life_pattern, social_style, values에 대해서는:
 - 친구 수를 협력성이나 사회성으로 판단하지 마세요.
 - 내향적이라는 이유만으로 발표력, 설득력, 협력성이 낮다고 판단하지 마세요.
 - 생활이 불규칙하다는 이유만으로 변화적응이 높거나 교대근무에 적합하다고 판단하지 마세요.
+- 약점을 특정 학과나 직무의 부적합으로 판단하지 마세요.
 - 현재 단계에서는 학과, 과목, 직무를 추천하지 마세요.
+"""
+
+AREA_ANALYSIS_PROMPT = """
+현재 분석할 영역:
+
+{area}
+
+
+학생 답변:
+
+{answer}
+
+
+학생의 답변을 분석하세요.
+
+규칙:
+
+1. 현재 영역에 대한 정보가 충분한지 판단하세요.
+
+2. 답변의 핵심 내용을 summary로 작성하세요.
+
+3. STANDARD_TRAITS에 있는 키워드만 사용하세요.
+
+4. 관련된 표준 키워드는 최대 3개만 선택하세요.
+
+5. 각 키워드에 대해 다음을 판단하세요.
+
+- trait
+- direction
+- confidence
+- evidence
+
+6. direction은 다음 중 하나입니다.
+
+strength
+weakness
+neutral
+
+7. 학생이 직접 말하지 않은 내용은 추론하지 마세요.
+
+8. 근거가 부족한 경우 mapped_traits는 빈 리스트로 반환하세요.
 """
 
 INTEREST_ANALYSIS_PROMPT = f"""
@@ -199,7 +234,7 @@ INTEREST_ANALYSIS_PROMPT = f"""
 
    각 mapped_trait에는 다음 정보를 포함하세요.
    - trait: STANDARD_TRAITS 중 하나
-   - direction: strength / neutral
+   - direction: strength / weakness / neutral
    - confidence: 해당 발화가 그 trait을 나타낸다고 판단하는 신뢰도 (0.0~1.0)
    - evidence: 해당 trait을 판단한 학생의 실제 발화
 
