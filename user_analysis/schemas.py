@@ -11,7 +11,6 @@ class MappedTrait(BaseModel):
 
     direction: Literal[
         "strength",
-        "weakness",
         "neutral"
     ]
 
@@ -52,8 +51,6 @@ class StudentProfileAnalysis(BaseModel):
     study_style: AreaResult
 
     strength: AreaResult
-
-    weakness: AreaResult
 
     life_pattern: AreaResult
 
