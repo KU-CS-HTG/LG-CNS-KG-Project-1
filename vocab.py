@@ -165,7 +165,7 @@ PARENT: dict[str, str] = {
     "Graph DB": "Database", "Neo4j": "Database",
     # 클라우드·인프라 계열
     "AWS": "Cloud", "Azure": "Cloud", "GCP": "Cloud", "Docker": "Cloud", "Kubernetes": "Cloud",
-    "DevOps": "Cloud", "CI/CD": "Cloud", "Terraform": "Cloud", "Jenkins": "Cloud",
+    "DevOps": "Cloud", "CI/CD": "Cloud", "Terraform": "Cloud", "Jenkins": "Cloud", "Data Center": "Cloud",
     # 프로그래밍 언어 → Programming
     "Java": "Programming", "Python": "Programming", "JavaScript": "Programming", "TypeScript": "Programming",
     "C": "Programming", "C++": "Programming", "C#": "Programming", "Node.js": "Programming",
@@ -179,6 +179,28 @@ PARENT: dict[str, str] = {
     "LangGraph": "Machine Learning", "Prompt Engineering": "Machine Learning",
     # 방법론
     "Agile": "Project Management",
+
+    # 화학·소재 계열
+    "Electrochemistry": "Chemistry", "Battery": "Chemistry",
+    "BMS": "Electrical Engineering",
+    "Polymer Engineering": "Materials Engineering", "Metallurgical Engineering": "Materials Engineering",
+    "Ceramics": "Materials Engineering", "Glass": "Materials Engineering",
+
+    # 기계·제조 공정 계열 → Mechanical Engineering
+    "Mechatronics": "Mechanical Engineering", "Automation": "Mechanical Engineering",
+    "Thermodynamics": "Mechanical Engineering", "Fluid Dynamics": "Mechanical Engineering",
+    "Heat Transfer": "Mechanical Engineering", "Structural Analysis": "Mechanical Engineering",
+    "Dynamics Analysis": "Mechanical Engineering", "Injection Molding": "Mechanical Engineering",
+    "Extrusion": "Mechanical Engineering", "CAD": "Mechanical Engineering",
+    "CFD": "Fluid Dynamics",                       # 유체역학의 전산 기법 — 세부 한 홉 더
+    "Semiconductor Packaging": "Semiconductor",
+
+    # 전기·전자·에너지 계열
+    "Circuit Design": "Electronics", "Automotive Electronics": "Electronics", "Display": "Electronics",
+    "Energy Engineering": "Electrical Engineering",
+
+    # 비즈니스 계열
+    "CRM": "Sales",
 }
 
 _canon_values = set(CANON.values())
