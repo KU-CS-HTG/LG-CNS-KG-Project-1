@@ -137,6 +137,57 @@ CANON: dict[str, str] = {
     "커뮤니케이션": "Communication", "의사소통": "Communication",
     "문제해결": "Problem Solving", "문제 해결": "Problem Solving",
     "프로젝트관리": "Project Management", "프로젝트 관리": "Project Management", "pm": "Project Management",
+
+    # ── 화학 · 소재 (LG화학, LG에너지솔루션)
+    "화학": "Chemistry", "화학공": "Chemistry",
+    "화학공학": "Chemical Engineering", "화공": "Chemical Engineering",
+    "전기화학": "Electrochemistry",
+    "재료공학": "Materials Engineering", "재료 공학": "Materials Engineering",
+    "신소재공학": "Materials Engineering", "신소재": "Materials Engineering",
+    "고분자공학": "Polymer Engineering",
+    "금속재료공학": "Metallurgical Engineering",
+    "세라믹": "Ceramics", "유리": "Glass", "glass": "Glass",
+    "배터리": "Battery", "전지": "Battery",
+    "bms": "BMS", "배터리관리시스템": "BMS",
+
+    # ── 기계 · 제조 공정 (LG전자, LG에너지솔루션, LG이노텍)
+    "기계": "Mechanical Engineering", "기계공학": "Mechanical Engineering", "기계공": "Mechanical Engineering",
+    "메카트로닉스": "Mechatronics",
+    "자동화": "Automation",
+    "열역학": "Thermodynamics", "유체역학": "Fluid Dynamics", "열전달": "Heat Transfer",
+    "구조해석": "Structural Analysis", "동역학 해석": "Dynamics Analysis", "cfd": "CFD",
+    "사출": "Injection Molding", "압출": "Extrusion",
+    "catia": "CAD", "creo": "CAD", "solidworks": "CAD", "auto cad": "CAD", "autocad": "CAD",
+    "3d cad": "CAD", "cad": "CAD",
+    "반도체 패키징": "Semiconductor Packaging", "패키징": "Semiconductor Packaging",
+
+    # ── 전기 · 전자 · 에너지 (LG에너지솔루션, LG이노텍, LG유플러스)
+    "전기": "Electrical Engineering", "전기전자": "Electrical Engineering",
+    "전자": "Electronics", "전자공학": "Electronics",
+    "회로설계": "Circuit Design", "회로 설계": "Circuit Design",
+    "에너지공학": "Energy Engineering",
+    "자동차 전장 시스템": "Automotive Electronics", "전장": "Automotive Electronics",
+
+    # ── 디스플레이 · 광학 · 반도체 (LG디스플레이, LG이노텍)
+    "디스플레이": "Display", "display": "Display",
+    "광학": "Optics",
+    "반도체": "Semiconductor",
+
+    # ── 통신 · 네트워크 확장 (LG유플러스)
+    "정보통신": "Telecommunications", "통신": "Telecommunications",
+    "5g": "Telecommunications",
+    "데이터센터": "Data Center",
+
+    # ── 데이터 · AI 도구 확장
+    "pytorch": "Machine Learning", "tensorflow": "Machine Learning",
+    "opencv": "Computer Vision",
+    "tableau": "Data Analysis", "google analytics": "Data Analysis", "ga": "Data Analysis",
+    "mongodb": "Database", "postgresql": "Database", "apache spark": "Database",
+
+    # ── 비즈니스 · 마케팅 (HSAD, D&O, LG전자 영업)
+    "마케팅": "Marketing", "영업": "Sales", "해외영업": "Sales",
+    "회계": "Accounting", "재무": "Finance", "재무회계": "Finance",
+    "crm": "CRM", "세일즈포스": "CRM",
 }
 
 # ═════════════════════════════════════════════════════════════
