@@ -91,10 +91,10 @@ python webapp.py
 ## `app.py` 입력 방식 4가지
 
 ```
-python app.py                     # 기본: 고정 3질문
-python app.py --interview         # 데모용 인터뷰 (관심·강점 2개 영역, 고정 질문 최대 1회)
-python app.py --full-interview    # user_analysis/main.py 와 완전히 같은 흐름 (7개 영역, 적응형 질문)
+python app.py                     # 기본값: user_analysis/main.py 와 완전히 같은 흐름 (7개 영역, 적응형 질문)
+python app.py --interview         # 데모용 축약 인터뷰 (관심·강점 2개 영역, 고정 질문 최대 1회)
 python app.py --profile <path>    # main.py 가 저장한 프로필 JSON을 그대로 읽어서 바로 추천 (대화 없음)
+python app.py --basic             # user_analysis 연동 이전의 고정 3질문 모드
 ```
 
 `--profile`은 `user_analysis/main.py`를 따로 실행해서 만든 `output/student_profile.json`(또는 같은 스키마의 파일)을 받습니다:
