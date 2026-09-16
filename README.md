@@ -97,6 +97,12 @@ python app.py --profile <path>    # main.py 가 저장한 프로필 JSON을 그�
 python app.py --basic             # user_analysis 연동 이전의 고정 3질문 모드
 ```
 
+`--basic`을 뺀 세 방식은 "① 데이터 분석 ② 시스템 설계 ③ 사람·일정 조율" 객관식(Q3)을 따로 묻지 않습니다 —
+자연스러운 인터뷰 중간에 갑자기 객관식이 끼어드는 게 어색해서, 이미 모은 프로필(강점·공부 스타일·친구
+관계·가치관 등)로 `interview.infer_orientation()`이 같은 판단을 대신합니다. `[진로 추천]` 문단도 이제
+프로필 요약(`interview.profile_summary_text()`)을 함께 받아서, 근거가 있을 때만 학생의 관심사·성향을
+자연스럽게 엮어 씁니다 (`--basic`은 프로필이 없으므로 전공·과목·직무 설명만 그대로).
+
 `--profile`은 `user_analysis/main.py`를 따로 실행해서 만든 `output/student_profile.json`(또는 같은 스키마의 파일)을 받습니다:
 
 ```
