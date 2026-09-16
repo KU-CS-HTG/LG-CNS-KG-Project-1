@@ -17,59 +17,59 @@
     border: 1px solid #e3e5e8; border-radius: 12px; padding: 32px;
   }
   h1 { font-size: 20px; margin: 0 0 24px; }
-  .question { font-weight: 600; margin-bottom: 12px; white-space: pre-line; }
-  textarea, input[type=text] {
+
+  .bubble { margin-bottom: 16px; }
+  .bubble .who { font-size: 12px; color: #8a8f98; margin-bottom: 4px; }
+  .bubble.ai .text { background: #f2f6ff; border-radius: 10px; padding: 10px 14px; display: inline-block; }
+  .bubble.student .text { background: #f6f7f9; border-radius: 10px; padding: 10px 14px; display: inline-block; }
+  #transcript { max-height: 340px; overflow-y: auto; margin-bottom: 8px; }
+
+  textarea {
     width: 100%; padding: 10px 12px; border: 1px solid #d5d8dc; border-radius: 8px;
-    font-size: 15px; font-family: inherit; resize: vertical;
+    font-size: 15px; font-family: inherit; resize: vertical; min-height: 72px;
   }
-  textarea { min-height: 80px; }
-  .choices { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
-  .choice-btn {
-    text-align: left; padding: 12px 14px; border: 1px solid #d5d8dc; border-radius: 8px;
-    background: #fff; cursor: pointer; font-size: 15px; font-family: inherit;
-  }
-  .choice-btn:hover { border-color: #3b6ef6; background: #f2f6ff; }
-  .next-btn, .primary-btn {
-    margin-top: 16px; padding: 10px 20px; border: none; border-radius: 8px;
+  .next-btn {
+    margin-top: 12px; padding: 10px 20px; border: none; border-radius: 8px;
     background: #3b6ef6; color: #fff; font-size: 15px; cursor: pointer;
   }
   .next-btn:disabled { background: #b9c3d6; cursor: not-allowed; }
-  .step-indicator { color: #8a8f98; font-size: 13px; margin-bottom: 8px; }
-  .hidden { display: none; }
-  .profile-box {
-    white-space: pre-wrap; background: #f6f7f9; border: 1px solid #e3e5e8;
-    border-radius: 8px; padding: 16px; font-size: 13px; color: #4a4f57;
-    font-family: ui-monospace, "SF Mono", Consolas, monospace; margin-top: 20px;
-  }
-  .result-label { font-weight: 700; margin-top: 24px; margin-bottom: 8px; }
-  .explain-box { white-space: pre-wrap; }
+
   .error { color: #c0392b; margin-top: 12px; font-size: 14px; }
+  .hidden { display: none; }
   .spinner { color: #8a8f98; font-size: 14px; }
+
+  .result-label { font-weight: 700; margin-top: 8px; margin-bottom: 12px; font-size: 15px; }
+  .explain-box { white-space: pre-wrap; }
+  .details-link {
+    display: inline-block; margin-top: 24px; font-size: 14px; color: #3b6ef6; text-decoration: none;
+  }
+  .details-link:hover { text-decoration: underline; }
+  .details-link::after { content: " →"; }
 </style>
 </head>
 <body>
 <div class="card">
   <h1>🎓 진로 추천</h1>
 
+  <div id="transcript"></div>
   <div id="qa-flow"></div>
   <div id="error" class="error hidden"></div>
+
   <div id="result" class="hidden">
-    <div class="result-label">[프로필]</div>
-    <div id="profile-text" class="profile-box"></div>
     <div class="result-label">[진로 추천]</div>
     <div id="explain-text" class="explain-box"></div>
+    <a id="details-link" class="details-link hidden" target="_blank" rel="noopener">세부 근거(전공 순위·과목·직무 커버리지) 보기</a>
   </div>
 </div>
 
 <script>
-const QUESTIONS = {{ questions | tojson }};
-// Q3는 "① .. ② .. ③ .." 형태의 객관식 — 질문 문구에서 선택지를 직접 뽑아낸다 (app.py QUESTIONS와 항상 일치)
-const CHOICES_Q3 = QUESTIONS[2].match(/[①②③][^①②③]+/g).map(s => s.trim());
+const INTRO_PROMPT = {{ intro_prompt | tojson }};
 
-const answers = [];
-let step = 0;
+const transcriptBox = document.getElementById("transcript");
 const flow = document.getElementById("qa-flow");
 const errorBox = document.getElementById("error");
+
+let interviewId = null;
 
 function showError(msg) {
   errorBox.textContent = msg;
@@ -77,82 +77,49 @@ function showError(msg) {
 }
 function clearError() { errorBox.classList.add("hidden"); }
 
-function renderStep() {
-  clearError();
-  flow.innerHTML = "";
-
+function addBubble(who, text) {
   const wrap = document.createElement("div");
-  wrap.innerHTML = `<div class="step-indicator">${step + 1} / ${QUESTIONS.length}</div>
-    <div class="question"></div>`;
-  wrap.querySelector(".question").textContent = QUESTIONS[step];
-  flow.appendChild(wrap);
-
-  if (step === 2) {
-    const box = document.createElement("div");
-    box.className = "choices";
-    CHOICES_Q3.forEach(choice => {
-      const btn = document.createElement("button");
-      btn.className = "choice-btn";
-      btn.textContent = choice;
-      btn.onclick = () => { answers.push(choice); advance(); };
-      box.appendChild(btn);
-    });
-    flow.appendChild(box);
-  } else {
-    const ta = document.createElement("textarea");
-    ta.placeholder = "여기에 답을 적어 주세요";
-    flow.appendChild(ta);
-
-    const btn = document.createElement("button");
-    btn.className = "next-btn";
-    btn.textContent = step === QUESTIONS.length - 1 ? "제출" : "다음";
-    btn.disabled = true;
-    ta.addEventListener("input", () => { btn.disabled = ta.value.trim() === ""; });
-    btn.onclick = () => { answers.push(ta.value.trim()); advance(); };
-    flow.appendChild(btn);
-  }
+  wrap.className = `bubble ${who}`;
+  const label = who === "ai" ? "AI" : "나";
+  wrap.innerHTML = `<div class="who">${label}</div><div class="text"></div>`;
+  wrap.querySelector(".text").textContent = text;
+  transcriptBox.appendChild(wrap);
+  transcriptBox.scrollTop = transcriptBox.scrollHeight;
 }
 
-function advance() {
-  step += 1;
-  if (step < QUESTIONS.length) {
-    renderStep();
-  } else {
-    submitAnswers();
-  }
-}
-
-function renderFollowup(question) {
+function renderQuestion(question) {
   clearError();
+  addBubble("ai", question);
   flow.innerHTML = "";
-  const wrap = document.createElement("div");
-  wrap.innerHTML = `<div class="step-indicator">조금 더 알려주세요</div>
-    <div class="question"></div>`;
-  wrap.querySelector(".question").textContent = question;
-  flow.appendChild(wrap);
 
   const ta = document.createElement("textarea");
+  ta.placeholder = "여기에 답을 적어 주세요";
   flow.appendChild(ta);
 
   const btn = document.createElement("button");
   btn.className = "next-btn";
-  btn.textContent = "제출";
+  btn.textContent = "답하기";
   btn.disabled = true;
   ta.addEventListener("input", () => { btn.disabled = ta.value.trim() === ""; });
-  btn.onclick = () => { answers.push(ta.value.trim()); submitAnswers(); };
+  ta.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey && !btn.disabled) { e.preventDefault(); btn.click(); }
+  });
+  btn.onclick = () => submitAnswer(ta.value.trim());
   flow.appendChild(btn);
+  ta.focus();
 }
 
-async function submitAnswers() {
-  flow.innerHTML = `<div class="spinner">전공·직무를 찾는 중입니다…</div>`;
+async function submitAnswer(answer) {
+  addBubble("student", answer);
+  flow.innerHTML = `<div class="spinner">생각하는 중…</div>`;
   clearError();
 
   let res;
   try {
-    res = await fetch("/api/submit", {
+    res = await fetch("/api/interview/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ answers }),
+      body: JSON.stringify({ interview_id: interviewId, answer }),
     });
   } catch (e) {
     flow.innerHTML = "";
@@ -167,8 +134,10 @@ async function submitAnswers() {
     return;
   }
 
-  if (data.status === "followup") {
-    renderFollowup(data.question);
+  interviewId = data.interview_id;
+
+  if (data.status === "question") {
+    renderQuestion(data.question);
     return;
   }
 
@@ -178,9 +147,12 @@ async function submitAnswers() {
     return;
   }
 
+  // status === "done"
   flow.innerHTML = "";
-  document.getElementById("profile-text").textContent = data.profile_text;
   document.getElementById("result").classList.remove("hidden");
+  const link = document.getElementById("details-link");
+  link.href = `/details/${data.result_id}`;
+  link.classList.remove("hidden");
   streamExplain(data.result_id);
 }
 
@@ -199,7 +171,7 @@ function streamExplain(resultId) {
   };
 }
 
-renderStep();
+renderQuestion(INTRO_PROMPT);
 </script>
 </body>
 </html>
