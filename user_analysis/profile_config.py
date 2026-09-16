@@ -50,21 +50,6 @@ PROFILE_AREAS = {
         ),
     },
 
-    "weakness": {
-        "name": "약점",
-        "purpose": (
-            "학생이 지속적으로 어렵다고 느끼거나 "
-            "부담을 느끼는 활동이나 환경을 파악한다."
-        ),
-        "main_question": (
-            "반대로 내가 유독 어렵거나 자신 없다고 느끼는 건 뭐가 있어?"
-        ),
-        "follow_up_question": (
-            "그 상황을 만나면 보통 피하고 싶은 편인지, "
-            "해보긴 하지만 많이 힘든 편인지도 알려줄래?"
-        ),
-    },
-
     "life_pattern": {
         "name": "생활 패턴",
         "purpose": (
@@ -114,17 +99,3 @@ PROFILE_AREAS = {
         ),
     },
 }
-
-# {
-#     "interest": True,
-#     "study_style": True,
-#     "strength": True,
-#     "weakness": False,
-#     "life_pattern": False,
-#     "social_style": True,
-#     "values": False
-# }
-# 다음 질문은 
-# weakness
-# life_pattern
-# values

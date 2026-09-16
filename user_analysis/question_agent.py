@@ -84,9 +84,6 @@ study_style:
 strength:
 학생이 자신 있게 잘한다고 느끼는 것
 
-weakness:
-학생이 어렵거나 부담스럽게 느끼는 것
-
 life_pattern:
 일정 변화, 활동 시간, 생활 환경 등에 대한 선호
 

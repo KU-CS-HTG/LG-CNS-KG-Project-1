@@ -56,7 +56,6 @@ def main():
         "interest": 0,
         "study_style": 0,
         "strength": 0,
-        "weakness": 0,
         "life_pattern": 0,
         "social_style": 0,
         "values": 0

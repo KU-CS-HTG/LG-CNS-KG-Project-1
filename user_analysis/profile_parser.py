@@ -121,7 +121,7 @@ def analyze_area_answer(
             "answer": answer
         })
 
-    # 나머지 6개 영역은 AreaResult 구조 사용
+    # 나머지 5개 영역은 AreaResult 구조 사용
     else:
 
         result = area_chain.invoke({
