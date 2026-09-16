@@ -8,6 +8,7 @@
     "Algorithm",
     "AngularJS",
     "AutoCAD",
+    "Automotive Electronics",
     "Autonomous Driving",
     "Azure",
     "BMS",
@@ -19,10 +20,11 @@
     "CCNP",
     "CI/CD",
     "Cadence Spectre",
+    "Ceramics",
     "Chemical Engineering",
+    "Circuit Design",
     "Cloud",
     "Communication",
-    "Communications Engineering",
     "Computer Architecture",
     "Computer Vision",
     "Control Engineering",
@@ -40,6 +42,8 @@
     "ERP",
     "Electrical Engineering",
     "Electrochemistry",
+    "Electronics",
+    "Energy Engineering",
     "FDTD",
     "Finance",
     "Fiori",
@@ -70,10 +74,12 @@
     "Node.js",
     "Numerical Analysis",
     "Operating Systems",
+    "Optics",
     "Optimization",
     "OrCAD",
     "Oracle",
     "PLC",
+    "Polymer Engineering",
     "PostgreSQL",
     "Power Systems",
     "Problem Solving",
@@ -96,6 +102,7 @@
     "SPEOS",
     "SQL",
     "SVN",
+    "Sales",
     "Security",
     "Setfos",
     "Signal Processing",
@@ -107,6 +114,7 @@
     "Spring",
     "Spring Boot",
     "Statistics",
+    "Telecommunications",
     "TensorFlow",
     "Terraform",
     "TypeScript",
@@ -164,7 +172,7 @@
     "JMP": "Statistics",
     "MATLAB": "Numerical Analysis",
     "VBA": "Programming",
-    "BMS": "Electrochemistry",
+    "BMS": "Electrical Engineering",
     "Rheology": "Materials Engineering",
     "SEM": "Materials Engineering",
     "CATIA": "Mechanical Design",
@@ -194,7 +202,7 @@
     "EDX": "Materials Engineering",
     "XRF": "Materials Engineering",
     "Power Systems": "Electrical Engineering",
-    "Communications Engineering": "Electrical Engineering",
+    "Telecommunications": "Electrical Engineering",
     "OrCAD": "Electrical Engineering",
     "CCNA": "Network",
     "CCNP": "Network",
@@ -202,7 +210,23 @@
     "Accounting": "Management",
     "Finance": "Management",
     "Human Resources": "Management",
-    "Digital Marketing": "Marketing"
+    "Digital Marketing": "Marketing",
+    "Polymer Engineering": "Materials Engineering",
+    "Metallurgical Engineering": "Materials Engineering",
+    "Ceramics": "Materials Engineering",
+    "Glass": "Materials Engineering",
+    "Injection Molding": "Mechanical Engineering",
+    "Extrusion": "Mechanical Engineering",
+    "CFD": "Simulation",
+    "Electronics": "Electrical Engineering",
+    "Circuit Design": "Electrical Engineering",
+    "Automotive Electronics": "Electrical Engineering",
+    "Display": "Electrical Engineering",
+    "Energy Engineering": "Electrical Engineering",
+    "Semiconductor": "Electrical Engineering",
+    "Data Center": "Cloud",
+    "Sales": "Marketing",
+    "CRM": "Sales"
   },
   "majors": [
     {
@@ -947,6 +971,12 @@
           "에너지자원물리화학 2",
           "에너지자원처리공학",
           "에너지소재열역학"
+        ],
+        "Energy Engineering": [
+          "에너지자원공학개론",
+          "신재생에너지",
+          "태양에너지공학",
+          "이산화탄소 포집, 활용, 저장"
         ],
         "Data Analysis": [
           "에너지 데이터 사이언스"
@@ -1930,14 +1960,16 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002117",
       "requires": [
-        "Electrical Engineering",
+        "Circuit Design",
         "Algorithm",
         "C",
         "C++",
         "Python",
         "MATLAB"
       ],
-      "prefers": [],
+      "prefers": [
+        "Electrical Engineering"
+      ],
       "soft": []
     },
     {
@@ -2022,14 +2054,16 @@
       "career_type": "산학장학생",
       "url": "https://careers.lg.com/apply/detail?id=1002118",
       "requires": [
-        "Electrical Engineering",
+        "Circuit Design",
         "Algorithm",
         "C",
         "C++",
         "Python",
         "MATLAB"
       ],
-      "prefers": [],
+      "prefers": [
+        "Electrical Engineering"
+      ],
       "soft": []
     },
     {
@@ -2068,7 +2102,8 @@
       "requires": [],
       "prefers": [
         "Mechanical Engineering",
-        "Electrical Engineering"
+        "Electrical Engineering",
+        "Electronics"
       ],
       "soft": []
     },
@@ -2081,6 +2116,7 @@
       "requires": [
         "Materials Engineering",
         "Chemical Engineering",
+        "Ceramics",
         "SEM"
       ],
       "prefers": [],
@@ -2205,7 +2241,9 @@
       "requires": [
         "Chemical Engineering",
         "Mechanical Engineering",
+        "Energy Engineering",
         "Materials Engineering",
+        "Polymer Engineering",
         "Electrochemistry"
       ],
       "prefers": [
@@ -2347,7 +2385,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Power Systems",
-        "Electrical Engineering",
+        "Circuit Design",
         "Control Engineering"
       ],
       "prefers": [],
@@ -2362,6 +2400,7 @@
       "requires": [
         "C",
         "Electrical Engineering",
+        "Electronics",
         "Statistics"
       ],
       "prefers": [],
@@ -2377,6 +2416,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Electrochemistry",
+        "Materials Engineering",
         "Chemical Engineering",
         "Data Analysis"
       ],
@@ -2485,7 +2525,9 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Electrical Engineering",
-        "Mechanical Engineering"
+        "Electronics",
+        "Mechanical Engineering",
+        "Optics"
       ],
       "prefers": [
         "Deep Learning"
@@ -2555,7 +2597,7 @@
       "requires": [
         "Mechanical Design",
         "SolidWorks",
-        "Electrical Engineering",
+        "Circuit Design",
         "Control Engineering"
       ],
       "prefers": [],
@@ -2644,6 +2686,8 @@
       "requires": [
         "Mechanical Engineering",
         "Electrical Engineering",
+        "Electronics",
+        "AutoCAD",
         "SolidWorks",
         "PLC"
       ],
@@ -2694,7 +2738,7 @@
         "Python",
         "Database",
         "Network",
-        "Communications Engineering",
+        "Telecommunications",
         "Data Analysis"
       ],
       "prefers": [],
@@ -2708,7 +2752,8 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Mechanical Engineering",
-        "Electrical Engineering"
+        "Electrical Engineering",
+        "Electronics"
       ],
       "prefers": [],
       "soft": []
@@ -2721,7 +2766,8 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Mechanical Engineering",
-        "Electrical Engineering"
+        "Electrical Engineering",
+        "Electronics"
       ],
       "prefers": [],
       "soft": []
@@ -2808,6 +2854,7 @@
       ],
       "prefers": [
         "PostgreSQL",
+        "Database",
         "PyTorch"
       ],
       "soft": [
@@ -2824,9 +2871,9 @@
       "requires": [],
       "prefers": [
         "Power Systems",
-        "Communications Engineering",
+        "Telecommunications",
         "OrCAD",
-        "Electrical Engineering"
+        "Circuit Design"
       ],
       "soft": []
     },
@@ -2856,6 +2903,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "BMS",
+        "Automotive Electronics",
         "MATLAB",
         "Simulink"
       ],
@@ -3163,7 +3211,7 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002196",
       "requires": [
-        "Communications Engineering",
+        "Telecommunications",
         "Electrical Engineering",
         "CCNA",
         "CCNP"

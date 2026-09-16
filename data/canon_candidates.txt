@@ -188,7 +188,6 @@
 1	금형
 1	냉동 사이클 설계
 1	비즈니스 영어
-1	세라믹
 1	무기소재
 1	실험 설계
 1	XRD
@@ -204,7 +203,6 @@
 1	전략기획
 1	신사업기획
 1	사업개발
-1	데이터센터
 1	HVAC
 1	에너지
 1	전략 컨설팅
@@ -229,7 +227,6 @@
 1	Classification
 1	Detection
 1	Segmentation
-1	OpenCV
 1	Robot Vision
 1	Camera Geometric
 1	VLM
@@ -254,9 +251,6 @@
 1	수학
 1	Gurobi
 1	Xpress
-1	에너지공학
-1	신소재공학
-1	고분자공학
 1	2차전지 소재 개발 및 평가
 1	Teamwork
 1	Proactive Problem Solving
@@ -279,11 +273,9 @@
 1	인공지능공학
 1	외국어 (영어)
 1	외국어 (중국어)
-1	재료 공학
 1	화공계열 전공
 1	신소재 전공
 1	소통
-1	광학
 1	통계 소프트웨어
 1	머신 비전
 1	자동화 검사 장비
@@ -309,7 +301,6 @@
 1	3DCS
 1	GD&T
 1	MES
-1	Auto CAD
 1	PC 제어
 1	지멘스
 1	미쓰비시
@@ -320,7 +311,6 @@
 1	AX 기술
 1	Agent 자동화 워크플로우
 1	PLC Programming
-1	Dynamics Analysis
 1	CFD Analysis
 1	Plant Simulation
 1	Programming Development
@@ -348,14 +338,11 @@
 1	물리모델링
 1	Lab Automation
 1	재료 기계
-1	MongoDB
-1	Apache Spark
 1	Delta Lake
 1	Kalman Filter
 1	RLS
 1	Adaptive Filter
 1	전기차
-1	자동차 전장 시스템
 1	MCU
 1	센서 데이터 처리
 1	Data Pipeline
@@ -397,7 +384,6 @@
 1	AVI
 1	IDC
 1	공기조화
-1	열전달
 1	열부하 계산
 1	열원설비
 1	공조설비
