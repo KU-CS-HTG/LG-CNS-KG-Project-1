@@ -212,7 +212,7 @@ PARENT: dict[str, str] = {
     "Graph DB": "Database", "Neo4j": "Database",
     # 클라우드·인프라 계열
     "AWS": "Cloud", "Azure": "Cloud", "GCP": "Cloud", "Docker": "Cloud", "Kubernetes": "Cloud",
-    "DevOps": "Cloud", "CI/CD": "Cloud", "Terraform": "Cloud", "Jenkins": "Cloud",
+    "DevOps": "Cloud", "CI/CD": "Cloud", "Terraform": "Cloud", "Jenkins": "Cloud", "Data Center": "Cloud",
     # 프로그래밍 언어 → Programming
     "Java": "Programming", "Python": "Programming", "JavaScript": "Programming", "TypeScript": "Programming",
     "C": "Programming", "C++": "Programming", "C#": "Programming", "Node.js": "Programming",
@@ -227,24 +227,27 @@ PARENT: dict[str, str] = {
     # 방법론
     "Agile": "Project Management",
 
-    # ── 2단계 (2026-09-15): 기존 부모에 붙는 도구
-    "PyTorch": "Deep Learning", "TensorFlow": "Deep Learning",
-    "PostgreSQL": "Database",
-    "R": "Statistics", "minitab": "Statistics", "JMP": "Statistics",
-    "MATLAB": "Numerical Analysis",
-    "VBA": "Programming",
-    # ── 2단계 클러스터 ① 배터리·화학·재료
-    "BMS": "Electrochemistry",
-    "Rheology": "Materials Engineering", "SEM": "Materials Engineering",
-    # ── 2단계 클러스터 ② 기계·설계·시뮬레이션·전기 HW
-    "CATIA": "Mechanical Design", "Creo": "Mechanical Design", "SolidWorks": "Mechanical Design",
-    "AutoCAD": "Mechanical Design", "Inventor": "Mechanical Design",
-    "Simulink": "Simulation", "FDTD": "Simulation", "SPEOS": "Simulation", "LightTools": "Simulation", "Setfos": "Simulation",
-    "SmartSpice": "Electrical Engineering", "Cadence Spectre": "Electrical Engineering",
-    # ── 2단계 클러스터 ③ 로봇·생산·ERP
-    "ROS": "Robotics", "ROS2": "Robotics", "Autonomous Driving": "Robotics", "PLC": "Robotics", "AMR": "Robotics",
-    "Digital Twin": "Manufacturing",
-    "SAP": "ERP", "S/4HANA": "ERP", "Fiori": "ERP", "ABAP": "ERP",
+    # 화학·소재 계열
+    "Electrochemistry": "Chemistry", "Battery": "Chemistry",
+    "BMS": "Electrical Engineering",
+    "Polymer Engineering": "Materials Engineering", "Metallurgical Engineering": "Materials Engineering",
+    "Ceramics": "Materials Engineering", "Glass": "Materials Engineering",
+
+    # 기계·제조 공정 계열 → Mechanical Engineering
+    "Mechatronics": "Mechanical Engineering", "Automation": "Mechanical Engineering",
+    "Thermodynamics": "Mechanical Engineering", "Fluid Dynamics": "Mechanical Engineering",
+    "Heat Transfer": "Mechanical Engineering", "Structural Analysis": "Mechanical Engineering",
+    "Dynamics Analysis": "Mechanical Engineering", "Injection Molding": "Mechanical Engineering",
+    "Extrusion": "Mechanical Engineering", "CAD": "Mechanical Engineering",
+    "CFD": "Fluid Dynamics",                       # 유체역학의 전산 기법 — 세부 한 홉 더
+    "Semiconductor Packaging": "Semiconductor",
+
+    # 전기·전자·에너지 계열
+    "Circuit Design": "Electronics", "Automotive Electronics": "Electronics", "Display": "Electronics",
+    "Energy Engineering": "Electrical Engineering",
+
+    # 비즈니스 계열
+    "CRM": "Sales",
 }
 
 _canon_values = set(CANON.values())
