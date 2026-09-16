@@ -200,6 +200,53 @@ CANON: dict[str, str] = {
     # ✗ "데이터 분석 툴"·"데이터 분석·시각화 도구" 는 넣지 않았다: 도구 언급 하나로 Data Analysis 를 주면 HSAD 미디어(AI·Excel·PPT·도구)가
     #   역량 2개짜리 직무로 올라와 통계학과 입력에서 AI (AX) 를 밀어낸다 (집합 코사인은 역량이 적은 직무에 유리 — 2개 규칙을 둔 이유와 같다)
 
+    # ═══ 팀원 확장 통합 (2026-09-16, main ec0874c·f5f06d8 의 CANON 확장을 3단계와 합친 것 — 결정 근거는 docs/20260916_어휘_3단계_초안.md 8절) ═══
+    # ── 화학·소재: 그대로 채택
+    "화공": "Chemical Engineering", "화학공": "Chemical Engineering", "기계공": "Mechanical Engineering", "전기전자": "Electrical Engineering",
+    "auto cad": "AutoCAD", "재료 공학": "Materials Engineering", "신소재공학": "Materials Engineering", "신소재": "Materials Engineering",
+    "배터리관리시스템": "BMS",
+    "고분자공학": "Polymer Engineering", "금속재료공학": "Metallurgical Engineering",
+    "세라믹": "Ceramics", "유리": "Glass", "glass": "Glass",
+    # ✗ 화학→Chemistry, 배터리/전지→Battery 는 채택하지 않음: 전공 raw 가 화학 과목을 전부 Chemical Engineering 으로 내므로
+    #   Chemistry·Battery 노드는 어느 전공과도 이어지지 않는다. 기존 매핑(→ Chemical Engineering / → Electrochemistry) 유지 + 별칭만 보강
+    "chemistry": "Chemical Engineering", "전지": "Electrochemistry", "battery": "Electrochemistry",
+    # ── 기계·제조
+    # ✗ 열역학/유체역학/구조해석/동역학/메카트로닉스를 ME 의 자식 노드로 쪼개는 안은 채택하지 않음 (재생성 실측):
+    #   직무 쪽에서 이 말을 요구하는 공고는 1~3건인데, 전공 쪽에서는 조선해양·원자핵·건설환경·바이오시스템이 유체역학·열역학 과목으로
+    #   Mechanical Engineering 을 얻고 있어서, 쪼개면 이 4개 전공이 ME 를 요구하는 신입 직무 15건과 끊긴다 (추론은 위로만 — 규칙 ③).
+    #   2단계 방식(과목명 수준의 세부 역학 → ME 별칭) 유지, 팀원 별칭만 보강
+    "열전달": "Mechanical Engineering", "heat transfer": "Mechanical Engineering",
+    "구조해석": "Mechanical Engineering", "동역학 해석": "Mechanical Engineering", "dynamics analysis": "Mechanical Engineering",
+    "fluid dynamics": "Mechanical Engineering",
+    "cfd": "CFD",                                                    # 전산 유체 — Simulation 의 자식 (팀원 안의 CFD→Fluid Dynamics→ME 는 두 단계)
+    "사출": "Injection Molding", "압출": "Extrusion",
+    # ✗ "자동화" → Automation(ME) 도 채택하지 않음: 공고의 '자동화' 는 전부 IT 자동화(Infrastructure Automation, 자동화 도구) 라 기계가 아니다
+    # ✗ catia/creo/solidworks/autocad → CAD 는 채택하지 않음: 2단계에서 도구 이름을 Mechanical Design 의 자식으로 두기로 했고
+    #   (카드에 "CATIA (Mechanical Design 계열)" 로 보이게), 기계공학부가 Mechanical Design 을 정확히 기른다. "cad" 는 → Mechanical Design 유지
+    # ── 전기·전자: Electronics / Circuit Design 을 EE 의 자식으로. 팀원 안의 Circuit Design → Electronics → EE 는 두 단계라 EE 직결로 바꿈
+    "전자": "Electronics", "전자공학": "Electronics", "전자 공학": "Electronics",          # (2단계의 → EE 를 덮음)
+    "회로설계": "Circuit Design", "회로 설계": "Circuit Design", "circuit design": "Circuit Design",
+    "display 제품 회로 설계": "Circuit Design",
+    "전기회로 설계": "Circuit Design", "측정 회로 설계": "Circuit Design", "기능 안전 회로 설계": "Circuit Design",   # (3단계의 → EE 를 덮음)
+    "emc 설계 평가": "Circuit Design",
+    "에너지공학": "Energy Engineering", "energy engineering": "Energy Engineering",
+    "자동차 전장 시스템": "Automotive Electronics", "전장": "Automotive Electronics",
+    # ── 디스플레이·광학·반도체
+    "디스플레이": "Display", "display": "Display", "광학": "Optics", "반도체": "Semiconductor",
+    "반도체 패키징": "Semiconductor", "패키징": "Semiconductor",       # 별도 노드(Semiconductor Packaging)로 두면 EE 까지 두 홉이라 Semiconductor 로 합침
+    # ── 통신·데이터센터
+    "데이터센터": "Data Center",
+    # ── 데이터·AI 도구
+    "opencv": "Computer Vision",
+    # ✗ tableau/google analytics/ga → Data Analysis 는 채택하지 않음: 도구 언급 하나로 Data Analysis 를 주면 HSAD 디지털 기획(AI·GA·Tableau·SQL)이
+    #   컴퓨터공학부 입력에서 Smart Factory 를 밀어내 평가셋 #3·#9·I2 가 깨진다 (9/16 실측). "데이터 분석 툴" 을 뺀 것과 같은 원칙
+    "mongodb": "Database", "apache spark": "Database",              # Spark 는 DB 가 아니라 분산 처리 엔진 — A 재검토 후보
+    # ✗ pytorch/tensorflow → Machine Learning, postgresql → Database 직결은 채택하지 않음: 2단계 자식 노드(PyTorch → Deep Learning 등) 유지
+    # ── 비즈니스: 영업은 Marketing 과 분리 (팀원 안) 하고 Marketing 의 자식으로 잇는다
+    "영업": "Sales", "해외영업": "Sales", "b2b 영업": "Sales", "sales": "Sales",          # (3단계의 → Marketing 을 덮음)
+    "crm": "CRM", "세일즈포스": "CRM",
+    "재무회계": "Accounting",                                        # 팀원 안은 Finance — 재무회계(financial accounting)는 회계 과목
+
     # ── 비기술 역량 (전공 쪽에서 자주 나온다)
     "커뮤니케이션": "Communication", "의사소통": "Communication",
     "문제해결": "Problem Solving", "문제 해결": "Problem Solving",
