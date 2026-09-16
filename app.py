@@ -175,20 +175,33 @@ def build_explain_prompt(r: dict) -> str:
     ]
     return "\n".join(lines)
 
-async def explain(r: dict) -> None:
-    """진로 추천 문단을 스트리밍으로 출력. run() 결과에 major/job/subjects가 있을 때만 호출."""
-    from langchain_core.prompts import ChatPromptTemplate
-    from langchain_openai import ChatOpenAI
-
-    if not r.get("major") or not r.get("job"):
-        return
-
+def _build_explain_chain():
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, timeout=20, max_retries=2)
     prompt = ChatPromptTemplate.from_messages([
         ("system", EXPLAIN_SYSTEM),
         ("human", "{evidence}"),
     ])
-    chain = prompt | llm
+    return prompt | llm
+
+
+def explain_stream(r: dict):
+    """진로 추천 문단을 청크(str) 단위로 yield — 동기. 웹 화면의 SSE 스트리밍용.
+
+    run() 결과에 major/job이 없으면 아무것도 내보내지 않는다.
+    """
+    if not r.get("major") or not r.get("job"):
+        return
+    chain = _build_explain_chain()
+    for chunk in chain.stream({"evidence": build_explain_prompt(r)}):
+        yield chunk.content
+
+
+async def explain(r: dict) -> None:
+    """진로 추천 문단을 스트리밍으로 출력. run() 결과에 major/job/subjects가 있을 때만 호출."""
+    if not r.get("major") or not r.get("job"):
+        return
+
+    chain = _build_explain_chain()
 
     print("[진로 추천] ", end="", flush=True)
     async for chunk in chain.astream({"evidence": build_explain_prompt(r)}):

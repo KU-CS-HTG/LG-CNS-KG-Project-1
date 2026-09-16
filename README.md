@@ -59,12 +59,24 @@ LG-CNS-KG-Project-1/
 ├── build_graph_majors.py   C  전공 절반 → graph.json   (LLM 호출: 전공당 1회)
 ├── graph_store.py          B  graph.json 조회 함수 (LLM 없음)
 ├── app.py                  D  온라인 파이프라인 (질문 3개 → 전공·과목·직무)
+├── webapp.py               D  위 파이프라인을 감싼 웹 페이지 (Flask)
+├── templates/index.html    D  웹 페이지 화면
 ├── check.py                D  확인 3건
 ├── lg_careers.py              수집 (완료. 다시 돌릴 일 거의 없음)
 ├── transform_v2.py            직무 데이터 가공 파이프라인
+├── requirements.txt            의존성 목록
 └── skeleton.py                walking skeleton (전부 가짜, 흐름 확인용)
 ```
 
 - 경로는 각 스크립트 위치 기준(`Path(__file__).parent / "data"`)이라 **어느 폴더에서 실행해도 동일**하게 동작합니다.
 - LLM 캐시(`extracted_raw.json`, `majors_extracted.json`)는 **커밋 대상**입니다. 공유하면 다른 사람은 LLM을 다시 부르지 않아도 됩니다. 재추출이 필요할 때만 지웁니다.
 - 실행 순서: `lg_careers.py` → `transform_v2.py normalize / extract / curate` → `build_graph_jobs.py` → `build_graph_majors.py sample` (눈으로 확인) → `build_graph_majors.py` → `app.py` / `check.py`
+
+## 웹 페이지로 실행하기
+
+```
+pip install -r requirements.txt
+python webapp.py
+```
+
+`http://localhost:5000` 접속. `app.py`(CLI)와 완전히 같은 로직(`run` / `render` / `explain_stream`)을 그대로 불러 쓰므로, 질문 흐름·전공/직무 판정·[진로 추천] 문단이 동일합니다. `.env`에 `OPENAI_API_KEY`가 있어야 합니다.
