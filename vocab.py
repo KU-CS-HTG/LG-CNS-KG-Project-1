@@ -138,53 +138,48 @@ CANON: dict[str, str] = {
     "문제해결": "Problem Solving", "문제 해결": "Problem Solving",
     "프로젝트관리": "Project Management", "프로젝트 관리": "Project Management", "pm": "Project Management",
 
-    # ── 화학 · 소재 (LG화학, LG에너지솔루션)
-    "화학": "Chemistry", "화학공": "Chemistry",
-    "화학공학": "Chemical Engineering", "화공": "Chemical Engineering",
-    "전기화학": "Electrochemistry",
-    "재료공학": "Materials Engineering", "재료 공학": "Materials Engineering",
+    # ── 화학 · 소재 확장 (위 "2단계 클러스터 ①"에 없는 별칭만 — 겹치는 키는 그쪽 값을 따른다)
+    "화학공": "Chemical Engineering", "화공": "Chemical Engineering",
+    "재료 공학": "Materials Engineering",
     "신소재공학": "Materials Engineering", "신소재": "Materials Engineering",
     "고분자공학": "Polymer Engineering",
     "금속재료공학": "Metallurgical Engineering",
     "세라믹": "Ceramics", "유리": "Glass", "glass": "Glass",
-    "배터리": "Battery", "전지": "Battery",
-    "bms": "BMS", "배터리관리시스템": "BMS",
+    "전지": "Electrochemistry",              # '배터리'는 클러스터①에서 이미 Electrochemistry
+    "배터리관리시스템": "BMS",
 
-    # ── 기계 · 제조 공정 (LG전자, LG에너지솔루션, LG이노텍)
-    "기계": "Mechanical Engineering", "기계공학": "Mechanical Engineering", "기계공": "Mechanical Engineering",
-    "메카트로닉스": "Mechatronics",
+    # ── 기계 · 제조 공정 확장 ("2단계 클러스터 ②"에 없는 별칭만)
+    "기계공": "Mechanical Engineering",
     "자동화": "Automation",
-    "열역학": "Thermodynamics", "유체역학": "Fluid Dynamics", "열전달": "Heat Transfer",
+    "열전달": "Heat Transfer",
     "구조해석": "Structural Analysis", "동역학 해석": "Dynamics Analysis", "cfd": "CFD",
     "사출": "Injection Molding", "압출": "Extrusion",
-    "catia": "CAD", "creo": "CAD", "solidworks": "CAD", "auto cad": "CAD", "autocad": "CAD",
-    "3d cad": "CAD", "cad": "CAD",
+    # CAD 툴 이름(catia/creo/solidworks/autocad/cad)은 클러스터②가 이미 개별 대표 표기로 관리 — 여기선 추가 안 함
     "반도체 패키징": "Semiconductor Packaging", "패키징": "Semiconductor Packaging",
 
-    # ── 전기 · 전자 · 에너지 (LG에너지솔루션, LG이노텍, LG유플러스)
-    "전기": "Electrical Engineering", "전기전자": "Electrical Engineering",
-    "전자": "Electronics", "전자공학": "Electronics",
-    "회로설계": "Circuit Design", "회로 설계": "Circuit Design",
+    # ── 전기 · 전자 · 에너지 확장 ("2단계 클러스터 ②"에 없는 별칭만)
+    "전기전자": "Electrical Engineering", "전자": "Electrical Engineering",
     "에너지공학": "Energy Engineering",
-    "자동차 전장 시스템": "Automotive Electronics", "전장": "Automotive Electronics",
+    "자동차 전장 시스템": "Electrical Engineering", "전장": "Electrical Engineering",
+    # '전자공학'·'회로설계'·'회로 설계'는 클러스터②에서 이미 Electrical Engineering
 
-    # ── 디스플레이 · 광학 · 반도체 (LG디스플레이, LG이노텍)
+    # ── 디스플레이 · 광학 · 반도체 (LG디스플레이, LG이노텍 — 새 영역)
     "디스플레이": "Display", "display": "Display",
     "광학": "Optics",
     "반도체": "Semiconductor",
 
-    # ── 통신 · 네트워크 확장 (LG유플러스)
+    # ── 통신 · 네트워크 확장 (LG유플러스 — 새 영역)
     "정보통신": "Telecommunications", "통신": "Telecommunications",
     "5g": "Telecommunications",
     "데이터센터": "Data Center",
 
-    # ── 데이터 · AI 도구 확장
-    "pytorch": "Machine Learning", "tensorflow": "Machine Learning",
+    # ── 데이터 · AI 도구 확장 (위 "기존 대표 표기의 별칭 보강"에 없는 것만)
     "opencv": "Computer Vision",
     "tableau": "Data Analysis", "google analytics": "Data Analysis", "ga": "Data Analysis",
-    "mongodb": "Database", "postgresql": "Database", "apache spark": "Database",
+    "mongodb": "Database", "apache spark": "Database",
+    # pytorch/tensorflow/postgresql은 위에서 이미 각각의 고유 대표 표기(PyTorch/TensorFlow/PostgreSQL)로 관리
 
-    # ── 비즈니스 · 마케팅 (HSAD, D&O, LG전자 영업)
+    # ── 비즈니스 · 마케팅 (HSAD, D&O, LG전자 영업 — 새 영역)
     "마케팅": "Marketing", "영업": "Sales", "해외영업": "Sales",
     "회계": "Accounting", "재무": "Finance", "재무회계": "Finance",
     "crm": "CRM", "세일즈포스": "CRM",
@@ -228,22 +223,20 @@ PARENT: dict[str, str] = {
     "Agile": "Project Management",
 
     # 화학·소재 계열
-    "Electrochemistry": "Chemistry", "Battery": "Chemistry",
+    "Electrochemistry": "Chemical Engineering",    # 배터리/전기화학은 화학공학의 세부 분야
     "BMS": "Electrical Engineering",
     "Polymer Engineering": "Materials Engineering", "Metallurgical Engineering": "Materials Engineering",
     "Ceramics": "Materials Engineering", "Glass": "Materials Engineering",
 
     # 기계·제조 공정 계열 → Mechanical Engineering
-    "Mechatronics": "Mechanical Engineering", "Automation": "Mechanical Engineering",
-    "Thermodynamics": "Mechanical Engineering", "Fluid Dynamics": "Mechanical Engineering",
+    #   메카트로닉스·열역학·유체역학·CAD 는 클러스터②가 이미 Mechanical Engineering/개별 표기로 관리 — 여기선 생략
+    "Automation": "Mechanical Engineering",
     "Heat Transfer": "Mechanical Engineering", "Structural Analysis": "Mechanical Engineering",
     "Dynamics Analysis": "Mechanical Engineering", "Injection Molding": "Mechanical Engineering",
-    "Extrusion": "Mechanical Engineering", "CAD": "Mechanical Engineering",
-    "CFD": "Fluid Dynamics",                       # 유체역학의 전산 기법 — 세부 한 홉 더
+    "Extrusion": "Mechanical Engineering", "CFD": "Mechanical Engineering",
     "Semiconductor Packaging": "Semiconductor",
 
     # 전기·전자·에너지 계열
-    "Circuit Design": "Electronics", "Automotive Electronics": "Electronics", "Display": "Electronics",
     "Energy Engineering": "Electrical Engineering",
 
     # 비즈니스 계열
