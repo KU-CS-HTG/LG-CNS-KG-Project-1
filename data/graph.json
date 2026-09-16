@@ -8,7 +8,6 @@
     "Algorithm",
     "AngularJS",
     "AutoCAD",
-    "Automotive Electronics",
     "Autonomous Driving",
     "Azure",
     "BMS",
@@ -22,7 +21,6 @@
     "Cadence Spectre",
     "Ceramics",
     "Chemical Engineering",
-    "Circuit Design",
     "Cloud",
     "Communication",
     "Computer Architecture",
@@ -42,7 +40,6 @@
     "ERP",
     "Electrical Engineering",
     "Electrochemistry",
-    "Electronics",
     "Energy Engineering",
     "FDTD",
     "Finance",
@@ -104,6 +101,7 @@
     "SVN",
     "Sales",
     "Security",
+    "Semiconductor",
     "Setfos",
     "Signal Processing",
     "Simulation",
@@ -217,13 +215,12 @@
     "Glass": "Materials Engineering",
     "Injection Molding": "Mechanical Engineering",
     "Extrusion": "Mechanical Engineering",
-    "CFD": "Simulation",
-    "Electronics": "Electrical Engineering",
-    "Circuit Design": "Electrical Engineering",
-    "Automotive Electronics": "Electrical Engineering",
+    "CFD": "Mechanical Engineering",
+    "Automation": "Mechanical Engineering",
     "Display": "Electrical Engineering",
-    "Energy Engineering": "Electrical Engineering",
     "Semiconductor": "Electrical Engineering",
+    "Semiconductor Packaging": "Semiconductor",
+    "Energy Engineering": "Electrical Engineering",
     "Data Center": "Cloud",
     "Sales": "Marketing",
     "CRM": "Sales"
@@ -1960,16 +1957,14 @@
       "career_type": "신입",
       "url": "https://careers.lg.com/apply/detail?id=1002117",
       "requires": [
-        "Circuit Design",
+        "Electrical Engineering",
         "Algorithm",
         "C",
         "C++",
         "Python",
         "MATLAB"
       ],
-      "prefers": [
-        "Electrical Engineering"
-      ],
+      "prefers": [],
       "soft": []
     },
     {
@@ -2054,16 +2049,14 @@
       "career_type": "산학장학생",
       "url": "https://careers.lg.com/apply/detail?id=1002118",
       "requires": [
-        "Circuit Design",
+        "Electrical Engineering",
         "Algorithm",
         "C",
         "C++",
         "Python",
         "MATLAB"
       ],
-      "prefers": [
-        "Electrical Engineering"
-      ],
+      "prefers": [],
       "soft": []
     },
     {
@@ -2102,8 +2095,7 @@
       "requires": [],
       "prefers": [
         "Mechanical Engineering",
-        "Electrical Engineering",
-        "Electronics"
+        "Electrical Engineering"
       ],
       "soft": []
     },
@@ -2385,7 +2377,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Power Systems",
-        "Circuit Design",
+        "Electrical Engineering",
         "Control Engineering"
       ],
       "prefers": [],
@@ -2400,7 +2392,6 @@
       "requires": [
         "C",
         "Electrical Engineering",
-        "Electronics",
         "Statistics"
       ],
       "prefers": [],
@@ -2525,7 +2516,6 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Electrical Engineering",
-        "Electronics",
         "Mechanical Engineering",
         "Optics"
       ],
@@ -2597,7 +2587,7 @@
       "requires": [
         "Mechanical Design",
         "SolidWorks",
-        "Circuit Design",
+        "Electrical Engineering",
         "Control Engineering"
       ],
       "prefers": [],
@@ -2686,7 +2676,6 @@
       "requires": [
         "Mechanical Engineering",
         "Electrical Engineering",
-        "Electronics",
         "AutoCAD",
         "SolidWorks",
         "PLC"
@@ -2752,8 +2741,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Mechanical Engineering",
-        "Electrical Engineering",
-        "Electronics"
+        "Electrical Engineering"
       ],
       "prefers": [],
       "soft": []
@@ -2766,8 +2754,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Mechanical Engineering",
-        "Electrical Engineering",
-        "Electronics"
+        "Electrical Engineering"
       ],
       "prefers": [],
       "soft": []
@@ -2873,7 +2860,7 @@
         "Power Systems",
         "Telecommunications",
         "OrCAD",
-        "Circuit Design"
+        "Electrical Engineering"
       ],
       "soft": []
     },
@@ -2903,7 +2890,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "BMS",
-        "Automotive Electronics",
+        "Electrical Engineering",
         "MATLAB",
         "Simulink"
       ],
