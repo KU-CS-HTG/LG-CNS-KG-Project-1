@@ -40,7 +40,7 @@ for c in cases:
         print(f"  ✗ #{c['id']:2} 역량 미검출  tags={r.get('tags')}")
         continue
     top3 = [x["name"].replace("?", "·") for x in r["ranking"][:3]]
-    jobs = [j["role"] for j in r.get("jobs", [])]
+    jobs = [j["role"] for j in r.get("jobs", [])[:2]]              # run() 이 3개를 돌려주게 됐지만(카드의 다음 후보 2개) 판정은 상위 2개 그대로
     ok_major = any(m in top3 for m in c["expect_major_top3"])
     ok_job = (not c["expect_job_role_contains"]) or any(k in j for k in c["expect_job_role_contains"] for j in jobs)
     ok = ok_major and ok_job
