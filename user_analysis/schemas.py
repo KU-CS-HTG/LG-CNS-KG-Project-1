@@ -43,6 +43,8 @@ class InterestResult(BaseModel):
 
     evidence: str
 
+    mapped_traits: list[MappedTrait] = Field(default_factory=list)
+
 
 class StudentProfileAnalysis(BaseModel):
     interest: InterestResult

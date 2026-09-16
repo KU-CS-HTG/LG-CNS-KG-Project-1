@@ -3,6 +3,7 @@
     "ABAP",
     "AMR",
     "AWS",
+    "Accounting",
     "Agile",
     "Algorithm",
     "AngularJS",
@@ -14,28 +15,38 @@
     "C#",
     "C++",
     "CATIA",
+    "CCNA",
+    "CCNP",
     "CI/CD",
     "Cadence Spectre",
+    "Ceramics",
     "Chemical Engineering",
     "Cloud",
     "Communication",
     "Computer Architecture",
     "Computer Vision",
+    "Control Engineering",
     "Creo",
     "Data Analysis",
     "Data Modeling",
     "Database",
     "Deep Learning",
+    "Design",
     "DevOps",
+    "Digital Marketing",
     "Digital Twin",
     "Docker",
+    "EDX",
     "ERP",
     "Electrical Engineering",
     "Electrochemistry",
+    "Energy Engineering",
     "FDTD",
+    "Finance",
     "Fiori",
     "GCP",
     "Git",
+    "Human Resources",
     "Inventor",
     "JMP",
     "Java",
@@ -49,7 +60,9 @@
     "MATLAB",
     "MSA",
     "Machine Learning",
+    "Management",
     "Manufacturing",
+    "Marketing",
     "Materials Engineering",
     "Mechanical Design",
     "Mechanical Engineering",
@@ -58,11 +71,16 @@
     "Node.js",
     "Numerical Analysis",
     "Operating Systems",
+    "Optics",
     "Optimization",
+    "OrCAD",
     "Oracle",
     "PLC",
+    "Polymer Engineering",
     "PostgreSQL",
+    "Power Systems",
     "Problem Solving",
+    "Process Engineering",
     "Programming",
     "Project Management",
     "Prompt Engineering",
@@ -81,7 +99,9 @@
     "SPEOS",
     "SQL",
     "SVN",
+    "Sales",
     "Security",
+    "Semiconductor",
     "Setfos",
     "Signal Processing",
     "Simulation",
@@ -92,11 +112,13 @@
     "Spring",
     "Spring Boot",
     "Statistics",
+    "Telecommunications",
     "TensorFlow",
     "Terraform",
     "TypeScript",
     "VBA",
     "Vue.js",
+    "XRF",
     "minitab"
   ],
   "is_a": {
@@ -148,7 +170,7 @@
     "JMP": "Statistics",
     "MATLAB": "Numerical Analysis",
     "VBA": "Programming",
-    "BMS": "Electrochemistry",
+    "BMS": "Electrical Engineering",
     "Rheology": "Materials Engineering",
     "SEM": "Materials Engineering",
     "CATIA": "Mechanical Design",
@@ -172,7 +194,36 @@
     "SAP": "ERP",
     "S/4HANA": "ERP",
     "Fiori": "ERP",
-    "ABAP": "ERP"
+    "ABAP": "ERP",
+    "Electrochemistry": "Chemical Engineering",
+    "Process Engineering": "Chemical Engineering",
+    "EDX": "Materials Engineering",
+    "XRF": "Materials Engineering",
+    "Power Systems": "Electrical Engineering",
+    "Telecommunications": "Electrical Engineering",
+    "OrCAD": "Electrical Engineering",
+    "CCNA": "Network",
+    "CCNP": "Network",
+    "Marketing": "Management",
+    "Accounting": "Management",
+    "Finance": "Management",
+    "Human Resources": "Management",
+    "Digital Marketing": "Marketing",
+    "Polymer Engineering": "Materials Engineering",
+    "Metallurgical Engineering": "Materials Engineering",
+    "Ceramics": "Materials Engineering",
+    "Glass": "Materials Engineering",
+    "Injection Molding": "Mechanical Engineering",
+    "Extrusion": "Mechanical Engineering",
+    "CFD": "Mechanical Engineering",
+    "Automation": "Mechanical Engineering",
+    "Display": "Electrical Engineering",
+    "Semiconductor": "Electrical Engineering",
+    "Semiconductor Packaging": "Semiconductor",
+    "Energy Engineering": "Electrical Engineering",
+    "Data Center": "Cloud",
+    "Sales": "Marketing",
+    "CRM": "Sales"
   },
   "majors": [
     {
@@ -255,8 +306,58 @@
       "school": "서울대학교",
       "name": "건축학과(건축학전공(5년))",
       "develops": {
+        "Design": [
+          "디지털 디자인 스튜디오",
+          "디지털 디자인 연구",
+          "건축의장",
+          "실내설계"
+        ],
         "Materials Engineering": [
           "건축재료계획"
+        ]
+      }
+    },
+    {
+      "id": "서울대학교--경영대학",
+      "school": "서울대학교",
+      "name": "경영대학",
+      "develops": {
+        "Finance": [
+          "투자론",
+          "재무관리",
+          "재무제표분석 및 기업가치 평가",
+          "채권분석",
+          "파생금융상품론",
+          "기업가치금융"
+        ],
+        "Marketing": [
+          "마케팅관리",
+          "마케팅사례연구",
+          "마케팅조사론",
+          "마케팅특강",
+          "마케팅 애널리틱스",
+          "마케팅 모형",
+          "전략적 브랜드 관리",
+          "광고관리론"
+        ],
+        "Management": [
+          "인사관리",
+          "조직행동론",
+          "경영전략",
+          "경영정보론",
+          "경영과학",
+          "경영철학과 윤리",
+          "특수경영론",
+          "기업법",
+          "노사관계론"
+        ],
+        "Accounting": [
+          "중급회계 1",
+          "중급회계 2",
+          "회계감사",
+          "회계원리",
+          "회계정보와 경영의사결정",
+          "회계학특강"
         ]
       }
     },
@@ -274,6 +375,27 @@
         ],
         "Project Management": [
           "스타트업 해커톤 캠프"
+        ],
+        "Marketing": [
+          "마케팅관리",
+          "디지털 마케팅",
+          "소비자행동",
+          "광고관리론"
+        ],
+        "Finance": [
+          "금융공학과 퀀트분석"
+        ],
+        "Management": [
+          "경영전략",
+          "조직이론",
+          "인사관리"
+        ],
+        "Accounting": [
+          "회계원리",
+          "세무회계",
+          "관리회계",
+          "고급회계",
+          "회계감사"
         ]
       }
     },
@@ -288,6 +410,9 @@
         "Data Analysis": [
           "경제 분석을 위한 데이터 사이언스",
           "경제분석 및 예측과 데이터지능 1"
+        ],
+        "Machine Learning": [
+          "경제분석을 위한 머신러닝"
         ]
       }
     },
@@ -303,10 +428,23 @@
           "물레성형 기초",
           "자유성형기법 1",
           "자유성형기법 2",
+          "도자공예 ",
           "금속공예 1",
           "금속공예 2",
           "금속공예 3",
           "금속공예 4"
+        ],
+        "Design": [
+          "인체와 장식 1",
+          "인체와 장식 2",
+          "공예와 문화",
+          "공예의 발명",
+          "현대 공예론",
+          "장신구 1",
+          "장신구 2",
+          "장신구 3",
+          "장신구 4",
+          "금속형태와구조"
         ]
       }
     },
@@ -455,6 +593,75 @@
       }
     },
     {
+      "id": "서울대학교--디자인과",
+      "school": "서울대학교",
+      "name": "디자인과",
+      "develops": {
+        "Design": [
+          "현대디자인론",
+          "편집디자인",
+          "제품디자인",
+          "정보인터랙션디자인",
+          "일러스트레이션",
+          "인간행태와디자인",
+          "리빙디자인",
+          "애니매이션",
+          "아이덴티티디자인",
+          "사회적이슈와디자인",
+          "사물인터랙션디자인",
+          "브랜드디자인프로젝트2",
+          "미디어디자인프로젝트2",
+          "브랜드디자인프로젝트1",
+          "그래픽디자인프로젝트1",
+          "그래픽디자인프로젝트2",
+          "제품인터랙션디자인프로젝트 1",
+          "제품인터랙션디자인프로젝트 2",
+          "리빙디자인프로젝트 1",
+          "리빙디자인프로젝트 2",
+          "바이오디자인",
+          "타이포그래피디자인1",
+          "타이포그래피디자인2",
+          "모빌리티디자인프로젝트 1",
+          "모빌리티디자인프로젝트 2",
+          "혼합매체드로잉",
+          "공간디자인기초",
+          "영상디자인",
+          "확장현실디자인",
+          "미디어디자인프로젝트1",
+          "디자인포트폴리오",
+          "디자인과 법률",
+          "운송디자인",
+          "디지털지오메트리",
+          "공간디자인",
+          "혼합재료모델링",
+          "3D그래픽디자인",
+          "서비스UX디자인",
+          "UI,UX디자인프로젝트2",
+          "UI,UX디자인프로젝트1",
+          "AI응용디자인",
+          "모션그래픽스",
+          "기초산업디자인",
+          "시각디자인기초",
+          "UI디자인프로그래밍",
+          "디자인요소와원리",
+          "VD컴퓨테이션",
+          "공간디자인프로젝트1",
+          "공간디자인프로젝트2",
+          "구조와재료디자인",
+          "기초시각디자인",
+          "디자인과 문화",
+          "디자인과정과방법",
+          "디자인기초1",
+          "디자인기초2",
+          "디자인리서치",
+          "디자인비즈니스",
+          "디자인사",
+          "디자인사진",
+          "제품서비스디자인"
+        ]
+      }
+    },
+    {
       "id": "서울대학교--물리·천문학부(천문학전공)",
       "school": "서울대학교",
       "name": "물리·천문학부(천문학전공)",
@@ -581,6 +788,7 @@
       "name": "수리과학부",
       "develops": {
         "Statistics": [
+          "확률미분방정식  ",
           "금융수학 1",
           "금융수학 2",
           "측도이론과 확률"
@@ -766,6 +974,12 @@
           "에너지자원처리공학",
           "에너지소재열역학"
         ],
+        "Energy Engineering": [
+          "에너지자원공학개론",
+          "신재생에너지",
+          "태양에너지공학",
+          "이산화탄소 포집, 활용, 저장"
+        ],
         "Data Analysis": [
           "에너지 데이터 사이언스"
         ],
@@ -912,6 +1126,12 @@
           "전기기기 및 제어",
           "전력전자공학",
           "전력 및 에너지시스템의 기초"
+        ],
+        "Network": [
+          "네트워크 프로토콜 설 계 및 실습"
+        ],
+        "Control Engineering": [
+          "제어공학개론"
         ]
       }
     },
@@ -1162,6 +1382,9 @@
           "항공기구조역학",
           "전산구조해석",
           "항공우주열역학"
+        ],
+        "Control Engineering": [
+          "비행체 제어원리"
         ]
       }
     },
@@ -1666,6 +1889,37 @@
       ]
     },
     {
+      "id": "1002146-atl-캠페인-기획",
+      "role": "ATL 캠페인 기획",
+      "company": "HSAD",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002146",
+      "requires": [],
+      "prefers": [
+        "Marketing",
+        "Digital Marketing"
+      ],
+      "soft": [
+        "Creativity"
+      ]
+    },
+    {
+      "id": "1002146-광고제작-ad",
+      "role": "광고제작(AD)",
+      "company": "HSAD",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002146",
+      "requires": [
+        "LLM",
+        "Design"
+      ],
+      "prefers": [],
+      "soft": [
+        "Creativity",
+        "Communication"
+      ]
+    },
+    {
       "id": "1002146-디지털-기획",
       "role": "디지털 기획",
       "company": "HSAD",
@@ -1745,6 +1999,32 @@
       "prefers": [
         "Simulation",
         "Python"
+      ],
+      "soft": []
+    },
+    {
+      "id": "1002117-경영관리",
+      "role": "경영관리",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [],
+      "prefers": [
+        "Accounting",
+        "Finance"
+      ],
+      "soft": []
+    },
+    {
+      "id": "1002117-er-노경",
+      "role": "ER(노경)",
+      "company": "LG디스플레이",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002117",
+      "requires": [],
+      "prefers": [
+        "Human Resources",
+        "Management"
       ],
       "soft": []
     },
@@ -1836,6 +2116,7 @@
       "requires": [
         "Materials Engineering",
         "Chemical Engineering",
+        "Ceramics",
         "SEM"
       ],
       "prefers": [],
@@ -1960,11 +2241,60 @@
       "requires": [
         "Chemical Engineering",
         "Mechanical Engineering",
+        "Energy Engineering",
         "Materials Engineering",
+        "Polymer Engineering",
         "Electrochemistry"
       ],
       "prefers": [
         "Mechanical Design"
+      ],
+      "soft": []
+    },
+    {
+      "id": "1002075-cell개발-각형전지-_부품",
+      "role": "Cell개발(각형전지)_부품",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Electrochemistry",
+        "Mechanical Design",
+        "Process Engineering"
+      ],
+      "soft": [
+        "Collaboration",
+        "Problem Solving"
+      ]
+    },
+    {
+      "id": "1002075-cell개발-각형전지-_시뮬레이션-모델링",
+      "role": "Cell개발(각형전지)_시뮬레이션/모델링",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Electrochemistry",
+        "Simulation"
+      ],
+      "prefers": [],
+      "soft": [
+        "Communication",
+        "Collaboration"
+      ]
+    },
+    {
+      "id": "1002075-cell개발-자동차",
+      "role": "Cell개발(자동차)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Materials Engineering",
+        "Electrochemistry",
+        "Process Engineering"
       ],
       "soft": []
     },
@@ -1984,6 +2314,37 @@
       "soft": [
         "Communication",
         "Collaboration"
+      ]
+    },
+    {
+      "id": "1002075-pack용접설계",
+      "role": "Pack용접설계",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Materials Engineering",
+        "Mechanical Engineering"
+      ],
+      "prefers": [],
+      "soft": []
+    },
+    {
+      "id": "1002075-영업마케팅",
+      "role": "영업마케팅",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Data Analysis",
+        "Accounting",
+        "Finance"
+      ],
+      "soft": [
+        "Communication",
+        "Collaboration",
+        "Problem Solving"
       ]
     },
     {
@@ -2017,6 +2378,20 @@
       "soft": []
     },
     {
+      "id": "1002075-bms-hw개발",
+      "role": "BMS HW개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Power Systems",
+        "Electrical Engineering",
+        "Control Engineering"
+      ],
+      "prefers": [],
+      "soft": []
+    },
+    {
       "id": "1002075-bms-sw개발",
       "role": "BMS SW개발",
       "company": "LG에너지솔루션",
@@ -2040,10 +2415,62 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Electrochemistry",
+        "Materials Engineering",
         "Chemical Engineering",
         "Data Analysis"
       ],
       "prefers": [],
+      "soft": []
+    },
+    {
+      "id": "1002075-pack개발-ess",
+      "role": "Pack개발(ESS)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Engineering",
+        "Power Systems",
+        "Electrical Engineering",
+        "Data Analysis",
+        "Mechanical Design"
+      ],
+      "prefers": [],
+      "soft": [
+        "Responsibility"
+      ]
+    },
+    {
+      "id": "1002075-system개발",
+      "role": "System개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Power Systems"
+      ],
+      "prefers": [
+        "Electrical Engineering"
+      ],
+      "soft": [
+        "Communication"
+      ]
+    },
+    {
+      "id": "1002075-설비관리-cell",
+      "role": "설비관리(Cell)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Data Analysis",
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "Process Engineering"
+      ],
+      "prefers": [
+        "Mechanical Design"
+      ],
       "soft": []
     },
     {
@@ -2055,6 +2482,7 @@
       "requires": [
         "Mechanical Engineering",
         "Electrical Engineering",
+        "Control Engineering",
         "Mechanical Design",
         "Data Analysis",
         "PLC"
@@ -2096,13 +2524,31 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "Electrical Engineering",
-        "Mechanical Engineering"
+        "Mechanical Engineering",
+        "Optics"
       ],
       "prefers": [
         "Deep Learning"
       ],
       "soft": [
         "Collaboration",
+        "Problem Solving"
+      ]
+    },
+    {
+      "id": "1002075-설비기술-전극",
+      "role": "설비기술(전극)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Manufacturing",
+        "Mechanical Design",
+        "Electrical Engineering"
+      ],
+      "soft": [
+        "Initiative",
         "Problem Solving"
       ]
     },
@@ -2137,6 +2583,41 @@
       ],
       "soft": [
         "Collaboration",
+        "Communication"
+      ]
+    },
+    {
+      "id": "1002075-설비기술-원통형",
+      "role": "설비기술(원통형)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Design",
+        "SolidWorks",
+        "Electrical Engineering",
+        "Control Engineering"
+      ],
+      "prefers": [],
+      "soft": [
+        "Communication"
+      ]
+    },
+    {
+      "id": "1002075-요소기술-원통형de",
+      "role": "요소기술(원통형DE)",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "SEM",
+        "EDX",
+        "XRF"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Analytical Thinking",
         "Communication"
       ]
     },
@@ -2203,6 +2684,7 @@
       "requires": [
         "Mechanical Engineering",
         "Electrical Engineering",
+        "AutoCAD",
         "SolidWorks",
         "PLC"
       ],
@@ -2253,6 +2735,7 @@
         "Python",
         "Database",
         "Network",
+        "Telecommunications",
         "Data Analysis"
       ],
       "prefers": [],
@@ -2299,6 +2782,33 @@
       "soft": []
     },
     {
+      "id": "1002075-선행공정기술",
+      "role": "선행공정기술",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Process Engineering"
+      ],
+      "prefers": [
+        "Electrochemistry"
+      ],
+      "soft": []
+    },
+    {
+      "id": "1002075-소재개발ax",
+      "role": "소재개발AX",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Machine Learning",
+        "Data Analysis"
+      ],
+      "prefers": [],
+      "soft": []
+    },
+    {
       "id": "1002075-소재기술",
       "role": "소재기술",
       "company": "LG에너지솔루션",
@@ -2339,12 +2849,28 @@
       ],
       "prefers": [
         "PostgreSQL",
+        "Database",
         "PyTorch"
       ],
       "soft": [
         "Problem Solving",
         "Growth Mindset"
       ]
+    },
+    {
+      "id": "1002075-bms_hw개발",
+      "role": "BMS_HW개발",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [],
+      "prefers": [
+        "Power Systems",
+        "Telecommunications",
+        "OrCAD",
+        "Electrical Engineering"
+      ],
+      "soft": []
     },
     {
       "id": "1002075-bms_sox-알고리즘-설계",
@@ -2372,6 +2898,7 @@
       "url": "https://careers.lg.com/apply/detail?id=1002075",
       "requires": [
         "BMS",
+        "Electrical Engineering",
         "MATLAB",
         "Simulink"
       ],
@@ -2488,6 +3015,24 @@
       ]
     },
     {
+      "id": "1002075-전장부품설계",
+      "role": "전장부품설계",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002075",
+      "requires": [
+        "Mechanical Design",
+        "Mechanical Engineering",
+        "Electrical Engineering",
+        "Materials Engineering"
+      ],
+      "prefers": [],
+      "soft": [
+        "Problem Solving",
+        "Communication"
+      ]
+    },
+    {
       "id": "1002075-차세대전지-개발-소듐이온전지",
       "role": "차세대전지 개발(소듐이온전지)",
       "company": "LG에너지솔루션",
@@ -2516,6 +3061,20 @@
         "Communication",
         "Analytical Thinking"
       ]
+    },
+    {
+      "id": "1001957-생산운영",
+      "role": "생산운영",
+      "company": "LG에너지솔루션",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1001957",
+      "requires": [
+        "Process Engineering",
+        "Materials Engineering",
+        "Manufacturing"
+      ],
+      "prefers": [],
+      "soft": []
     },
     {
       "id": "1002193-경력-반도체-기판-제품개발",
@@ -2608,6 +3167,23 @@
       ]
     },
     {
+      "id": "1002196-aidc-엔지니어-전기",
+      "role": "AIDC 엔지니어(전기)",
+      "company": "LG유플러스",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002196",
+      "requires": [
+        "Power Systems"
+      ],
+      "prefers": [
+        "Electrical Engineering"
+      ],
+      "soft": [
+        "Problem Solving",
+        "Communication"
+      ]
+    },
+    {
       "id": "1002196-aidc엔지니어-기계",
       "role": "AIDC엔지니어(기계)",
       "company": "LG유플러스",
@@ -2620,6 +3196,23 @@
       "prefers": [],
       "soft": [
         "Problem Solving",
+        "Communication"
+      ]
+    },
+    {
+      "id": "1002196-nw기술",
+      "role": "NW기술",
+      "company": "LG유플러스",
+      "career_type": "신입",
+      "url": "https://careers.lg.com/apply/detail?id=1002196",
+      "requires": [
+        "Telecommunications",
+        "Electrical Engineering",
+        "CCNA",
+        "CCNP"
+      ],
+      "prefers": [],
+      "soft": [
         "Communication"
       ]
     },
@@ -2642,6 +3235,20 @@
         "Problem Solving",
         "Communication"
       ]
+    },
+    {
+      "id": "1002191-사무지원",
+      "role": "사무지원",
+      "company": "LG유플러스",
+      "career_type": "신입/경력",
+      "url": "https://careers.lg.com/apply/detail?id=1002191",
+      "requires": [
+        "ERP"
+      ],
+      "prefers": [
+        "Accounting"
+      ],
+      "soft": []
     },
     {
       "id": "1002204-ax기획",

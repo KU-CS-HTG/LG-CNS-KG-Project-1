@@ -10,7 +10,6 @@
 4	정보보안기사
 3	AX
 3	일본어
-3	전기 관련 자격증
 3	ISMS-P
 2	MCP
 2	Robot Foundation Model
@@ -19,7 +18,6 @@
 2	제2외국어 회화 능통
 2	PPT
 2	컴퓨터공학
-2	지표 분석
 2	협업
 2	엑셀
 2	FCBGA
@@ -38,7 +36,6 @@
 2	MS Teams
 2	Word
 2	CISSP
-2	전산 회계 관련 자격증
 1	Function Calling
 1	Vector DB
 1	AI Transformation
@@ -171,13 +168,6 @@
 1	DX
 1	SDA
 1	Data
-1	브랜딩
-1	광고
-1	디지털 플랫폼
-1	소셜 플랫폼
-1	소비자 트렌드
-1	AI Tool
-1	디자인 Tool
 1	데이터 분석·시각화 도구
 1	디지털 기술
 1	커머스 플랫폼
@@ -191,12 +181,6 @@
 1	AI 기반 인재 소싱 Tool
 1	ATS
 1	영어 회화
-1	공인회계사
-1	CFA
-1	세무사
-1	공인노무사
-1	경영지도사
-1	근로감독
 1	IC 아키텍처 개발
 1	산업설비 자동화
 1	로봇공학
@@ -204,7 +188,6 @@
 1	금형
 1	냉동 사이클 설계
 1	비즈니스 영어
-1	세라믹
 1	무기소재
 1	실험 설계
 1	XRD
@@ -220,7 +203,6 @@
 1	전략기획
 1	신사업기획
 1	사업개발
-1	데이터센터
 1	HVAC
 1	에너지
 1	전략 컨설팅
@@ -245,7 +227,6 @@
 1	Classification
 1	Detection
 1	Segmentation
-1	OpenCV
 1	Robot Vision
 1	Camera Geometric
 1	VLM
@@ -270,23 +251,10 @@
 1	수학
 1	Gurobi
 1	Xpress
-1	에너지공학
-1	신소재공학
-1	고분자공학
 1	2차전지 소재 개발 및 평가
-1	2차전지 부품 개발
-1	Cell Design
-1	Electrochemical Modeling
-1	Performance Simulation
 1	Teamwork
 1	Proactive Problem Solving
-1	2차전지 소재 개발
-1	Cell 설계
 1	3D CAD tool
-1	용접 재료
-1	강도설계
-1	회계
-1	재무
 1	원재료 특성 및 구조 설계
 1	이차전지 소재
 1	전극 형성
@@ -297,10 +265,6 @@
 1	Japanese
 1	B2B Sales Experience
 1	Data Center Knowledge
-1	전원 회로 설계
-1	측정 회로 설계
-1	제어 회로 설계
-1	기능 안전 회로 설계
 1	HW 성능 검증
 1	디버깅
 1	Embedded 시스템
@@ -309,33 +273,17 @@
 1	인공지능공학
 1	외국어 (영어)
 1	외국어 (중국어)
-1	이차전지
-1	재료 공학
 1	화공계열 전공
 1	신소재 전공
-1	3D Tool
-1	AC/DC 회로 이론
-1	전력변환기기 동작원리
 1	소통
-1	제어
-1	광학
 1	통계 소프트웨어
 1	머신 비전
 1	자동화 검사 장비
 1	데이터 분석 툴
-1	전극 설비
-1	기계 설계
-1	전기 설계
 1	Vision 광학 Tool
 1	비파괴 검사
 1	CT
 1	X-ray
-1	2D 설계
-1	Solid Works
-1	전기회로 설계
-1	제어 프로그램 설계
-1	EDX
-1	XRF
 1	SAS
 1	Spotfire
 1	Spss
@@ -353,7 +301,6 @@
 1	3DCS
 1	GD&T
 1	MES
-1	Auto CAD
 1	PC 제어
 1	지멘스
 1	미쓰비시
@@ -364,7 +311,6 @@
 1	AX 기술
 1	Agent 자동화 워크플로우
 1	PLC Programming
-1	Dynamics Analysis
 1	CFD Analysis
 1	Plant Simulation
 1	Programming Development
@@ -381,7 +327,6 @@
 1	임베디드
 1	센서 및 Device 연동
 1	웹·앱
-1	통신
 1	센서 연동
 1	설비 제어
 1	로봇 컨트롤
@@ -391,22 +336,13 @@
 1	에너지관리기사
 1	기계/전기/안전/산업공학 자격증
 1	물리모델링
-1	데이터 사이언스
 1	Lab Automation
-1	소재 데이터 분석
 1	재료 기계
-1	MongoDB
-1	Apache Spark
 1	Delta Lake
-1	DCDC 설계
-1	통신 회로 설계
-1	OrCAD
-1	EMC 설계 평가
 1	Kalman Filter
 1	RLS
 1	Adaptive Filter
 1	전기차
-1	자동차 전장 시스템
 1	MCU
 1	센서 데이터 처리
 1	Data Pipeline
@@ -427,25 +363,13 @@
 1	예측 알고리즘 개발
 1	시계열 데이터 분석
 1	Simulator 개발
-1	2D 도면 작성
-1	기계 전공
-1	전기전자 전공
-1	재료 전공
-1	메카트로닉스 전공
 1	소재 기반 연구
 1	HW
 1	SW
 1	전기전자공학
 1	영미권 변호사 자격
-1	전극 믹싱
-1	전극 코팅
-1	R2R 공정
-1	전극 코터 검사기
 1	계측기 운영
-1	물성 측정
-1	설비 유지보수
 1	지게차 운전
-1	R2R 필름 성형
 1	FCBGA 기판 또는 반도체 패키징 양산 공정
 1	ABF 등 패키지용 소재 공정기술
 1	영어 커뮤니케이션
@@ -458,12 +382,8 @@
 1	ABF
 1	AOI
 1	AVI
-1	전력 계통
-1	전기 설비
 1	IDC
-1	전기 공학 관련 학과
 1	공기조화
-1	열전달
 1	열부하 계산
 1	열원설비
 1	공조설비
@@ -472,16 +392,7 @@
 1	건축설비기사
 1	일반기계기사
 1	Teams
-1	AI 도구
-1	통신 공학
-1	5G
-1	LTE
-1	CCNA
-1	CCNP
 1	정보통신산업기사
-1	광통신공학
-1	노동관계 법령 해석
-1	임단협 합의서 작성
 1	문서 작성 및 보고
 1	Microsoft 365
 1	Entra
