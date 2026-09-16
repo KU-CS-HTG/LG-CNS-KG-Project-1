@@ -23,6 +23,7 @@ LLM 을 다시 부르고 싶을 때만 data/majors_raw.json 을 지운다.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -137,8 +138,18 @@ def call_llm(major: str, subjects: list[str], chain=None) -> list[dict]:
     return [item.model_dump() for item in result.skills]
 
 
+_WS = re.compile(r"\s+")
+
+
+def _squash(s: str) -> str:
+    """비교용 키 — 공백을 전부 뺀다. CSV 에 '네트워크 프로토콜 설 계 및 실습' 처럼 공백이 잘못 들어간 과목명이 있고
+    LLM 은 이를 '설계' 로 고쳐 적는다. 공백까지 같아야 인정하던 때는 이 때문에 근거 7건·역량 2건이 탈락했다
+    (9/16 실측: 전기·정보공학부 Network, 경제학부 Machine Learning). 돌려주는 값은 항상 CSV 의 원래 표기다."""
+    return _WS.sub("", s)
+
+
 def match_subject(name: str, subjects: list[str]) -> str | None:
-    """LLM 이 적은 과목명을 실제 과목명에 맞춘다. 정확 일치가 없으면 부분 일치를 1건까지 허용.
+    """LLM 이 적은 과목명을 실제 과목명에 맞춘다. 공백 무시 정확 일치 → 없으면 부분 일치를 1건까지 허용.
 
     '기계학습' → '기계학습 개론' 처럼 LLM 이 줄여 쓰는 일이 잦다. 예전 코드는 정확 일치만 인정해서
     이런 근거가 전부 탈락했다. 단, 후보가 2개 이상이면 어느 과목인지 알 수 없으므로 None (안전 쪽).
@@ -146,9 +157,13 @@ def match_subject(name: str, subjects: list[str]) -> str | None:
     name = name.strip()
     if name in subjects:
         return name
-    if len(name) < 2:                          # 'AI' 한 글자짜리 등은 부분 일치 시도 안 함
+    key = _squash(name)
+    if len(key) < 2:                           # 'AI' 한 글자짜리 등은 부분 일치 시도 안 함
         return None
-    cands = [s for s in subjects if name in s or s in name]
+    exact = [s for s in subjects if _squash(s) == key]
+    if exact:
+        return exact[0]                        # 공백만 다른 같은 과목
+    cands = [s for s in subjects if key in _squash(s) or _squash(s) in key]
     return cands[0] if len(cands) == 1 else None
 
 
