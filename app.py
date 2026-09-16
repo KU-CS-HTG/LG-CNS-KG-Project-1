@@ -150,6 +150,10 @@ def run(answers: list[str], session: dict, trait_tags: list[str] | None = None,
 
 # ── 카드 헬퍼 (LLM 없음). 카드 = 사실(숫자·근거), 문단 = 말(LLM) — docs/20260916_render_v2_스펙.md
 BAR_WIDTH = 10
+SOURCE_URLS = {                              # 카드 끝 출처 줄. 과목은 대학알리미 공시 xlsx 를 정리한 것(설명서 5-1), 공고는 careers.lg.com 스냅샷(data/raw/)
+    "curriculum": "https://www.academyinfo.go.kr",
+    "jobs": "https://careers.lg.com",
+}
 
 
 def _pct(score: float) -> int:
@@ -169,6 +173,12 @@ def _disp_width(s: str) -> int:
 
 def _pad(s: str, width: int) -> str:
     return s + " " * max(0, width - _disp_width(s))
+
+
+def _pretty(name: str) -> str:
+    """'전기?정보공학부' → '전기·정보공학부'. CSV 를 CP949 → UTF-8 로 옮길 때 '·' 가 '?' 로 깨진 전공명 5개 — 데이터는 그대로 두고 표시만 고친다
+    (graph.json 의 이름을 바꾸면 majors_raw 캐시 키가 어긋나 LLM 재호출이 생긴다). check.py 의 .replace("?", "·") 와 같은 처리."""
+    return name.replace("?", "·")
 
 
 def _one_school(r: dict) -> bool:
@@ -228,7 +238,7 @@ def render(r: dict) -> str:
 
     # ── [전공]  ① 전수 순위 + 학생 태그가 어떻게 이어졌는지 (✓ 정확 / ≈ 계열 / ○ 미연결) + 역량 연결도 바
     m, rk = r["major"], r["ranking"]
-    L.append(f"[전공]    {m['name'] if _one_school(r) else m['school'] + ' ' + m['name']}")
+    L.append(f"[전공]    {_pretty(m['name']) if _one_school(r) else m['school'] + ' ' + _pretty(m['name'])}")
     L.append(f"{IND}{r['total_majors']}개 전공 중 역량이 이어지는 {len(rk)}개를 비교한 결과 1위")
     matched = list(m.get("matched_skills", []))
     fam = m.get("family", {})                                              # {학생 태그: 그것을 커버한 전공 역량}
@@ -241,15 +251,15 @@ def render(r: dict) -> str:
     missing = [t for t in list(r["tags"]) + sorted(inferred) if t not in set(matched) and t not in fam]
     if missing:
         L.append(f"{IND}○ 아직 안 이어진 역량 — " + ", ".join(f"{t} (추정)" if t in inferred else t for t in dict.fromkeys(missing)))
-    width = max(_disp_width(x["name"]) for x in rk[:3])
-    for i, x in enumerate(rk[:3]):
-        label = "역량 연결도  " if i == 0 else " " * 13
+    L.append(f"{IND}역량 연결도")                                          # 라벨은 따로 한 줄 — 아래 세 줄의 들여쓰기가 같아야 웹 폰트에서도 바가 맞는다
+    width = max(_disp_width(_pretty(x["name"])) for x in rk[:3])
+    for x in rk[:3]:
         raw = f"  ({x['score']:.3f})" if DEBUG else ""
-        L.append(f"{IND}{label}{_pad(x['name'], width)}  {_bar(x['score'])} {_pct(x['score'])}%{raw}")
+        L.append(f"{IND}  {_pad(_pretty(x['name']), width)}  {_bar(x['score'])} {_pct(x['score'])}%{raw}")
     L.append("")
 
     # ── [과목]  다리 과목. 과목별 꼬리표는 빼고 출처는 카드 끝 한 줄로 (9/16)
-    L.append(f"[과목]    {m['name']}에서 이 역량을 기르는 과목")
+    L.append(f"[과목]    {_pretty(m['name'])}에서 이 역량을 기르는 과목")
     for s in r["subjects"]:
         L.append(f"{IND}{s['subject']} → {', '.join(s['for'])}")
     L.append("")
@@ -272,7 +282,8 @@ def render(r: dict) -> str:
 
     # ── 출처 한 줄 — "과목명이 실존한다"(확인 항목 ②) 와 "왜 서울대만?" 의 근거. 과목명은 넣지 않는다 (확인 ② 가 누출로 잡는다)
     schools = " · ".join(sorted({x["school"] for x in rk}))
-    L += ["", "─" * 10, f"출처 · 과목: {schools} 교육과정 (data/subject_cleaned.csv) · 공고: careers.lg.com 스냅샷 (data/raw/)"]
+    L += ["", "─" * 10,
+          f"출처 · 과목: {schools} 교육과정 — 대학알리미 {SOURCE_URLS['curriculum']} · 공고: LG Careers {SOURCE_URLS['jobs']} (스냅샷)"]
     return "\n".join(L)
 
 
@@ -280,8 +291,9 @@ EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
 아래 [근거]에 주어진 사실만 사용해서, 학생에게 보여줄 "진로 추천" 문단을 작성하라.
 이 문단은 화면 위쪽의 추천 카드(전공 순위·과목·직무 요구 역량 커버 현황) **아래에 붙는 설명**이다.
 숫자와 근거는 카드가 이미 보여주므로 다시 나열하지 말고, 카드의 항목들이 왜 그렇게 이어지는지 풀어 쓴다.
-단, 1단락에서 "전공 N개를 모두 비교해 학생의 역량과 가장 잘 이어진 전공" 이라는 취지를 친절한 말로 한 문장 말하는 것은
-허용한다 — 숫자는 [근거]의 "전체 전공 수 / 이어진 전공 수" 값만 쓴다.
+단, 1단락에는 "전공 N개를 모두 비교했고, 그중 학생의 역량과 이어지는 M개 가운데 가장 잘 이어진 전공" 이라는 취지의
+문장을 **반드시 한 번** 친절한 말로 넣는다 — 숫자 N, M 은 [근거]의 "전체 전공 수 / 이어진 전공 수" 값을 그대로 쓴다.
+(예: "61개 전공을 모두 살펴봤고, 네 역량과 이어지는 46개 중에서 통계학과가 가장 잘 이어졌어요.")
 전공명·과목명·직무명·회사명은 문장 안에 자연스럽게 포함한다.
 
 절대 규칙:
