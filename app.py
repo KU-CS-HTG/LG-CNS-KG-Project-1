@@ -95,12 +95,15 @@ TRAIT_TAG_WEIGHT = 0.5   # 성향에서 추정한 태그 — 근거가 아니라
 
 
 def run(answers: list[str], session: dict, trait_tags: list[str] | None = None,
-        stated_tags: list[str] | None = None, soft_traits: list[str] | None = None) -> dict:
-    """answers: [Q1, Q2, Q3(, 재질문 답)].
+        stated_tags: list[str] | None = None, soft_traits: list[str] | None = None,
+        profile_summary: str | None = None) -> dict:
+    """answers: [Q1, Q2] (--basic 모드에서만 Q3 포함).
     인터뷰 모드 전용 (선택):
-      stated_tags  — 관심 분야를 사전으로 직접 바꾼 태그. 학생이 말한 것이므로 근거 태그와 같은 무게(1.0)
-      trait_tags   — 성향→기술 역량으로 추정한 태그. 연관일 뿐이라 0.5
-      soft_traits  — 강점 성향(한글). 직무의 요구 태도와 대조 (동점 처리 전용, 점수 아님)
+      stated_tags     — 관심 분야를 사전으로 직접 바꾼 태그 + 성향 판단 태그(interview.infer_orientation).
+                        학생이 말한 것과 같은 무게(1.0)
+      trait_tags      — 성향→기술 역량으로 추정한 태그. 연관일 뿐이라 0.5
+      soft_traits     — 강점 성향(한글). 직무의 요구 태도와 대조 (동점 처리 전용, 점수 아님)
+      profile_summary — [진로 추천] 문단에 배경으로 쓸 프로필 요약 (interview.profile_summary_text)
     """
     tags = list(dict.fromkeys([t for t in (stated_tags or []) if t in set(TAGS)] + normalize_to_tags(answers)))
 
@@ -141,7 +144,7 @@ def run(answers: list[str], session: dict, trait_tags: list[str] | None = None,
         subjects = subjects_for(major["id"], major_skills, k=3)
 
     return {"tags": tags, "inferred_tags": inferred, "ranking": ranking, "total_majors": count_majors(),
-            "major": major, "job": job, "jobs": jobs, "subjects": subjects}
+            "major": major, "job": job, "jobs": jobs, "subjects": subjects, "profile_summary": profile_summary}
 
 
 def render(r: dict) -> str:
@@ -204,14 +207,21 @@ EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
    지어내는 것과는 다르다 — 이건 하지 않는다.
 3. 직무가 어떤 일을 하는지는 **[근거]에 적힌 요구 역량으로만** 말한다. 그 회사·직무의 실제 업무 내용은
    우리 데이터에 없으므로 상상해서 쓰지 않는다.
-4. 문장 수를 채우려고 내용을 늘리지 않는다. 할 말이 적으면 짧게 쓴다.
+4. [학생 프로필]이 주어졌다면, 그 안의 관심사·성향만 언급한다. 거기 없는 성격·경험·에피소드를
+   지어내지 않는다. 프로필 문장을 그대로 인용하지 말고 자연스러운 말로 풀어 쓴다.
+5. 문장 수를 채우려고 내용을 늘리지 않는다. 할 말이 적으면 짧게 쓴다.
 
 작성 순서 (총 4단락, 각 단락 사이 줄바꿈):
 
-[1단락 - 도입, 1~2문장]
-전공 진학과 수강할 과목을 직접 추천하는 문장으로 시작한다.
-예: "당신은 서울대학교 통계학과에 진학하여 '데이터마이닝 방법 및 실습', '실험계획 및 실습',
-'함수추정의 응용 및 실습' 과목들을 듣는 것을 추천합니다."
+[1단락 - 도입, 2~3문장]
+[학생 프로필]이 주어졌다면, 그 안의 관심사·성향이 왜 이 전공과 어울리는지 짧게 엮은 다음, 전공
+진학과 수강할 과목을 추천하는 문장으로 이어간다. [학생 프로필]이 없다면 전공 진학과 수강할 과목을
+바로 추천하는 문장으로 시작한다.
+예 (프로필이 있을 때): "수학을 잘하고 혼자 기록하며 공부하는 걸 편하게 느낀다면, 데이터를 차분히
+파고드는 성향과 잘 맞습니다. 당신은 서울대학교 통계학과에 진학하여 '데이터마이닝 방법 및 실습',
+'실험계획 및 실습', '함수추정의 응용 및 실습' 과목들을 듣는 것을 추천합니다."
+예 (프로필이 없을 때): "당신은 서울대학교 통계학과에 진학하여 '데이터마이닝 방법 및 실습', '실험계획
+및 실습', '함수추정의 응용 및 실습' 과목들을 듣는 것을 추천합니다."
 
 [2단락 - 과목이 역량을 기르는 이유, 2~3문장]
 [근거]의 과목들이 왜, 어떻게 해당 역량(Skill)을 길러주는지 고등학생도 이해할 수 있는
@@ -243,7 +253,11 @@ def build_explain_prompt(r: dict) -> str:
     fam = job.get("family", {}) if job else {}
     family_text = ", ".join(f"{child} (전공의 {parent} 로 커버)" for child, parent in sorted(fam.items())) or "(없음)"
 
-    lines = [
+    lines: list[str] = []
+    if r.get("profile_summary"):                     # 대화(또는 JSON)로 얻은 학생 프로필 — 있을 때만 1단락에 쓰인다
+        lines += ["[학생 프로필]", r["profile_summary"], ""]
+
+    lines += [
         f"전공: {major['school']} {major['name']}",
         f"직무: {job['company']} {job['role']} ({job['career_type']})" if job else "직무: (매칭 없음)",
         "",
@@ -299,13 +313,16 @@ if __name__ == "__main__":
 
     session: dict = {}
     trait_tags: list[str] = []
+    profile_summary: str | None = None
 
-    # 네 가지 입력 방식. 전부 interview.py 가 같은 모양({"answers", "interest_tags", "trait_tags", ...})으로
-    # 돌려주므로 아래 공통 처리(Q3 묻기 → run())는 한 번만 쓴다.
+    # 네 가지 입력 방식. 프로필 기반 셋(기본값/--interview/--profile)은 interview.py 가 같은 모양
+    # ({"answers", "interest_tags", "trait_tags", ...})으로 돌려주고, Q3(① ② ③)는 더 이상 따로 묻지 않는다 —
+    # interview.infer_orientation() 이 이미 모은 프로필(강점·공부 스타일·친구 관계·가치관...)로 같은 판단을
+    # 대신한다. 자연스러운 대화 중간에 객관식이 끼어드는 게 어색하다는 이유로 뺐다 (2026-09-16).
     #   (플래그 없음)        : 기본값. user_analysis/main.py 와 완전히 같은 흐름 (7개 영역, 적응형 질문)
     #   --profile <path>   : main.py 가 저장한 JSON을 그대로 읽는다 (대화 없음)
     #   --interview        : 데모용 축약 버전 (2개 영역, 고정 질문 최대 1회)
-    #   --basic            : 원래의 고정 3질문 모드 (user_analysis 연동 이전 방식)
+    #   --basic            : 원래의 고정 3질문 모드 (user_analysis 연동 이전 방식) — Q3 를 그대로 묻는다
     if "--profile" in sys.argv:
         from interview import from_profile_file
         path = sys.argv[sys.argv.index("--profile") + 1]
@@ -321,19 +338,22 @@ if __name__ == "__main__":
         iv = full_interview()
 
     if iv is not None:
-        # Q3(①②③)는 프로필에 대응하는 영역이 없어 세 모드 모두 따로 묻는다 — 규칙 기반이라 근거 태그가 하나 보장된다
-        q3 = input(f"\n{QUESTIONS[2]}\n> ")
-        answers = iv["answers"] + [q3]
+        # normalize_to_tags()/webapp.py/check.py 는 answers[2] 자리를 "Q3"로 취급해 자유 태거 입력에서 뺀다
+        # (규칙 기반으로 따로 처리하려고). Q3 를 안 묻는 모드에서도 그 계약은 그대로 두고, 빈 문자열로
+        # 자리만 맡아 둔다 — 그래야 재질문 답이 answers[3]에 붙어서 자유 태거 입력에 제대로 들어간다.
+        answers = iv["answers"] + [""]
         trait_tags, stated_tags, soft_traits = iv["trait_tags"], iv["interest_tags"], iv["soft_traits"]
+        profile_summary = iv.get("profile_summary")
         if iv["interest_evidence"]:
-            print("\n(관심에서 읽은 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["interest_evidence"].items()) + ")")
+            # 성향 판단(예전 Q3)도 interview.py 에서 interest_evidence 에 같이 얹혀 오므로 여기 한 줄로 같이 보인다
+            print("\n(관심·성향에서 읽은 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["interest_evidence"].items()) + ")")
         if iv["trait_evidence"]:
-            print("(성향에서 추정한 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["trait_evidence"].items()) + ")")
+            print("(강점 성향에서 추정한 역량: " + "; ".join(f"{s} ← {e}" for s, e in iv["trait_evidence"].items()) + ")")
     else:
         answers = [input(f"\n{q}\n> ") for q in QUESTIONS]
         stated_tags, soft_traits = [], []
 
-    kw = dict(trait_tags=trait_tags, stated_tags=stated_tags, soft_traits=soft_traits)
+    kw = dict(trait_tags=trait_tags, stated_tags=stated_tags, soft_traits=soft_traits, profile_summary=profile_summary)
     result = run(answers, session, **kw)
     if "followup" in result:
         answers.append(input(f"\n{FOLLOWUP_PREFIX}{result['followup']}\n> "))

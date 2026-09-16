@@ -3,13 +3,18 @@
 팀원이 만든 user_analysis/ (자기소개 → 7개 영역 프로필) 를 우리 파이프라인의 **입력 단계**로 붙인다.
 user_analysis 의 파일은 건드리지 않는다. 이 파일이 둘 사이를 잇는 유일한 접점이다.
 
-우리가 쓰는 것 (7개 영역 중 2개):
-  interest  → domains·activities 를 먼저 **사전(vocab.canonicalize)** 으로 태그화 (LLM 0, 근거 = interest.evidence)
-              사전에 없는 표현(미술, 음악…)만 자기소개 원문과 함께 태거(app.normalize_to_tags)로     ← 효과의 대부분
-  strength  → mapped_traits(direction=strength) →
-              ① vocab.TRAIT_TO_SKILL → 기술 역량 태그 (가중치 0.5, 전공 매칭용)
-              ② vocab.TRAIT_TO_SOFT  → 소프트 스킬 → 직무의 요구 태도(job.soft)와 대조 (동점 처리 전용)
-나머지 5개(약점·생활·친구·가치관·공부 스타일)는 매칭에 쓸 근거가 없어 호출하지 않는다 (코드는 그대로 보존).
+우리가 태그로 쓰는 것 (7개 영역 중 2개 + 성향 분류 1개):
+  interest    → domains·activities 를 먼저 **사전(vocab.canonicalize)** 으로 태그화 (LLM 0, 근거 = interest.evidence)
+                사전에 없는 표현(미술, 음악…)만 자기소개 원문과 함께 태거(app.normalize_to_tags)로   ← 효과의 대부분
+  strength    → mapped_traits(direction=strength) →
+                ① vocab.TRAIT_TO_SKILL → 기술 역량 태그 (가중치 0.5, 전공 매칭용)
+                ② vocab.TRAIT_TO_SOFT  → 소프트 스킬 → 직무의 요구 태도(job.soft)와 대조 (동점 처리 전용)
+  (전체 프로필) → infer_orientation() 이 "데이터 분석 / 시스템 설계 / 사람·일정 조율" 중 하나를 판단
+                (예전엔 이걸 사용자에게 "① ② ③ 중 골라줘"로 따로 물었다 — 자연스러운 인터뷰 도중에
+                갑자기 객관식이 끼어드는 게 어색해서, 이미 모은 프로필로 같은 판단을 LLM에게 대신 시킨다)
+나머지 4개(생활·친구·가치관·공부 스타일)는 태그로는 안 쓰지만, [진로 추천] 문단을 쓸 때 배경 설명으로 쓴다
+(profile_summary_text, explain()의 "[학생 프로필]" 절 — app.build_explain_prompt 참고). 약점은 태그에도
+문단에도 근거로 쓰지 않는다 (user_analysis 규칙 14: 약점을 부적합 판단에 쓰지 않는다).
 
 세 가지 방법으로 프로필(StudentProfileAnalysis)을 채울 수 있고, 채운 다음엔 전부
 profile_to_inputs() 하나로 수렴한다 — 대화든 파일이든 run() 이 받는 모양은 같다.
@@ -28,6 +33,11 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Literal
+
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+from pydantic import BaseModel, Field
 
 # user_analysis 모듈들은 `from schemas import ...` 처럼 서로를 평면 import 한다 (원작자가 그 폴더 안에서 실행).
 # 파일을 고치지 않고 그대로 쓰기 위해 그 폴더를 import 경로에 넣는다.
@@ -50,6 +60,78 @@ FULL_INTERVIEW_MAX_PER_AREA = 2           # main.py 의 question_counts[area] < 
 
 INTRO_PROMPT = ("안녕! 전공이나 진로를 추천하기 전에 너에 대해 먼저 알고 싶어.\n"
                 "좋아하는 것, 잘하는 것, 해본 것 등 편하게 자기소개해 줘.")
+
+# 영역 이름 → 문단/성향 판단에 쓸 한국어 라벨. interest 는 domains/activities 를 따로 다루므로 여기 없다.
+_AREA_LABELS = {
+    "study_style": "공부 스타일", "strength": "강점", "weakness": "어려워하는 것",
+    "life_pattern": "생활 패턴", "social_style": "친구·모둠에서의 모습", "values": "중요하게 여기는 것",
+}
+
+
+def profile_summary_text(profile: StudentProfileAnalysis, include_weakness: bool = True) -> str:
+    """프로필에서 정보가 충분한 영역만 한국어 줄글로. [진로 추천] 문단과 성향 판단에 같이 쓴다.
+
+    include_weakness=False 로 부르면 약점 줄을 뺀다 — 성향(데이터/시스템/사람) 판단에는
+    약점을 근거로 쓰지 않는다 (user_analysis 규칙 14와 같은 이유: 약점 → 부적합 판단 금지).
+    """
+    interest = profile.interest
+    lines: list[str] = []
+    if interest.sufficient and (interest.domains or interest.activities or interest.evidence):
+        what = ", ".join(list(interest.domains) + list(interest.activities)) or interest.evidence
+        lines.append(f"관심사: {what}")
+
+    for area, label in _AREA_LABELS.items():
+        if area == "weakness" and not include_weakness:
+            continue
+        data = getattr(profile, area)
+        if data.sufficient and data.summary:
+            lines.append(f"{label}: {data.summary}")
+
+    return "\n".join(lines)
+
+
+class _OrientationResult(BaseModel):
+    tag: Literal["Data Analysis", "Software Engineering", "Project Management"] | None = Field(
+        default=None,
+        description="학생 프로필에서 뚜렷하게 드러나는 성향 하나. 셋 다 뚜렷한 근거가 없으면 null.")
+    evidence: str = Field(default="", description="판단 근거가 된 프로필 문장. tag 가 null 이면 빈 문자열.")
+
+
+_ORIENTATION_SYSTEM = """당신은 고등학생의 진로 성향을 판단하는 상담 AI입니다.
+아래 [학생 프로필]을 보고, 다음 세 가지 성향 중 학생에게 가장 가까운 것 하나를 고르세요.
+
+- Data Analysis: 데이터를 파고들어 패턴을 찾는 것에 더 끌린다
+- Software Engineering: 시스템을 설계하고 만드는 것에 더 끌린다
+- Project Management: 사람과 일정을 조율해 프로젝트를 굴리는 것에 더 끌린다
+
+규칙:
+1. 프로필에 직접적인 근거가 있을 때만 고르세요. 셋 다 근거가 약하면 tag 를 null 로 반환하세요 — 어느 하나를
+   무리해서 고르지 마세요.
+2. "어려워하는 것"(약점)은 이 판단에 쓰지 마세요. 어렵다고 느끼는 것이 그 일을 못 한다는 뜻은 아닙니다.
+3. evidence 에는 판단 근거가 된 프로필의 문장을 그대로 적으세요."""
+
+_orientation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+_orientation_prompt = ChatPromptTemplate.from_messages([
+    ("system", _ORIENTATION_SYSTEM),
+    ("human", "{profile_text}"),
+])
+_orientation_chain = _orientation_prompt | _orientation_llm.with_structured_output(_OrientationResult)
+
+
+def infer_orientation(profile: StudentProfileAnalysis) -> tuple[str | None, str]:
+    """"데이터 분석/시스템 설계/사람 조율" 중 하나를 프로필에서 판단. (태그, 근거) 를 돌려준다.
+
+    예전 Q3("① ② ③ 중 골라줘")를 대신한다. 규칙 기반이 아니라 LLM 1회를 쓰는 이유: Q3 는 선택지가
+    정해져 있어 규칙으로 풀 수 있었지만, 여기서는 "어느 문장이 어느 선택지에 해당하는가"부터 판단해야
+    해서 규칙만으로는 안 된다. 대신 자유 서술 3문장이 아니라 **프로필 전체**(interest+strength+
+    study_style+life_pattern+social_style+values)를 근거로 주기 때문에, 답 하나("2")만 주고 판단하게
+    했던 예전 실패(2026-09-15 실측)보다 근거가 훨씬 두껍다.
+    """
+    text = profile_summary_text(profile, include_weakness=False)
+    if not text.strip():
+        return None, ""
+    result = _orientation_chain.invoke({"profile_text": text})
+    return result.tag, result.evidence
 
 
 def profile_to_inputs(profile: StudentProfileAnalysis, intro: str | None = None,
@@ -93,11 +175,18 @@ def profile_to_inputs(profile: StudentProfileAnalysis, intro: str | None = None,
             trait_tags.append(TRAIT_TO_SKILL[t.trait])
             trait_evidence[TRAIT_TO_SKILL[t.trait]] = f"{t.trait} ← \"{t.evidence}\""
 
+    # ── 성향 판단(예전 Q3 대신) — 사용자가 직접 답한 것과 같은 무게로 stated 쪽(interest_tags)에 얹는다.
+    orientation_tag, orientation_evidence = infer_orientation(profile)
+    if orientation_tag and orientation_tag not in interest_tags:
+        interest_tags.append(orientation_tag)
+        interest_evidence[orientation_tag] = orientation_evidence or "(전체 프로필에서 판단)"
+
     return {"answers": [q1_text, q2_text],
             "interest_tags": interest_tags, "interest_evidence": interest_evidence,
             "trait_tags": trait_tags, "trait_evidence": trait_evidence,
             "soft_traits": soft_traits, "trait_details": {t.trait: t.evidence for t in strong},
-            "profile": profile}
+            "orientation_tag": orientation_tag, "orientation_evidence": orientation_evidence,
+            "profile_summary": profile_summary_text(profile), "profile": profile}
 
 
 def interview(ask=input, say=print) -> dict:
@@ -119,7 +208,7 @@ def interview(ask=input, say=print) -> dict:
             profile = update_profile(profile, area, analyze_area_answer(area, ans))   # LLM 1회
 
     result = profile_to_inputs(profile, intro=intro, extra_texts=extra)
-    result["llm_calls"] = 1 + len(extra)
+    result["llm_calls"] = 1 + len(extra) + 1     # 자기소개 분석 + 영역 분석 + profile_to_inputs 의 infer_orientation()
     return result
 
 
@@ -156,7 +245,7 @@ def full_interview(ask=input, say=print) -> dict:
         profile = update_profile(profile, q.area, analyze_area_answer(q.area, ans))
 
     result = profile_to_inputs(profile, intro=intro, extra_texts=extra)
-    result["llm_calls"] = 1 + sum(counts.values())
+    result["llm_calls"] = 1 + sum(counts.values()) + 1   # 자기소개 분석 + 영역 분석 + infer_orientation()
     return result
 
 
