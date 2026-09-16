@@ -15,14 +15,13 @@ SYSTEM_PROMPT = f"""
 학생의 자기소개와 대화를 통해 다음 7개 영역의 정보를 수집하고,
 자연어 답변을 구조화된 학생 프로필로 변환합니다.
 
-7개 영역:
+6개 영역:
 1. interest: 관심사
 2. study_style: 공부 스타일
 3. strength: 강점
-4. weakness: 약점
-5. life_pattern: 생활 패턴
-6. social_style: 친구 관계 / 모둠 활동
-7. values: 성격 / 가치관
+4. life_pattern: 생활 패턴
+5. social_style: 친구 관계 / 모둠 활동
+6. values: 성격 / 가치관
 
 분석 규칙:
 - 성향/역량 매핑에는 아래 STANDARD_TRAITS만 사용하세요.
@@ -87,10 +86,9 @@ INTRODUCTION_ANALYSIS_PROMPT = """
 1. interest: 관심사
 2. study_style: 공부 스타일
 3. strength: 강점
-4. weakness: 약점
-5. life_pattern: 생활 패턴
-6. social_style: 친구 관계 / 모둠 활동
-7. values: 성격 / 가치관
+4. life_pattern: 생활 패턴
+5. social_style: 친구 관계 / 모둠 활동
+6. values: 성격 / 가치관
 
 
 [공통 판단]
@@ -137,9 +135,9 @@ INTRODUCTION_ANALYSIS_PROMPT = """
 '직접 찾아보고 공부한다'는 행동 근거가 있으므로 탐구성을 판단할 수 있음
 
 
-[나머지 6개 영역 분석]
+[나머지 5개 영역 분석]
 
-study_style, strength, weakness,
+study_style, strength,
 life_pattern, social_style, values에 대해서는:
 
 - sufficient: 해당 영역의 정보가 충분한지

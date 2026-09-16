@@ -11,6 +11,8 @@ class MappedTrait(BaseModel):
 
     direction: Literal[
         "strength",
+        "weakness",     # 라벨로만 남긴다 — 약점 영역은 묻지 않고(profile_config), 이 라벨은 어디서도 쓰지 않는다.
+                        # 선택지를 둘로 줄이면 경계 성향이 neutral 로 몰려 강점 추출이 흔들린다 (9/16 실측, docs/20260916_인터뷰_평가_회귀_분석.md)
         "neutral"
     ]
 
