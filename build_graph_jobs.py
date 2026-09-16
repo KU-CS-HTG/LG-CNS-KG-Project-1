@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from vocab import canonicalize_all, PARENT
+from vocab import canonicalize_all, canonicalize_soft, PARENT
 
 DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
 STAGED = DATA / "staged_jobs.json"
@@ -47,6 +47,7 @@ def load_job_rows() -> list[dict]:
                 "source_url": s["source_url"],
                 "required": ext.get("required_skills", []),
                 "preferred": ext.get("preferred_skills", []),
+                "soft": ext.get("soft_skills", []),          # 직무가 요구하는 태도 — 성향 매칭용 (없는 직무도 많다)
             })
         print(f"입력: {STAGED.name} + {EXTRACTED.name} ({len(rows)}건)")
         return rows
@@ -66,6 +67,7 @@ def load_job_rows() -> list[dict]:
                 # v1은 required/preferred, v2는 required_skills/preferred_skills
                 "required": r.get("required") or r.get("required_skills", []),
                 "preferred": r.get("preferred") or r.get("preferred_skills", []),
+                "soft": r.get("soft_skills", []),
             })
         print(f"입력: {CURATED_V1.name} ({len(rows)}건)")
         return rows
@@ -99,6 +101,8 @@ def build_jobs() -> tuple[list[dict], set[str], list[str]]:
             "url": r["source_url"],
             "requires": req,
             "prefers": pref,
+            # 요구 태도 (SoftSkill). 빈 리스트 = "공고에 없음 또는 추출이 놓침" — 둘을 구분할 수 없으므로 '알 수 없음' 으로 다룬다
+            "soft": list(dict.fromkeys(c for c in map(canonicalize_soft, r.get("soft", [])) if c)),
         })
         skills |= set(req) | set(pref)
 

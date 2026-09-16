@@ -122,13 +122,19 @@ def _match(need: set[str], have: set[str]) -> tuple[set[str], dict[str, str]]:
 
 # ═════════════════════════════════════════════════════════════
 
-def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
+def find_majors_by_skills(skills: list[str], limit: int = 10,
+                          tag_weights: dict[str, float] | None = None) -> list[dict]:
     """역량 태그 → 추천 전공.
 
     같은 전공명이 여러 대학에 있으면 **최상위 1개만** 남긴다 (설계서 2절).
     안 그러면 추천 3개가 전부 컴퓨터공학과가 된다 — 확인 항목 2번.
+
+    tag_weights: 태그별 신뢰 가중치 (기본 1.0). 성향에서 추정한 태그(vocab.TRAIT_TO_SKILL)는 0.5 로 들어온다 —
+    근거(과목명·공고)가 아니라 연관에서 온 태그라 절반만 믿는다. 분자·분모에 같이 곱하므로 비율 의미는 유지된다.
     """
     user = set(skills)
+    tw = tag_weights or {}
+    w = lambda s: _weight(s) * tw.get(s, 1.0)                 # 태그 무게 = √idf × 신뢰 가중치
     ranked = []
 
     for m in _load().get("majors", []):
@@ -155,9 +161,9 @@ def find_majors_by_skills(skills: list[str], limit: int = 10) -> list[dict]:
             #     흔한 태그가 동점을 양산한다. 시험 계산(9/15): "신호처리·데이터분석" 에서 Data Analysis 만 있는
             #     첨단융합학부가 0.50 → 0.12 로 내려가고, 희귀 역량을 갖춘 전공이 위로 온다.
             #   태그가 전부 흔한 것뿐이면(분모가 작으면) 결과는 가중 전과 같다 — 해가 되는 경우가 없다.
-            "score": (sum(_weight(s) * _strength(len(develops[s])) for s in exact)
-                      + FAMILY_WEIGHT * sum(_weight(s) * _strength(len(develops[p])) for s, p in family.items()))
-                     / sum(_weight(s) for s in user) if user else 0.0,
+            "score": (sum(w(s) * _strength(len(develops[s])) for s in exact)
+                      + FAMILY_WEIGHT * sum(w(s) * _strength(len(develops[p])) for s, p in family.items()))
+                     / sum(w(s) for s in user) if user else 0.0,
             # 동점 처리 — 매칭된 역량의 근거 과목 수. 같은 커버리지면 그 역량을 더 깊게 다루는 전공이 위로.
             #   (작업 가이드 B-3 "2차 기준". 통계학과는 Statistics 근거 과목이 19개, 식물생산과학부는 2개)
             "evidence_count": sum(len(develops[s]) for s in matched + covered_by),
@@ -181,13 +187,20 @@ def count_majors() -> int:
     """그래프에 올라간 전공 수 (전공명 기준, 중복 제외)."""
     return len({m["name"] for m in _load().get("majors", [])})
 
-def find_jobs_by_skills(skills: list[str], limit: int = 5, career_type: str | None = None) -> list[dict]:
+def find_jobs_by_skills(skills: list[str], limit: int = 5, career_type: str | None = None,
+                        soft_traits: list[str] | None = None) -> list[dict]:
     """역량 태그 → 추천 직무. 갖춘 역량 / 채울 역량을 함께 돌려준다.
 
     career_type="신입" 이면 신입 공고만. 서비스 정의가 'LG 계열사 **신입** 직무 진로 추천' 이라
     취준생에게 경력·석박사 산학장학 공고가 1위로 나오는 걸 막는다 (실측 9/15: 웹/자바 입력에 '보험 SE (경력)' 이 1위).
+
+    soft_traits: 학생의 강점 성향(한글, user_analysis STANDARD_TRAITS). vocab.TRAIT_TO_SOFT 로 소프트 스킬로 바꿔
+    직무의 요구 태도(job["soft"])와 대조한다. **점수에는 더하지 않고 동점일 때만** 2차 기준 —
+    soft 데이터가 없는 직무(84건 중 40건)가 '알 수 없음' 때문에 밀리면 안 되기 때문. 맞는 개수만 세고 안 맞는 건 세지 않는다.
     """
+    from vocab import TRAIT_TO_SOFT
     user = set(skills)
+    user_soft = {TRAIT_TO_SOFT[t] for t in (soft_traits or []) if t in TRAIT_TO_SOFT}
     ranked = []
 
     for j in _load().get("jobs", []):
@@ -213,10 +226,33 @@ def find_jobs_by_skills(skills: list[str], limit: int = 5, career_type: str | No
             "covered_count": len(exact) + len(family),
             # 집합 코사인에 계열 일치를 절반으로 얹는다. 분모 √(|user|×|직무 역량|) 는 역량을 길게 나열한 공고 보정 (기존 그대로)
             "score": (len(exact) + FAMILY_WEIGHT * len(family)) / math.sqrt(len(user) * len(all_skills)),
+            "soft_wanted": list(j.get("soft", [])),               # 직무가 요구하는 태도 (없으면 빈 리스트 = 알 수 없음)
+            "soft_match": sorted(set(j.get("soft", [])) & user_soft),   # 그중 학생 성향과 맞는 것
         })
 
+    # 1차: 기술 매칭 점수. 2차(동점일 때만): 성향 적합 개수 — 데이터 없음(0)과 불일치(0)는 같은 급, 일치만 앞으로.
+    # "동점" = 인접한 직무와의 점수 차 ≤ TIE_EPS. (반올림으로 묶으면 0.4763/0.4714 처럼 경계에 걸린 쌍이 갈린다 — 실측)
     ranked.sort(key=lambda x: -x["score"])
-    return ranked[:limit]
+    return _reorder_ties(ranked, key=lambda x: len(x["soft_match"]))[:limit]
+
+
+TIE_EPS = 0.01   # 이 차이 안이면 기술 점수는 같은 급으로 본다
+
+
+def _reorder_ties(ranked: list[dict], key) -> list[dict]:
+    """점수순 리스트를 받아, 점수가 TIE_EPS 안에서 이어지는 구간(동점 그룹)마다 key 내림차순으로 재정렬한다.
+    그룹 밖의 순서(기술 점수)는 절대 바뀌지 않는다 — 성향은 기술 매칭을 뒤집지 못한다."""
+    out: list[dict] = []
+    i = 0
+    while i < len(ranked):
+        j = i + 1
+        while j < len(ranked) and ranked[j - 1]["score"] - ranked[j]["score"] <= TIE_EPS:
+            j += 1
+        group = ranked[i:j]
+        group.sort(key=lambda x: (-key(x), -x["score"]))
+        out.extend(group)
+        i = j
+    return out
 
 
 def get_evidence(major_id: str, skill: str) -> list[str]:

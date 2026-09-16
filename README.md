@@ -62,7 +62,10 @@ LG-CNS-KG-Project-1/
 ├── build_graph_majors.py   C  전공 절반 → graph.json   (LLM 호출: 전공당 1회)
 ├── graph_store.py          B  graph.json 조회 함수 (LLM 없음)
 ├── app.py                  D  온라인 파이프라인 (질문 3개 → 전공·과목·직무)
-├── check.py                D  확인 3건
+├── check.py                D  확인 3건 + 평가셋(evals/) 실행
+├── interview.py               대화형 입력 모드 어댑터 — user_analysis/ 를 우리 입력으로 (python app.py --interview)
+├── user_analysis/             자기소개 → 7개 영역 프로필 (팀원 모듈, 그대로 보존. interview.py 가 interest·strength 만 사용)
+├── evals/                     평가셋 — cases.json(3질문 모드 10건), interview_cases.json(인터뷰 모드 2건)
 ├── lg_careers.py              수집 (완료. 다시 돌릴 일 거의 없음)
 ├── transform_v2.py            직무 데이터 가공 파이프라인
 └── skeleton.py                walking skeleton (전부 가짜, 흐름 확인용)
