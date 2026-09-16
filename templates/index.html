@@ -63,11 +63,8 @@
 
 <script>
 const QUESTIONS = {{ questions | tojson }};
-const CHOICES_Q3 = [
-  "① 데이터를 파고들어 패턴 찾기",
-  "② 시스템을 설계하고 만들기",
-  "③ 사람과 일정을 조율해 프로젝트 굴리기",
-];
+// Q3는 "① .. ② .. ③ .." 형태의 객관식 — 질문 문구에서 선택지를 직접 뽑아낸다 (app.py QUESTIONS와 항상 일치)
+const CHOICES_Q3 = QUESTIONS[2].match(/[①②③][^①②③]+/g).map(s => s.trim());
 
 const answers = [];
 let step = 0;

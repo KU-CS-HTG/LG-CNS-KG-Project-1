@@ -12,7 +12,7 @@ import uuid
 
 from flask import Flask, Response, jsonify, render_template, request, session
 
-from app import QUESTIONS, explain_stream, render, run
+from app import FOLLOWUP_PREFIX, QUESTIONS, explain_stream, render, run
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)   # 서버 재시작 시 기존 세션은 무효화된다 — 데모 규모라 문제 없음
@@ -39,7 +39,7 @@ def submit():
     session["state"] = state   # run() 이 state 딕셔너리를 제자리에서 수정한다 (asked_again, tags)
 
     if "followup" in result:
-        return jsonify(status="followup", question=result["followup"])
+        return jsonify(status="followup", question=FOLLOWUP_PREFIX + result["followup"])
 
     if result.get("empty"):
         return jsonify(status="empty")
