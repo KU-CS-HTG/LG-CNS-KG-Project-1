@@ -18,7 +18,8 @@ profile_to_inputs() 하나로 수렴한다 — 대화든 파일이든 run() 이 
                          (원본은 temperature=0.3 으로 질문을 생성해 매번 달라진다) 실행: python app.py --interview
   full_interview()    — user_analysis/main.py 와 동일한 흐름. question_agent 가 7개 영역 전부를 그때그때
                          물어본다(영역당 최대 2회). LLM 호출이 더 많은 대신 main.py 를 직접 돌린 것과 같다.
-                         실행: python app.py --full-interview
+                         app.py 의 기본값 (플래그 없이 python app.py 만 실행해도 이 흐름을 탄다).
+                         옛 고정 3질문 모드가 필요하면 python app.py --basic.
   from_profile_file()  — main.py 가 이미 저장한 JSON(output/student_profile.json)을 그대로 읽는다. 대화 없음.
                          실행: python app.py --profile user_analysis/output/student_profile.json
 """

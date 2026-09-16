@@ -300,24 +300,25 @@ if __name__ == "__main__":
     session: dict = {}
     trait_tags: list[str] = []
 
-    # 네 가지 입력 방식. 셋 다 interview.py 가 같은 모양({"answers", "interest_tags", "trait_tags", ...})으로
+    # 네 가지 입력 방식. 전부 interview.py 가 같은 모양({"answers", "interest_tags", "trait_tags", ...})으로
     # 돌려주므로 아래 공통 처리(Q3 묻기 → run())는 한 번만 쓴다.
-    #   --profile <path>   : user_analysis/main.py 가 저장한 JSON을 그대로 읽는다 (대화 없음)
-    #   --full-interview   : user_analysis/main.py 와 완전히 같은 흐름 (7개 영역, 적응형 질문)
+    #   (플래그 없음)        : 기본값. user_analysis/main.py 와 완전히 같은 흐름 (7개 영역, 적응형 질문)
+    #   --profile <path>   : main.py 가 저장한 JSON을 그대로 읽는다 (대화 없음)
     #   --interview        : 데모용 축약 버전 (2개 영역, 고정 질문 최대 1회)
-    #   (플래그 없음)        : 기존 3질문 모드
-    iv = None
+    #   --basic            : 원래의 고정 3질문 모드 (user_analysis 연동 이전 방식)
     if "--profile" in sys.argv:
         from interview import from_profile_file
         path = sys.argv[sys.argv.index("--profile") + 1]
         iv = from_profile_file(path)
         print(f"\n({path} 의 프로필을 읽었습니다)")
-    elif "--full-interview" in sys.argv:
-        from interview import full_interview
-        iv = full_interview()
     elif "--interview" in sys.argv:
         from interview import interview
         iv = interview()
+    elif "--basic" in sys.argv:
+        iv = None
+    else:
+        from interview import full_interview
+        iv = full_interview()
 
     if iv is not None:
         # Q3(①②③)는 프로필에 대응하는 영역이 없어 세 모드 모두 따로 묻는다 — 규칙 기반이라 근거 태그가 하나 보장된다
