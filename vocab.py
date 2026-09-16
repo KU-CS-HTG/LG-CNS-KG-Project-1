@@ -210,14 +210,17 @@ CANON: dict[str, str] = {
     # ✗ 화학→Chemistry, 배터리/전지→Battery 는 채택하지 않음: 전공 raw 가 화학 과목을 전부 Chemical Engineering 으로 내므로
     #   Chemistry·Battery 노드는 어느 전공과도 이어지지 않는다. 기존 매핑(→ Chemical Engineering / → Electrochemistry) 유지 + 별칭만 보강
     "chemistry": "Chemical Engineering", "전지": "Electrochemistry", "battery": "Electrochemistry",
-    # ── 기계·제조: 세부 역학을 ME 의 자식 노드로 (팀원 안). 전공 raw 의 영문 표기도 같은 노드로 가야 정확 매칭이 된다
-    "메카트로닉스": "Mechatronics", "mechatronics": "Mechatronics",                     # (2단계의 → ME 를 덮음)
-    "자동화": "Automation",
-    "열역학": "Thermodynamics", "thermodynamics": "Thermodynamics",                     # (2단계의 → ME 를 덮음)
-    "유체역학": "Fluid Dynamics", "fluid mechanics": "Fluid Dynamics", "fluid dynamics": "Fluid Dynamics",
-    "열전달": "Heat Transfer", "구조해석": "Structural Analysis", "structural analysis": "Structural Analysis",
-    "동역학 해석": "Dynamics Analysis", "cfd": "CFD",
+    # ── 기계·제조
+    # ✗ 열역학/유체역학/구조해석/동역학/메카트로닉스를 ME 의 자식 노드로 쪼개는 안은 채택하지 않음 (재생성 실측):
+    #   직무 쪽에서 이 말을 요구하는 공고는 1~3건인데, 전공 쪽에서는 조선해양·원자핵·건설환경·바이오시스템이 유체역학·열역학 과목으로
+    #   Mechanical Engineering 을 얻고 있어서, 쪼개면 이 4개 전공이 ME 를 요구하는 신입 직무 15건과 끊긴다 (추론은 위로만 — 규칙 ③).
+    #   2단계 방식(과목명 수준의 세부 역학 → ME 별칭) 유지, 팀원 별칭만 보강
+    "열전달": "Mechanical Engineering", "heat transfer": "Mechanical Engineering",
+    "구조해석": "Mechanical Engineering", "동역학 해석": "Mechanical Engineering", "dynamics analysis": "Mechanical Engineering",
+    "fluid dynamics": "Mechanical Engineering",
+    "cfd": "CFD",                                                    # 전산 유체 — Simulation 의 자식 (팀원 안의 CFD→Fluid Dynamics→ME 는 두 단계)
     "사출": "Injection Molding", "압출": "Extrusion",
+    # ✗ "자동화" → Automation(ME) 도 채택하지 않음: 공고의 '자동화' 는 전부 IT 자동화(Infrastructure Automation, 자동화 도구) 라 기계가 아니다
     # ✗ catia/creo/solidworks/autocad → CAD 는 채택하지 않음: 2단계에서 도구 이름을 Mechanical Design 의 자식으로 두기로 했고
     #   (카드에 "CATIA (Mechanical Design 계열)" 로 보이게), 기계공학부가 Mechanical Design 을 정확히 기른다. "cad" 는 → Mechanical Design 유지
     # ── 전기·전자: Electronics / Circuit Design 을 EE 의 자식으로. 팀원 안의 Circuit Design → Electronics → EE 는 두 단계라 EE 직결로 바꿈
@@ -234,7 +237,9 @@ CANON: dict[str, str] = {
     # ── 통신·데이터센터
     "데이터센터": "Data Center",
     # ── 데이터·AI 도구
-    "opencv": "Computer Vision", "tableau": "Data Analysis", "google analytics": "Data Analysis", "ga": "Data Analysis",
+    "opencv": "Computer Vision",
+    # ✗ tableau/google analytics/ga → Data Analysis 는 채택하지 않음: 도구 언급 하나로 Data Analysis 를 주면 HSAD 디지털 기획(AI·GA·Tableau·SQL)이
+    #   컴퓨터공학부 입력에서 Smart Factory 를 밀어내 평가셋 #3·#9·I2 가 깨진다 (9/16 실측). "데이터 분석 툴" 을 뺀 것과 같은 원칙
     "mongodb": "Database", "apache spark": "Database",              # Spark 는 DB 가 아니라 분산 처리 엔진 — A 재검토 후보
     # ✗ pytorch/tensorflow → Machine Learning, postgresql → Database 직결은 채택하지 않음: 2단계 자식 노드(PyTorch → Deep Learning 등) 유지
     # ── 비즈니스: 영업은 Marketing 과 분리 (팀원 안) 하고 Marketing 의 자식으로 잇는다
@@ -318,9 +323,6 @@ PARENT: dict[str, str] = {
     # ── 팀원 확장 통합 (2026-09-16) — 전부 한 홉 (규칙 ①). 팀원 안의 두 단계(CFD→Fluid Dynamics→ME, Circuit Design→Electronics→EE)는 직결로 바꿈
     "Polymer Engineering": "Materials Engineering", "Metallurgical Engineering": "Materials Engineering",
     "Ceramics": "Materials Engineering", "Glass": "Materials Engineering",
-    "Mechatronics": "Mechanical Engineering", "Automation": "Mechanical Engineering",
-    "Thermodynamics": "Mechanical Engineering", "Fluid Dynamics": "Mechanical Engineering", "Heat Transfer": "Mechanical Engineering",
-    "Structural Analysis": "Mechanical Engineering", "Dynamics Analysis": "Mechanical Engineering",
     "Injection Molding": "Mechanical Engineering", "Extrusion": "Mechanical Engineering",
     "CFD": "Simulation",
     "Electronics": "Electrical Engineering", "Circuit Design": "Electrical Engineering",
