@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from vocab import canonicalize_all, PARENT
+from vocab import canonicalize_all, canonicalize_soft, PARENT
 
 DATA = Path(__file__).resolve().parent / "data"   # 이 파일이 있는 폴더 기준 → 어디서 실행해도 같은 경로
 STAGED = DATA / "staged_jobs.json"
@@ -47,6 +47,7 @@ def load_job_rows() -> list[dict]:
                 "source_url": s["source_url"],
                 "required": ext.get("required_skills", []),
                 "preferred": ext.get("preferred_skills", []),
+                "soft": ext.get("soft_skills", []),          # 직무가 요구하는 태도 — 성향 매칭용 (없는 직무도 많다)
             })
         print(f"입력: {STAGED.name} + {EXTRACTED.name} ({len(rows)}건)")
         return rows
@@ -66,6 +67,7 @@ def load_job_rows() -> list[dict]:
                 # v1은 required/preferred, v2는 required_skills/preferred_skills
                 "required": r.get("required") or r.get("required_skills", []),
                 "preferred": r.get("preferred") or r.get("preferred_skills", []),
+                "soft": r.get("soft_skills", []),
             })
         print(f"입력: {CURATED_V1.name} ({len(rows)}건)")
         return rows
@@ -87,8 +89,9 @@ def build_jobs() -> tuple[list[dict], set[str], list[str]]:
         # 필수에 이미 있는 건 우대에서 뺀다 (같은 역량이 양쪽에 뜨면 출력이 지저분해진다)
         pref = [s for s in pref if s not in set(req)]
 
-        if not req and not pref:
-            continue                       # 역량이 하나도 없는 직무는 그래프에 올려도 안 이어진다
+        if len(req) + len(pref) < 2:
+            continue                       # 역량 0~1개 직무는 제외. 1개짜리('영업마케팅: Data Analysis')는 집합 코사인에서
+                                           # 항상 만점이 나와 AI 직무(10개)를 밀어내는데, 추천 근거로는 너무 빈약하다 (9/15 실측)
 
         jobs.append({
             "id": r["job_id"],
@@ -98,6 +101,8 @@ def build_jobs() -> tuple[list[dict], set[str], list[str]]:
             "url": r["source_url"],
             "requires": req,
             "prefers": pref,
+            # 요구 태도 (SoftSkill). 빈 리스트 = "공고에 없음 또는 추출이 놓침" — 둘을 구분할 수 없으므로 '알 수 없음' 으로 다룬다
+            "soft": list(dict.fromkeys(c for c in map(canonicalize_soft, r.get("soft", [])) if c)),
         })
         skills |= set(req) | set(pref)
 
@@ -134,7 +139,16 @@ def build() -> None:
     via_parent = {s for s in job_skills - major_skills if PARENT.get(s) in major_skills}
     print(f"  ★ 정확히는 안 겹치지만 IS_A 한 홉으로 전공과 이어지는 직무 역량: {len(via_parent)}개 {sorted(via_parent)[:12]}")
     print(f"    ↑ 이 숫자가 0이면 추천 결과도 0이다. 어휘집이 갈렸다는 뜻.")
-    print(f"\n  CANON 추가 후보 {len(candidates)}개 → A에게 전달")
+    from collections import Counter
+    by_company = Counter(j["company"] for j in jobs)
+    print(f"  회사별 Job: {dict(by_company)}")
+
+    # CANON 추가 후보 → 파일. A 가 이걸 보고 어휘집에 넣을지 결정한다 (작업 가이드 A-5 'unmapped.txt')
+    cand_path = DATA / "canon_candidates.txt"
+    counts = Counter(t.strip() for r in load_job_rows() for t in r["required"] + r["preferred"])
+    ranked = sorted(candidates, key=lambda t: -counts.get(t, 0))          # 많이 나온 후보부터 — A 가 위에서부터 보면 된다
+    cand_path.write_text("\n".join(f"{counts.get(t, 0)}\t{t}" for t in ranked), encoding="utf-8")
+    print(f"\n  CANON 추가 후보 {len(candidates)}개 → {cand_path.name} (A에게 전달)")
     for t in candidates[:12]:
         print(f"    - {t}")
 
