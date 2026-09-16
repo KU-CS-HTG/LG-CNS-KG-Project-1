@@ -133,56 +133,120 @@ CANON: dict[str, str] = {
     "erp": "ERP", "sap": "SAP", "s/4hana": "S/4HANA", "s/4hana public cloud": "S/4HANA", "s/4hana cloud private": "S/4HANA",
     "fiori": "Fiori", "abap": "ABAP",
 
+
+    # ═══ 3단계 (2026-09-16 초안, A 검토 전) ═══
+    # 근거: 신입 직무 85건 중 33건이 어휘 밖이라 그래프에 못 올랐다 (LGES 22 · LGD 4 · LGU 4 · HSAD 3).
+    #       탈락 직무의 LLM 원출력(extracted_raw.json)과 canon_candidates.txt 2회 이상 41개를 대조해 만들었다.
+    #       새 대표 표기는 모두 서울대 과목명에 근거가 있는 것만 (규칙 ②). 어학·오피스 도구·자격증 그 자체는 넣지 않았다.
+    # ── 3단계 클러스터 ④ 배터리 공정·재료 분석 (LGES Cell개발·공정기술·생산운영 ↔ 화학생물공학부 '공정제어 및 설계'·재료공학부 '재료공정통계분석')
+    "2차전지": "Electrochemistry", "이차전지": "Electrochemistry", "2차전지 부품 개발": "Electrochemistry",
+    "cell 설계": "Electrochemistry", "cell design": "Electrochemistry", "cell 설계 이해": "Electrochemistry",
+    "electrochemical modeling": "Electrochemistry", "전기화학적 기본 지식": "Electrochemistry",
+    "공정": "Process Engineering", "process engineering": "Process Engineering", "공정 이해": "Process Engineering",
+    "공정 관련 지식": "Process Engineering", "선행공정": "Process Engineering", "전극 제조 공정 이해": "Process Engineering",
+    "r2r 공정": "Process Engineering", "r2r 공정 이해": "Process Engineering", "r2r 필름 성형": "Process Engineering",
+    "전극 믹싱": "Process Engineering", "전극 코팅": "Process Engineering", "전극 부자재 이해": "Process Engineering",
+    "전극 코터 검사기": "Process Engineering",
+    "2차전지 소재 개발": "Materials Engineering", "재료 전공": "Materials Engineering", "용접 재료": "Materials Engineering",
+    "물성 측정": "Materials Engineering",
+    "edx": "EDX", "xrf": "XRF",                                    # SEM 과 같은 재료 분석 장비 → PARENT
+    "전극 설비": "Manufacturing", "설비 유지보수": "Manufacturing",
+
+    # ── 3단계 클러스터 ⑤ 전력·제어·통신·회로 (LGES BMS/System/전장부품, LGU AIDC전기/NW ↔ 전기·정보공학부
+    #    '전력 및 에너지시스템의 기초'·'제어공학개론'·'통신의 기초'. 전공 raw 에 Control Engineering 은 이미 있다)
+    "전력": "Power Systems", "power systems": "Power Systems", "전력 계통": "Power Systems", "전력 지식": "Power Systems",
+    "전력전자": "Power Systems", "전력 변환": "Power Systems", "전력변환기기 동작원리": "Power Systems",
+    "전원 회로 설계": "Power Systems", "dcdc 설계": "Power Systems", "ac/dc 회로 이론": "Power Systems", "전기 설비": "Power Systems",
+    "제어": "Control Engineering", "제어공학": "Control Engineering", "control engineering": "Control Engineering",
+    "control systems": "Control Engineering", "자동제어": "Control Engineering",
+    "제어 회로 설계": "Control Engineering", "제어 프로그램 설계": "Control Engineering",
+    "통신": "Telecommunications", "통신 공학": "Telecommunications", "통신공학": "Telecommunications",
+    "communications engineering": "Telecommunications", "정보통신": "Telecommunications", "광통신공학": "Telecommunications",
+    "무선통신": "Telecommunications", "이동통신": "Telecommunications",
+    "5g": "Telecommunications", "lte": "Telecommunications", "통신 회로 설계": "Telecommunications",
+    "ccna": "CCNA", "ccnp": "CCNP",                                # 네트워크 자격증 → PARENT Network
+    "전기 지식": "Electrical Engineering", "전기 설계": "Electrical Engineering", "전기전자 전공": "Electrical Engineering",
+    "전기 공학 관련 학과": "Electrical Engineering", "전기 관련 자격증": "Electrical Engineering",
+    "전기회로 설계": "Electrical Engineering", "측정 회로 설계": "Electrical Engineering",
+    "기능 안전 회로 설계": "Electrical Engineering", "emc 설계 평가": "Electrical Engineering",
+    "orcad": "OrCAD",                                              # SmartSpice 와 같은 회로 도구 → PARENT
+
+    # ── 3단계 클러스터 ⑥ 기계·설계 별칭 보강 (LGES 전장부품설계·설비기술·Pack개발 — 새 대표 표기 없음)
+    "기계 지식": "Mechanical Engineering", "기구 지식": "Mechanical Engineering", "기구적인 지식": "Mechanical Engineering",
+    "기계 전공": "Mechanical Engineering", "메카트로닉스 전공": "Mechanical Engineering", "강도설계": "Mechanical Engineering",
+    "기계 설계": "Mechanical Design", "2d 설계": "Mechanical Design", "2d 도면 작성": "Mechanical Design",
+    "3d tool": "Mechanical Design", "cad 활용 능력": "Mechanical Design", "solid works": "SolidWorks",
+    "performance simulation": "Simulation", "mechanical properties modeling": "Simulation",
+
+    # ── 3단계 클러스터 ⑦ 경영·마케팅·디자인 (HSAD 캠페인/광고제작, LGD 경영관리/HRM/ER, LGES 영업마케팅, LGU 사업기획
+    #    ↔ 경영학과·디자인과. 전공 raw 에 Marketing·Accounting·Finance·Design 이 이미 있어 재추출 없이 이어진다)
+    "경영": "Management", "management": "Management", "경영학": "Management",
+    "마케팅": "Marketing", "marketing": "Marketing", "브랜딩": "Marketing", "브랜드": "Marketing",
+    "광고": "Marketing", "소비자 트렌드": "Marketing", "시장조사": "Marketing",
+    "영업": "Marketing", "b2b 영업": "Marketing",                    # 영업(Sales) 과목은 없다 — 마케팅으로 묶을지 A 판단
+    "디지털 마케팅": "Digital Marketing", "digital marketing": "Digital Marketing",   # 경영학과 '디지털 마케팅' 과목 → PARENT Marketing
+    "디지털 플랫폼": "Digital Marketing", "소셜 플랫폼": "Digital Marketing", "소셜 미디어": "Digital Marketing", "sns": "Digital Marketing",
+    "경영지도사": "Management",
+    "회계": "Accounting", "accounting": "Accounting", "공인회계사": "Accounting", "세무사": "Accounting",
+    "세무회계": "Accounting", "전산 회계 관련 자격증": "Accounting",
+    "재무": "Finance", "finance": "Finance", "재무관리": "Finance", "cfa": "Finance",
+    "financial engineering": "Finance", "금융": "Finance",
+    "인사관리": "Human Resources", "human resources": "Human Resources", "hrm": "Human Resources", "hr": "Human Resources",
+    "노사관계": "Human Resources", "공인노무사": "Human Resources", "노동관계 법령 해석": "Human Resources",
+    "임단협 합의서 작성": "Human Resources", "근로감독": "Human Resources",
+    "디자인": "Design", "design": "Design", "디자인 tool": "Design", "시각디자인": "Design", "제품디자인": "Design",
+    "ai tool": "LLM", "ai 도구": "LLM",                               # 광고제작·사업기획의 '생성형 AI 도구'
+    "지표 분석": "Data Analysis", "소재 데이터 분석": "Data Analysis", "데이터 사이언스": "Data Analysis", "data science": "Data Analysis",
+    # ✗ "데이터 분석 툴"·"데이터 분석·시각화 도구" 는 넣지 않았다: 도구 언급 하나로 Data Analysis 를 주면 HSAD 미디어(AI·Excel·PPT·도구)가
+    #   역량 2개짜리 직무로 올라와 통계학과 입력에서 AI (AX) 를 밀어낸다 (집합 코사인은 역량이 적은 직무에 유리 — 2개 규칙을 둔 이유와 같다)
+
+    # ═══ 팀원 확장 통합 (2026-09-16, main ec0874c·f5f06d8 의 CANON 확장을 3단계와 합친 것 — 결정 근거는 docs/20260916_어휘_3단계_초안.md 8절) ═══
+    # ── 화학·소재: 그대로 채택
+    "화공": "Chemical Engineering", "화학공": "Chemical Engineering", "기계공": "Mechanical Engineering", "전기전자": "Electrical Engineering",
+    "auto cad": "AutoCAD", "재료 공학": "Materials Engineering", "신소재공학": "Materials Engineering", "신소재": "Materials Engineering",
+    "배터리관리시스템": "BMS",
+    "고분자공학": "Polymer Engineering", "금속재료공학": "Metallurgical Engineering",
+    "세라믹": "Ceramics", "유리": "Glass", "glass": "Glass",
+    # ✗ 화학→Chemistry, 배터리/전지→Battery 는 채택하지 않음: 전공 raw 가 화학 과목을 전부 Chemical Engineering 으로 내므로
+    #   Chemistry·Battery 노드는 어느 전공과도 이어지지 않는다. 기존 매핑(→ Chemical Engineering / → Electrochemistry) 유지 + 별칭만 보강
+    "chemistry": "Chemical Engineering", "전지": "Electrochemistry", "battery": "Electrochemistry",
+    # ── 기계·제조
+    # ✗ 열역학/유체역학/구조해석/동역학/메카트로닉스를 ME 의 자식 노드로 쪼개는 안은 채택하지 않음 (재생성 실측):
+    #   직무 쪽에서 이 말을 요구하는 공고는 1~3건인데, 전공 쪽에서는 조선해양·원자핵·건설환경·바이오시스템이 유체역학·열역학 과목으로
+    #   Mechanical Engineering 을 얻고 있어서, 쪼개면 이 4개 전공이 ME 를 요구하는 신입 직무 15건과 끊긴다 (추론은 위로만 — 규칙 ③).
+    #   2단계 방식(과목명 수준의 세부 역학 → ME 별칭) 유지, 팀원 별칭만 보강
+    "열전달": "Mechanical Engineering", "heat transfer": "Mechanical Engineering",
+    "구조해석": "Mechanical Engineering", "동역학 해석": "Mechanical Engineering", "dynamics analysis": "Mechanical Engineering",
+    "fluid dynamics": "Mechanical Engineering",
+    "cfd": "CFD",                                                    # 전산 유체 — ME 의 자식 (팀원 최종안)
+    "사출": "Injection Molding", "압출": "Extrusion",
+    "자동화": "Automation",                                          # 팀원 안. 공고의 '자동화' 는 대부분 IT 자동화라 이 별칭이 실제로 걸리는 공고는 없다 (실측 0건)
+    # ✗ catia/creo/solidworks/autocad → CAD 는 채택하지 않음: 2단계에서 도구 이름을 Mechanical Design 의 자식으로 두기로 했고
+    #   (카드에 "CATIA (Mechanical Design 계열)" 로 보이게), 기계공학부가 Mechanical Design 을 정확히 기른다. "cad" 는 → Mechanical Design 유지
+    # ── 전기·전자: 팀원 최종안(821a617)대로 전자·회로설계·전장은 Electrical Engineering 별칭 (2단계와 같은 방식). 별도 노드 없음
+    "전자": "Electrical Engineering", "circuit design": "Electrical Engineering",
+    "자동차 전장 시스템": "Electrical Engineering", "전장": "Electrical Engineering",
+    "에너지공학": "Energy Engineering", "energy engineering": "Energy Engineering",
+    # ── 디스플레이·광학·반도체
+    "디스플레이": "Display", "display": "Display", "광학": "Optics", "반도체": "Semiconductor",
+    "반도체 패키징": "Semiconductor Packaging", "패키징": "Semiconductor Packaging",   # 팀원 안. Packaging→Semiconductor→EE 두 단계지만 PyTorch→DL→ML 과 같은 선례
+    # ── 통신·데이터센터
+    "데이터센터": "Data Center",
+    # ── 데이터·AI 도구
+    "opencv": "Computer Vision",
+    # ✗ tableau/google analytics/ga → Data Analysis 는 채택하지 않음: 도구 언급 하나로 Data Analysis 를 주면 HSAD 디지털 기획(AI·GA·Tableau·SQL)이
+    #   컴퓨터공학부 입력에서 Smart Factory 를 밀어내 평가셋 #3·#9·I2 가 깨진다 (9/16 실측). "데이터 분석 툴" 을 뺀 것과 같은 원칙
+    "mongodb": "Database", "apache spark": "Database",              # Spark 는 DB 가 아니라 분산 처리 엔진 — A 재검토 후보
+    # ✗ pytorch/tensorflow → Machine Learning, postgresql → Database 직결은 채택하지 않음: 2단계 자식 노드(PyTorch → Deep Learning 등) 유지
+    # ── 비즈니스: 영업은 Marketing 과 분리 (팀원 안) 하고 Marketing 의 자식으로 잇는다
+    "영업": "Sales", "해외영업": "Sales", "b2b 영업": "Sales", "sales": "Sales",          # (3단계의 → Marketing 을 덮음)
+    "crm": "CRM", "세일즈포스": "CRM",
+    "재무회계": "Accounting",                                        # 팀원 안은 Finance — 재무회계(financial accounting)는 회계 과목
+
     # ── 비기술 역량 (전공 쪽에서 자주 나온다)
     "커뮤니케이션": "Communication", "의사소통": "Communication",
     "문제해결": "Problem Solving", "문제 해결": "Problem Solving",
     "프로젝트관리": "Project Management", "프로젝트 관리": "Project Management", "pm": "Project Management",
-
-    # ── 화학 · 소재 확장 (위 "2단계 클러스터 ①"에 없는 별칭만 — 겹치는 키는 그쪽 값을 따른다)
-    "화학공": "Chemical Engineering", "화공": "Chemical Engineering",
-    "재료 공학": "Materials Engineering",
-    "신소재공학": "Materials Engineering", "신소재": "Materials Engineering",
-    "고분자공학": "Polymer Engineering",
-    "금속재료공학": "Metallurgical Engineering",
-    "세라믹": "Ceramics", "유리": "Glass", "glass": "Glass",
-    "전지": "Electrochemistry",              # '배터리'는 클러스터①에서 이미 Electrochemistry
-    "배터리관리시스템": "BMS",
-
-    # ── 기계 · 제조 공정 확장 ("2단계 클러스터 ②"에 없는 별칭만)
-    "기계공": "Mechanical Engineering",
-    "자동화": "Automation",
-    "열전달": "Heat Transfer",
-    "구조해석": "Structural Analysis", "동역학 해석": "Dynamics Analysis", "cfd": "CFD",
-    "사출": "Injection Molding", "압출": "Extrusion",
-    # CAD 툴 이름(catia/creo/solidworks/autocad/cad)은 클러스터②가 이미 개별 대표 표기로 관리 — 여기선 추가 안 함
-    "반도체 패키징": "Semiconductor Packaging", "패키징": "Semiconductor Packaging",
-
-    # ── 전기 · 전자 · 에너지 확장 ("2단계 클러스터 ②"에 없는 별칭만)
-    "전기전자": "Electrical Engineering", "전자": "Electrical Engineering",
-    "에너지공학": "Energy Engineering",
-    "자동차 전장 시스템": "Electrical Engineering", "전장": "Electrical Engineering",
-    # '전자공학'·'회로설계'·'회로 설계'는 클러스터②에서 이미 Electrical Engineering
-
-    # ── 디스플레이 · 광학 · 반도체 (LG디스플레이, LG이노텍 — 새 영역)
-    "디스플레이": "Display", "display": "Display",
-    "광학": "Optics",
-    "반도체": "Semiconductor",
-
-    # ── 통신 · 네트워크 확장 (LG유플러스 — 새 영역)
-    "정보통신": "Telecommunications", "통신": "Telecommunications",
-    "5g": "Telecommunications",
-    "데이터센터": "Data Center",
-
-    # ── 데이터 · AI 도구 확장 (위 "기존 대표 표기의 별칭 보강"에 없는 것만)
-    "opencv": "Computer Vision",
-    "tableau": "Data Analysis", "google analytics": "Data Analysis", "ga": "Data Analysis",
-    "mongodb": "Database", "apache spark": "Database",
-    # pytorch/tensorflow/postgresql은 위에서 이미 각각의 고유 대표 표기(PyTorch/TensorFlow/PostgreSQL)로 관리
-
-    # ── 비즈니스 · 마케팅 (HSAD, D&O, LG전자 영업 — 새 영역)
-    "마케팅": "Marketing", "영업": "Sales", "해외영업": "Sales",
-    "회계": "Accounting", "재무": "Finance", "재무회계": "Finance",
-    "crm": "CRM", "세일즈포스": "CRM",
 }
 
 # ═════════════════════════════════════════════════════════════
@@ -207,7 +271,7 @@ PARENT: dict[str, str] = {
     "Graph DB": "Database", "Neo4j": "Database",
     # 클라우드·인프라 계열
     "AWS": "Cloud", "Azure": "Cloud", "GCP": "Cloud", "Docker": "Cloud", "Kubernetes": "Cloud",
-    "DevOps": "Cloud", "CI/CD": "Cloud", "Terraform": "Cloud", "Jenkins": "Cloud", "Data Center": "Cloud",
+    "DevOps": "Cloud", "CI/CD": "Cloud", "Terraform": "Cloud", "Jenkins": "Cloud",
     # 프로그래밍 언어 → Programming
     "Java": "Programming", "Python": "Programming", "JavaScript": "Programming", "TypeScript": "Programming",
     "C": "Programming", "C++": "Programming", "C#": "Programming", "Node.js": "Programming",
@@ -222,25 +286,45 @@ PARENT: dict[str, str] = {
     # 방법론
     "Agile": "Project Management",
 
-    # 화학·소재 계열
-    "Electrochemistry": "Chemical Engineering",    # 배터리/전기화학은 화학공학의 세부 분야
-    "BMS": "Electrical Engineering",
+    # ── 2단계 (2026-09-15): 기존 부모에 붙는 도구
+    "PyTorch": "Deep Learning", "TensorFlow": "Deep Learning",
+    "PostgreSQL": "Database",
+    "R": "Statistics", "minitab": "Statistics", "JMP": "Statistics",
+    "MATLAB": "Numerical Analysis",
+    "VBA": "Programming",
+    # ── 2단계 클러스터 ① 배터리·화학·재료
+    "BMS": "Electrical Engineering",      # 9/16 팀원 안 채택 — BMS HW 공고는 회로 설계 (2단계 Electrochemistry 에서 이동)
+    "Rheology": "Materials Engineering", "SEM": "Materials Engineering",
+    # ── 2단계 클러스터 ② 기계·설계·시뮬레이션·전기 HW
+    "CATIA": "Mechanical Design", "Creo": "Mechanical Design", "SolidWorks": "Mechanical Design",
+    "AutoCAD": "Mechanical Design", "Inventor": "Mechanical Design",
+    "Simulink": "Simulation", "FDTD": "Simulation", "SPEOS": "Simulation", "LightTools": "Simulation", "Setfos": "Simulation",
+    "SmartSpice": "Electrical Engineering", "Cadence Spectre": "Electrical Engineering",
+    # ── 2단계 클러스터 ③ 로봇·생산·ERP
+    "ROS": "Robotics", "ROS2": "Robotics", "Autonomous Driving": "Robotics", "PLC": "Robotics", "AMR": "Robotics",
+    "Digital Twin": "Manufacturing",
+    "SAP": "ERP", "S/4HANA": "ERP", "Fiori": "ERP", "ABAP": "ERP",
+    # ── 3단계 (2026-09-16 초안, A 검토 전)
+    # Electrochemistry: 전기화학 과목은 화학부·화공·재료·에너지자원 4곳에 있지만 전공 raw 는 전부 Chemical Engineering 으로 묶었다
+    #   (어휘 목록에 Electrochemistry 가 있었는데도). 재추출에 기대지 말고 한 홉으로 잇는다.
+    "Electrochemistry": "Chemical Engineering", "Process Engineering": "Chemical Engineering",
+    "EDX": "Materials Engineering", "XRF": "Materials Engineering",
+    "Power Systems": "Electrical Engineering", "Telecommunications": "Electrical Engineering",
+    "OrCAD": "Electrical Engineering",
+    "CCNA": "Network", "CCNP": "Network",
+    # 경영 4분야 → Management. 전공 raw 에 Marketing·Accounting·Finance 는 있고 Human Resources 는 없어서 (인사관리·노사관계론은
+    # Management 로 묶임) HR 은 이 홉으로만 이어진다. 기술 쪽 Java→Programming 과 같은 꼴.
+    "Marketing": "Management", "Accounting": "Management", "Finance": "Management", "Human Resources": "Management",
+    "Digital Marketing": "Marketing",                # HSAD 캠페인 기획(브랜딩·광고·디지털/소셜 플랫폼)이 Marketing 하나로 뭉쳐 2개 규칙에 걸리던 것을 푼다
+    # ── 팀원 확장 통합 (2026-09-16) — 전부 한 홉 (규칙 ①). 팀원 안의 두 단계(CFD→Fluid Dynamics→ME, Circuit Design→Electronics→EE)는 직결로 바꿈
     "Polymer Engineering": "Materials Engineering", "Metallurgical Engineering": "Materials Engineering",
     "Ceramics": "Materials Engineering", "Glass": "Materials Engineering",
-
-    # 기계·제조 공정 계열 → Mechanical Engineering
-    #   메카트로닉스·열역학·유체역학·CAD 는 클러스터②가 이미 Mechanical Engineering/개별 표기로 관리 — 여기선 생략
-    "Automation": "Mechanical Engineering",
-    "Heat Transfer": "Mechanical Engineering", "Structural Analysis": "Mechanical Engineering",
-    "Dynamics Analysis": "Mechanical Engineering", "Injection Molding": "Mechanical Engineering",
-    "Extrusion": "Mechanical Engineering", "CFD": "Mechanical Engineering",
-    "Semiconductor Packaging": "Semiconductor",
-
-    # 전기·전자·에너지 계열
+    "Injection Molding": "Mechanical Engineering", "Extrusion": "Mechanical Engineering",
+    "CFD": "Mechanical Engineering", "Automation": "Mechanical Engineering",
+    "Display": "Electrical Engineering", "Semiconductor": "Electrical Engineering", "Semiconductor Packaging": "Semiconductor",
     "Energy Engineering": "Electrical Engineering",
-
-    # 비즈니스 계열
-    "CRM": "Sales",
+    "Data Center": "Cloud",
+    "Sales": "Marketing", "CRM": "Sales",
 }
 
 _canon_values = set(CANON.values())
