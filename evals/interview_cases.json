@@ -39,5 +39,45 @@
       "Data Analysis"
     ],
     "expect_soft_match": true
+  },
+  {
+    "id": "I3",
+    "script": [
+      "안녕하세요. 화학을 제일 좋아하고, 특히 배터리나 전기화학 같은 에너지 소재가 어떻게 작동하는지 궁금해서 관련 책이랑 영상을 찾아봐요. 실험 동아리에서 실험 계획 세우고 결과를 표로 정리해서 발표하는 걸 자주 맡아요.",
+      "화학 실험 동아리에서 전지 만들기 실험을 했고, 결과를 엑셀로 정리했어요.",
+      "꼼꼼하게 계획 세우고 끝까지 마무리하는 편이에요."
+    ],
+    "q3": "1",
+    "expect_major_top3": [
+      "화학생물공학부",
+      "화학부",
+      "에너지자원공학과"
+    ],
+    "expect_trait_tags_subset": [
+      "Project Management"
+    ],
+    "expect_stated_tags_subset": [
+      "Chemical Engineering"
+    ],
+    "note": "비IT 인터뷰 ① 배터리. 관심 '화학' 사전 직행, 계획성·조정능력 → Project Management. 성향 판단(infer_orientation)도 PM 을 1.0 으로 얹는다"
+  },
+  {
+    "id": "I4",
+    "script": [
+      "저는 사람들 앞에서 뭔가 소개하고 홍보하는 게 좋아요. 학교 축제 홍보팀에서 SNS 계정 운영하고 포스터 문구 쓰는 걸 맡았는데, 어떤 글이 반응이 좋은지 보는 게 재밌었어요. 친구들이 아이디어 잘 낸다고 해요.",
+      "축제 홍보 SNS 를 운영하면서 반응 좋은 게시물을 분석해 봤어요.",
+      "새로운 아이디어를 내고 사람들 설득하는 걸 잘해요."
+    ],
+    "q3": "3",
+    "expect_major_top3": [
+      "경영학과",
+      "경영대학"
+    ],
+    "expect_trait_tags_subset": [],
+    "expect_stated_tags_subset": [
+      "Digital Marketing"
+    ],
+    "expect_soft_match": true,
+    "note": "비IT 인터뷰 ② 마케팅. 'SNS 운영' → Digital Marketing 사전 직행. 발표력 → Communication ✓ (영업마케팅 요구 태도). PM(1.0) 때문에 건설환경도시공학부가 2위로 바짝 붙는다 — 성향 판단 가중치 논의 근거"
   }
 ]
