@@ -217,36 +217,71 @@ def _format_conversation(history: list[dict[str, str]]) -> str:
     return "\n".join(f"{'학생' if h['role'] == 'student' else 'AI'}: {h['content']}" for h in history)
 
 
+class InterviewSession:
+    """user_analysis/main.py 와 같은 흐름(7개 영역, 적응형 질문)을 **한 걸음씩** 진행한다.
+
+    full_interview() 는 CLI 의 input()/print() 루프로 이걸 감싼 것뿐이다 — 로직은 여기 하나뿐이다.
+    webapp.py 처럼 매 요청마다 한 걸음만 내딛고 상태를 어딘가에 들고 있어야 하는 곳(HTTP는 대화 중간에
+    멈춰 있을 수 없다)에서는 이 클래스를 직접 쓴다: start() → answer() 를 다음 질문이 None 이 될 때까지
+    반복하고, 끝나면 finish() 로 profile_to_inputs() 결과를 받는다.
+    """
+
+    def __init__(self) -> None:
+        self.profile: StudentProfileAnalysis | None = None
+        self.intro: str | None = None
+        self.history: list[dict[str, str]] = []
+        self.extra: list[str] = []
+        self.counts: dict[str, int] = {area: 0 for area in PROFILE_AREAS}
+        self._pending_area: str | None = None
+        self._pending_question: str | None = None
+
+    def start(self, intro: str) -> str | None:
+        """자기소개 → 프로필 초기화(LLM 1회). 다음 질문을 돌려준다. 처음부터 다 채워졌으면 None."""
+        self.intro = intro
+        self.profile = analyze_introduction(intro)
+        self.history = [{"role": "student", "content": intro}]
+        return self._advance()
+
+    def answer(self, text: str) -> str | None:
+        """직전 질문에 대한 답 → 프로필 갱신(LLM 1회). 다음 질문을 돌려준다. 더 물을 게 없으면 None."""
+        area = self._pending_area
+        self.history += [{"role": "assistant", "content": self._pending_question},
+                          {"role": "student", "content": text}]
+        self.extra.append(text)
+        self.profile = update_profile(self.profile, area, analyze_area_answer(area, text))
+        return self._advance()
+
+    def _advance(self) -> str | None:
+        available = [a for a in get_missing_areas(self.profile) if self.counts[a] < FULL_INTERVIEW_MAX_PER_AREA]
+        if is_profile_complete(self.profile) or not available:          # 더 물어볼 수 있는 영역이 없으면 종료
+            self._pending_area = self._pending_question = None
+            return None
+        q = generate_next_question(missing_areas=available, conversation=_format_conversation(self.history))
+        self.counts[q.area] += 1
+        self._pending_area, self._pending_question = q.area, q.question
+        return q.question
+
+    def finish(self) -> dict:
+        """profile_to_inputs() 결과. llm_calls 는 자기소개 분석 + 영역 분석 + infer_orientation() 합."""
+        result = profile_to_inputs(self.profile, intro=self.intro, extra_texts=self.extra)
+        result["llm_calls"] = 1 + sum(self.counts.values()) + 1
+        return result
+
+
 def full_interview(ask=input, say=print) -> dict:
     """user_analysis/main.py 와 완전히 같은 흐름 — question_agent 가 7개 영역을 전부 그때그때 물어본다.
 
     interview() 보다 LLM 호출이 훨씬 많다(매 라운드 질문 생성 1회 + 영역 분석 1회). 데모용 지름길이 아니라
-    "app.py 에서 바로 main.py 를 돌린 것"이 필요할 때 쓴다. 완성된 프로필을 넘기는 순간까지는
-    user_analysis 원본 함수(generate_next_question/update_profile/...)를 그대로 호출할 뿐이다.
+    "app.py 에서 바로 main.py 를 돌린 것"이 필요할 때 쓴다. 실제 진행은 InterviewSession 이 한다 —
+    이 함수는 그걸 input()/print() 루프로 감싼 CLI 용 얇은 래퍼.
     """
     say(f"\n{INTRO_PROMPT}")
-    intro = ask("> ")
-    profile = analyze_introduction(intro)
-    history: list[dict[str, str]] = [{"role": "student", "content": intro}]
-    extra: list[str] = []
-    counts = {area: 0 for area in PROFILE_AREAS}
-
-    while not is_profile_complete(profile):
-        available = [a for a in get_missing_areas(profile) if counts[a] < FULL_INTERVIEW_MAX_PER_AREA]
-        if not available:                                              # 더 물어볼 수 있는 영역이 없으면 종료
-            break
-
-        q = generate_next_question(missing_areas=available, conversation=_format_conversation(history))
-        counts[q.area] += 1
-        say(f"\n{q.question}")
-        ans = ask("> ")
-        history += [{"role": "assistant", "content": q.question}, {"role": "student", "content": ans}]
-        extra.append(ans)
-        profile = update_profile(profile, q.area, analyze_area_answer(q.area, ans))
-
-    result = profile_to_inputs(profile, intro=intro, extra_texts=extra)
-    result["llm_calls"] = 1 + sum(counts.values()) + 1   # 자기소개 분석 + 영역 분석 + infer_orientation()
-    return result
+    session = InterviewSession()
+    q = session.start(ask("> "))
+    while q is not None:
+        say(f"\n{q}")
+        q = session.answer(ask("> "))
+    return session.finish()
 
 
 def load_profile(path: str | Path) -> StudentProfileAnalysis:

@@ -86,7 +86,13 @@ pip install -r requirements.txt
 python webapp.py
 ```
 
-`http://localhost:5000` 접속. `app.py`(CLI)와 완전히 같은 로직(`run` / `render` / `explain_stream`)을 그대로 불러 쓰므로, 질문 흐름·전공/직무 판정·[진로 추천] 문단이 동일합니다. `.env`에 `OPENAI_API_KEY`가 있어야 합니다.
+`http://localhost:5000` 접속. `app.py`(CLI)의 기본 흐름(플래그 없이 `python app.py`)과 완전히 같은 인터뷰를
+씁니다 — `interview.InterviewSession`으로 `user_analysis/main.py`와 같은 적응형 질문(7개 영역)을 채팅
+형태로 한 걸음씩 진행하고, 끝나면 `run` / `render` / `explain_stream`을 그대로 불러 전공·과목·직무를
+찾습니다. `.env`에 `OPENAI_API_KEY`가 있어야 합니다.
+
+화면에는 `[진로 추천]` 문단만 보입니다. 전공 순위·근거 과목·직무 커버리지 같은 세부 근거는 결과 화면
+아래 "세부 근거 보기" 링크로 따로 열리는 `/details/<result_id>` 페이지에서 확인합니다.
 
 ## `app.py` 입력 방식 4가지
 
