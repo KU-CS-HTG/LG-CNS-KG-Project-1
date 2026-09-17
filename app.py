@@ -187,7 +187,7 @@ def _wrap_items(prefix: str, items: list[str], indent: str, sep: str = ", ") -> 
     # 이어지는 줄의 들여쓰기: 접두어가 짧으면("✓ ", "○ ") 그 폭만큼, 길면("≈ Machine Learning 계열로 커버 — ") 2칸만 —
     # 긴 접두어 폭만큼 들여 쓰면 남는 폭이 30칸도 안 돼 항목이 한두 개씩 뚝뚝 끊긴다 (9/17 병합 때 실측)
     pw = _disp_width(prefix)
-    cont = indent + " " * (pw if pw <= 8 else 2)
+    cont = indent + " " * (pw if pw <= 12 else 2)
     first = True
     for it in items:
         piece = it if first else sep + it
@@ -273,10 +273,11 @@ def render(r: dict) -> str:
         return "이야기에서 이어질 역량을 아직 찾지 못했어. 좋아하는 과목이나 직접 해 본 활동을 조금 더 알려줄래?"
 
     IND = " " * 10
-    profile = " · ".join(r["tags"])
+    L = _wrap_items("[프로필]  ", list(r["tags"]), "", sep=" · ")             # 태그가 4개면 한 줄이 72칸을 넘는다
     if r.get("inferred_tags"):                                             # 성향에서 추정한 태그는 근거 태그와 구분해 보여준다
-        profile += "   (성향에서 추정: " + " · ".join(r["inferred_tags"]) + ")"
-    L = [f"[프로필]  {profile}", ""]
+        L += _wrap_items("(성향에서 추정: ", list(r["inferred_tags"]), IND, sep=" · ")
+        L[-1] += ")"
+    L.append("")
 
     # ── [전공]  ① 전수 순위 + 학생 태그가 어떻게 이어졌는지 (✓ 정확 / ≈ 계열 / ○ 미연결) + 역량 연결도 바
     m, rk = r["major"], r["ranking"]
@@ -284,14 +285,14 @@ def render(r: dict) -> str:
     L.append(f"[전공]    {major_disp}")
     # 한 줄로 쓰면 <pre> 폭(LINE_WIDTH)을 넘어 웹에서 둘째 줄이 왼쪽 끝으로 밀린다(9/17) — 처음부터 두 줄로 끊고
     # 둘째 줄도 IND 로 시작해 어떤 화면 폭에서도 들여쓰기가 깨지지 않게 한다.
-    L.append(f"{IND}선택 이유: 전체 {r['total_majors']}개 전공 중 보유 역량과 관련된 {len(rk)}개 전공을 선정했고,")
+    L.append(f"{IND}선택 이유: 전체 {r['total_majors']}개 전공 중 보유 역량과 관련된 {len(rk)}개를 선정,")   # '전공을 선정했고' 는 79칸
     L.append(f"{IND}그 중 1위가 {major_disp}")
     matched, fam = _student_links(r)                                       # fam = {학생 태그: 그것을 커버한 전공 역량}
     ev = m.get("evidence", {})
     if matched:
         L += _wrap_items("✓ ", [f"{s} (과목 {len(ev.get(s, []))}개)" for s in matched], IND, sep=" · ")
     for tag, parent in sorted(fam.items()):
-        L.append(f"{IND}≈ {tag} → {parent} 계열로 커버 (과목 {len(ev.get(parent, []))}개)")
+        L.append(f"{IND}≈ {tag} → {parent} 계열 (과목 {len(ev.get(parent, []))}개)")      # '계열로 커버' 는 74칸
     inferred = set(r.get("inferred_tags", []))
     missing = _unlinked(r)
     if missing:
@@ -331,10 +332,17 @@ def render(r: dict) -> str:
         L += ["", f"{IND}(요구 태도의 ✓ = 너의 강점 성향과 맞음)"]
 
     # ── 출처 한 줄 — "과목명이 실존한다"(확인 항목 ②) 와 "왜 서울대만?" 의 근거. 과목명은 넣지 않는다 (확인 ② 가 누출로 잡는다)
-    schools = " · ".join(sorted({x["school"] for x in rk}))
-    L += ["", "─" * 10,
-          f"출처 · 과목: {schools} 교육과정 — 대학알리미 {SOURCE_URLS['curriculum']} · 공고: LG Careers {SOURCE_URLS['jobs']} (스냅샷)"]
+    L += _source_lines(rk)
     return "\n".join(L)
+
+
+def _source_lines(rk: list[dict]) -> list[str]:
+    """카드 끝 출처. 한 줄로 쓰면 110칸이라 웹 <pre> 에서 0열로 꺾인다 — 과목/URL/공고 세 줄."""
+    schools = " · ".join(sorted({x["school"] for x in rk}))
+    return ["", "─" * 10,
+            f"출처 · 과목: {schools} 교육과정 — 대학알리미",
+            f"             {SOURCE_URLS['curriculum']}",
+            f"     · 공고: LG Careers (스냅샷) {SOURCE_URLS['jobs']}"]
 
 
 # ═════════════════════════════════════════════════════════════
@@ -377,8 +385,8 @@ def render_reverse(rv: dict) -> str:
     if j.get("url"):
         L.append(f"{IND}공고 → {j['url']}")
     if rv["candidates"]:
-        L.append(f"{IND}같은 이름 {len(rv['candidates'])}건 더 — "
-                 + " · ".join(f"{c['company']} {c['role']} ({c['career_type']})" for c in rv["candidates"][:4]))
+        L += _wrap_items(f"같은 이름 {len(rv['candidates'])}건 더 — ",
+                         [f"{c['company']} {c['role']} ({c['career_type']})" for c in rv["candidates"][:4]], IND, sep=" · ")
     L.append("")
 
     rk = rv["ranking"]
@@ -402,9 +410,7 @@ def render_reverse(rv: dict) -> str:
     for sub in rv["subjects"]:
         L.append(f"{IND}{sub['subject']} → {', '.join(sub['for'])}")
 
-    schools = " · ".join(sorted({x["school"] for x in rk}))
-    L += ["", "─" * 10,
-          f"출처 · 과목: {schools} 교육과정 — 대학알리미 {SOURCE_URLS['curriculum']} · 공고: LG Careers {SOURCE_URLS['jobs']} (스냅샷)"]
+    L += _source_lines(rk)
     return "\n".join(L)
 
 
@@ -424,6 +430,7 @@ EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
 (예: "LG 직무와 연결되는 61개 전공을 모두 살펴봤고, 당신의 역량과 관련된 전공 15개 중 경영학과가 가장 잘 어울려요.
  당신의 역량 세 가지 중 두 가지(데이터 분석·통계)는 경영학과 과목에서 직접 다루고, 나머지 하나(파이썬)는
  아직 경영학과 과목으로 이어지지 않았어요.")
+계열로 이어진 역량이 있을 때만 "~계열로 이어져요" 라고 쓰고, 미연결 역량을 계열로 이어졌다고 쓰지 않는다 (9/17 팀 결정 B).
 전공명·과목명·직무명·회사명은 문장 안에 자연스럽게 포함한다.
 
 절대 규칙:
