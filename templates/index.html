@@ -18,10 +18,13 @@
   }
   h1 { font-size: 20px; margin: 0 0 24px; }
 
-  .bubble { margin-bottom: 16px; }
+  .bubble { margin-bottom: 16px; display: flex; flex-direction: column; }
   .bubble .who { font-size: 12px; color: #8a8f98; margin-bottom: 4px; }
-  .bubble.ai .text { background: #f2f6ff; border-radius: 10px; padding: 10px 14px; display: inline-block; }
-  .bubble.student .text { background: #f6f7f9; border-radius: 10px; padding: 10px 14px; display: inline-block; }
+  .bubble .text { border-radius: 10px; padding: 10px 14px; max-width: 80%; white-space: pre-wrap; }
+  .bubble.ai { align-items: flex-start; }
+  .bubble.ai .text { background: #f2f6ff; align-self: flex-start; }
+  .bubble.student { align-items: flex-end; }
+  .bubble.student .text { background: #d9f2df; align-self: flex-end; }
   #transcript { max-height: 340px; overflow-y: auto; margin-bottom: 8px; }
 
   textarea {
