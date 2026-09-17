@@ -108,8 +108,13 @@ def node_motif(slide, x, y, scale=1.0, colors=None):
         etree.SubElement(o._element.spPr, qn("a:effectLst"))
 
 
+SECTION = [0]
+
+
 def header(slide, num, title, subtitle=None, dark=False):
-    """장 번호(연한 큰 숫자) + 제목 + 부제. 모티프는 우상단."""
+    """장 번호(연한 큰 숫자, 자동 증가) + 제목 + 부제. 모티프는 우상단."""
+    if num:
+        SECTION[0] += 1; num = SECTION[0]
     bg = T["dark"] if dark else T["bg"]
     rect(slide, 0, 0, W, H, bg)
     col_t = T["dark_text"] if dark else T["text"]
@@ -346,6 +351,84 @@ card(s, 6.9, 1.85, 5.8, 3.6, title="지도 읽기 — 학생이 올 때마다 (L
     [("⑤ 카드 + AI가 쓴 설명 문단(1회) — 카드에 없는 건 쓰지 않도록 규칙", {})],
 ], body_size=12, icon="2")
 lesson(s, "판정(②③④)에 LLM이 없어서 같은 이야기에 같은 답이 나오고, 카드의 이름은 전부 실존한다.", y=5.75)
+
+# ════════════════════════════════════════════════════════════════════
+# 6-2. 기술 스택
+s = prs.slides.add_slide(BLANK)
+header(s, 5, "기술 스택 — 작게, 표준으로", "Python 3,100줄 · 파일 7개 · 외부 의존성 5개. \"판정은 도구가 한다\"를 지키려면 도구가 단순해야 했다")
+stack = [
+    ("언어 · 협업", "Py", [
+        [("Python 3.14", {"bold": True}), (" — 코드 3,100줄(팀 모듈 포함 4,500), 파일 7개", {})],
+        [("Git · GitHub", {"bold": True}), (" — 커밋 167 · PR 15 · 브랜치 전략(기능 브랜치 → PR)", {})],
+        [("VS Code · Claude Code", {"bold": True}), (" — 팀원 2명이 코딩 보조로 사용 (동시 편집 사고의 원인이자 문서화의 도구)", {})]]),
+    ("LLM", "AI", [
+        [("OpenAI gpt-4o-mini", {"bold": True}), (", temperature 0 — 추출·태거·설명 문단 전부 같은 모델", {})],
+        [("LangChain", {"bold": True}), (" — ChatPromptTemplate · with_structured_output(pydantic) · stream/astream", {})],
+        [("pydantic", {"bold": True}), (" — 출력 스키마(Tags · MajorSkills · JobExtraction · StudentProfile). Literal 로 라벨 고정", {})]]),
+    ("데이터 · 수집", "DB", [
+        [("requests", {"bold": True}), (" — LG Careers 내부 API(JSON) 호출, 날짜별 스냅샷 data/raw/", {})],
+        [("pandas", {"bold": True}), (" — 대학알리미 CSV(3,829행)를 전공 단위로 그룹화", {})],
+        [("JSON 파일 3층", {"bold": True}), (" — raw(LLM 원출력 캐시) → extracted(필터) → graph.json. DB 없음", {})]]),
+    ("지식그래프", "KG", [
+        [("graph.json + Python dict/set", {"bold": True}), (" — 노드 5종·관계 5종, 집합 연산으로 판정 (LLM 0회)", {})],
+        [("vocab.py", {"bold": True}), (" — 통제 어휘 139 · IS_A 102 · 성향→역량 7 · 성향→태도 17 (사람이 관리하는 온톨로지)", {})],
+        [("의도적으로 뺀 것: Neo4j · 벡터 임베딩", {"bold": True, "color": T["accent"]}), (" — 노드 300개 규모라 dict 로 충분. Cypher 로 옮길 수 있게 설계 (확장 과제)", {})]]),
+    ("화면", "UI", [
+        [("CLI", {"bold": True}), (" — app.py 입력 4방식(--basic · --interview · 기본 대화 · --profile) + 역방향 --job", {})],
+        [("Flask + Jinja", {"bold": True}), (" — index.html(채팅) · details.html(문단). 판정은 여기서 하지 않는다", {})],
+        [("SSE(EventSource)", {"bold": True}), (" — 설명 문단 스트리밍. 카드는 즉시, 문단은 흘려보냄", {})]]),
+    ("검증 · 문서", "QA", [
+        [("check.py", {"bold": True}), (" — 확인 3건 + 평가셋 24건(JSON) 자동 채점, 대본 주입(ask/say)으로 대화도 자동", {})],
+        [("tiktoken", {"bold": True}), (" — 토큰 실측(115k vs 1.4k). 감으로 말하지 않기 위해", {})],
+        [("Markdown + Mermaid", {"bold": True}), (" — 설명서 1,200줄 · 결정 기록 12개 · 시연 대본 · 챗봇 대조 실험", {})]]),
+]
+for i, (t1, ic, body) in enumerate(stack):
+    cx = 0.6 + (i % 3) * 4.1; cy = 1.8 + (i // 3) * 2.5
+    card(s, cx, cy, 3.85, 2.38, title=t1, body=body, body_size=10.5, title_size=14, icon=ic, title_color=T["accent"] if ic == "KG" else T["primary"])
+tb(s, 0.6, 6.78, 12, 0.3, "requirements.txt 5줄: flask · langchain-core · langchain-openai · python-dotenv · pydantic (+ pandas · requests · tiktoken)", size=10.5, color=T["muted"])
+
+# ════════════════════════════════════════════════════════════════════
+# 6-3. 지난주 수업 → 이번 프로젝트 (LLM 서비스 설계 6요소)
+s = prs.slides.add_slide(BLANK)
+header(s, 6, "지난주 수업이 어디에 쓰였나 — 설계 6요소", "9/8~9/11 (RCIF · 프롬프트 템플릿 · LCEL · Pydantic · Function Calling · 상태 관리) → 이 프로젝트의 어느 파일")
+rows = [["요소 (9/11 수업)", "수업에서 배운 것", "이 프로젝트에서는", "어디에"],
+        ["① 프롬프트 ★", "RCIF · Zero/Few-shot · v1→v4 반복(작성→테스트→관찰→수정) · 프롬프트 템플릿 {변수}", "시스템 프롬프트 3종을 RCIF로. 실제 오류 4건을 음성 예시로, 정상 3건을 양성 예시로(Few-shot). 전공 추출 v1→v3 재작성", "build_graph_majors.py · transform_v2.py · app.py"],
+        ["② 체인 구조", "LCEL 파이프: 프롬프트 | 모델 | 파서, invoke/stream/batch", "체인 8개 전부 `프롬프트 | llm.with_structured_output(스키마)`. 온라인은 순서가 고정된 파이프라인(태거 → 도구 → 설명)", "app.py · interview.py · user_analysis/"],
+        ["③ 도구 목록", "Function Calling: @tool + bind_tools — \"AI는 판단, 도구가 실행\"", "배운 대로 하지 않았다: LLM이 도구를 고르게 할 이유가 없어(순서 고정) 판정 자체를 도구(graph_store 4함수·사전 조회)에 넘김. bind_tools 0회", "graph_store.py · vocab.py"],
+        ["④ 상태 관리", "LLM은 stateless. 히스토리는 dict로, 전략은 Sliding/Summary/Entity/Vector", "대화 상태는 서버 dict(InterviewSession). 대화 전체 대신 요약된 프로필(pydantic)을 들고 다닌다 = Summary Memory 방식", "interview.py · webapp.py"],
+        ["⑤ 스트리밍", "stream() — 완성된 토큰을 즉시 출력, 사용성", "설명 문단만 astream/stream → 웹 SSE. 카드(판정)는 즉시, 문단은 흘려보냄", "app.py explain · webapp.py"],
+        ["⑥ 비용·지연", "호출 수·토큰을 세어 설계에 반영", "오프라인 277회 1회성 캐시 · 온라인 2~6회 · tiktoken 실측(115k vs 1.4k) · 대화 20회→6회", "docs/발표_수치 · check.py"]]
+table(s, 0.6, 1.85, 12.1, rows, [1.7, 3.3, 4.6, 2.5], font_size=10, row_h=0.62, first_col_bold=True)
+lesson(s, "다섯은 배운 대로, 도구 하나는 뒤집어서 — AI가 도구를 고르는 게 아니라 판정을 도구가 한다.", y=6.38)
+
+# ════════════════════════════════════════════════════════════════════
+# 6-4. 프롬프트 전략 — RCIF 를 실제 프롬프트에
+s = prs.slides.add_slide(BLANK)
+header(s, 7, "프롬프트 전략 — RCIF를 실제 프롬프트에", "전공 역량 추출 프롬프트(build_graph_majors.py EXTRACT_SYSTEM) 발췌. 직무 추출·태거·설명 문단도 같은 틀")
+prompt_lines = [
+    ("R", "너는 대학 교육과정을 분석해 전공이 기르는 역량을 판별하는 전문가다."),
+    ("C", "입력: 전공명 + 그 전공의 개설 과목명 목록 / 출력: 이 전공이 기르는 역량 + 근거 과목명"),
+    ("C", "[통제 어휘 목록] {vocab_list}      ← 프롬프트 템플릿 변수. 사전 139개가 그대로 들어간다"),
+    ("I", "1. skill 은 통제 어휘 목록에 있는 것만. 목록에 없는 역량은 만들지 않는다"),
+    ("I", "2. via 는 준 과목명을 그대로. 줄이거나 바꾸지 않는다"),
+    ("I", "4. 해당하는 역량이 없으면 빈 배열이 정답이다. 억지로 채우지 마라"),
+    ("F", "[이런 건 틀린 답이다 — 실제로 나왔던 오류]  ✗ 간호학과 '의료관련감염관리' → Security"),
+    ("F", "[이런 건 맞는 답이다]  ✓ 통계학과 '회귀분석 및 실습' → Statistics"),
+    ("F", "class MajorSkills(BaseModel): skills: list[...] = Field(max_length=10)  # 형식은 스키마가"),
+]
+rect(s, 0.6, 1.85, 7.6, 4.55, T["card"], MSO_SHAPE.ROUNDED_RECTANGLE, radius=0.03)
+colmap = {"R": T["primary"], "C": T["good"], "I": T["accent"], "F": "7C3AED" if THEME != "B" else "C4B5FD"}
+for i, (tag, line) in enumerate(prompt_lines):
+    y = 2.0 + i * 0.47
+    o = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(y + 0.03), Inches(0.38), Inches(0.3)); o.adjustments[0] = 0.3
+    o.fill.solid(); o.fill.fore_color.rgb = rgb(colmap[tag]); o.line.fill.background(); etree.SubElement(o._element.spPr, qn("a:effectLst"))
+    tf = o.text_frame; tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0; tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+    pp = tf.paragraphs[0]; pp.alignment = PP_ALIGN.CENTER; r = pp.add_run(); r.text = tag; r.font.bold = True; r.font.size = Pt(11); r.font.color.rgb = rgb("FFFFFF"); r.font.name = "Arial"
+    tb(s, 1.3, y + 0.02, 6.8, 0.4, line, size=10.5, color=T["text"], font=T["mono"] if tag == "F" and "class " in line else FONT)
+tb(s, 0.8, 6.45, 7.4, 0.3, "R 역할 · C 맥락(입력·출력·사전) · I 지시(규칙) · F 형식(예시 + pydantic) — 수업 9/8 RCIF, 9/9 구조화 출력", size=10, color=T["muted"])
+card(s, 8.5, 1.85, 4.2, 1.4, title="Few-shot은 우리 오류로", body="수업: \"복잡한 기준·일관된 출력이면 퓨샷\". 예시를 지어내지 않고 9/14 실제 오분류 4건(간호학과→Security …)을 음성 예시로, 정상 3건을 양성 예시로", body_size=10.5, icon="✗", title_color=T["accent"])
+card(s, 8.5, 3.4, 4.2, 1.4, title="v1 → v3, 그리고 정답지", body="수업: \"작성→테스트→관찰→수정, v4를 했다고 끝이 아니다\". 전공 추출 프롬프트를 세 번 다시 썼고, '끝이 아닌' 부분을 평가셋 24건으로 대신했다", body_size=10.5, icon="↻")
+card(s, 8.5, 4.95, 4.2, 1.45, title="Format = 스키마, 개수는 근거가", body="수업: with_structured_output은 모델 수준에서 형식을 강제. 그래서 Format을 글이 아니라 pydantic으로. 단 max_length만 두고 하한은 없앴다 — 개수를 시키면 채운다(4회 관측)", body_size=10.5, icon="{}", title_color=T["good"])
 
 # ════════════════════════════════════════════════════════════════════
 # 7~12. 시행착오 6개
