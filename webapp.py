@@ -5,8 +5,8 @@ interview.InterviewSession 으로 user_analysis/main.py 와 같은 적응형 질
 끝나면 app.run() → app.explain_stream() 으로 전공·과목·직무를 찾고 [진로 추천] 문단을 스트리밍한다.
 판정(어떤 전공·직무를 추천할지)은 여기서 하지 않는다 — 전부 graph_store.py 몫이다.
 
-화면에는 [진로 추천] 문단만 보인다. 전공 순위·근거 과목·직무 커버리지 같은 세부 근거는
-/details/<result_id> 라는 별도 링크로만 확인할 수 있다 (화면을 근거 카드로 채우지 않기 위해).
+화면에는 [핵심 요약](전공 순위·근거 과목·직무 커버리지 카드)이 바로 보인다. LLM이 쓰는 [진로 추천]
+문단은 시간이 좀 더 걸리므로 "세부내용 확인" 링크를 눌러야 나오는 별도 페이지(/details/<result_id>)로 뺐다.
 """
 from __future__ import annotations
 
@@ -34,6 +34,24 @@ def index():
     return render_template("index.html", intro_prompt=INTRO_PROMPT)
 
 
+def _summary_fields(result: dict) -> dict:
+    """[핵심 요약]에 바로 보여줄 것 — render() 카드 + 근거 줄. LLM 호출 없음(render()는 순수 카드 헬퍼)."""
+    evidence_lines = []
+    if result.get("interest_evidence"):
+        evidence_lines.append("관심·성향에서 읽은 역량: " +
+                               "; ".join(f"{s} ← {e}" for s, e in result["interest_evidence"].items()))
+    if result.get("trait_evidence"):
+        evidence_lines.append("강점 성향에서 추정한 역량: " +
+                               "; ".join(f"{s} ← {e}" for s, e in result["trait_evidence"].items()))
+    return {"profile_text": render(result), "evidence_lines": evidence_lines}
+
+
+def _store_result(result: dict, iv: dict) -> str:
+    result_id = uuid.uuid4().hex
+    _RESULTS[result_id] = {**result, "interest_evidence": iv["interest_evidence"], "trait_evidence": iv["trait_evidence"]}
+    return result_id
+
+
 def _finalize(state: dict) -> dict:
     """인터뷰(질문 루프)가 끝났다 — run() 을 돌려서 프론트에 줄 JSON payload를 만든다.
 
@@ -54,9 +72,8 @@ def _finalize(state: dict) -> dict:
     if result.get("empty"):
         return {"status": "empty"}
 
-    result_id = uuid.uuid4().hex
-    _RESULTS[result_id] = {**result, "interest_evidence": iv["interest_evidence"], "trait_evidence": iv["trait_evidence"]}
-    return {"status": "done", "result_id": result_id}
+    result_id = _store_result(result, iv)
+    return {"status": "done", "result_id": result_id, **_summary_fields(_RESULTS[result_id])}
 
 
 def _finish_followup(state: dict, answer: str) -> dict:
@@ -66,10 +83,8 @@ def _finish_followup(state: dict, answer: str) -> dict:
     if result.get("empty"):
         return {"status": "empty"}
 
-    iv = state["iv"]
-    result_id = uuid.uuid4().hex
-    _RESULTS[result_id] = {**result, "interest_evidence": iv["interest_evidence"], "trait_evidence": iv["trait_evidence"]}
-    return {"status": "done", "result_id": result_id}
+    result_id = _store_result(result, state["iv"])
+    return {"status": "done", "result_id": result_id, **_summary_fields(_RESULTS[result_id])}
 
 
 @app.post("/api/interview/answer")
@@ -122,20 +137,10 @@ def explain_endpoint(result_id: str):
 
 @app.get("/details/<result_id>")
 def details(result_id: str):
-    """전공 순위·근거 과목·직무 커버리지 같은 세부 근거 — 메인 화면에는 안 보이고 이 링크로만."""
-    result = _RESULTS.get(result_id)
-    if result is None:
+    """[진로 추천] 문단 — [핵심 요약]과 달리 LLM이 쓰므로 시간이 걸린다. 이 링크를 눌러야 스트리밍이 시작된다."""
+    if result_id not in _RESULTS:
         abort(404, description="결과를 찾을 수 없습니다. 처음부터 다시 시도해 주세요.")
-
-    evidence_lines = []
-    if result.get("interest_evidence"):
-        evidence_lines.append("관심·성향에서 읽은 역량: " +
-                               "; ".join(f"{s} ← {e}" for s, e in result["interest_evidence"].items()))
-    if result.get("trait_evidence"):
-        evidence_lines.append("강점 성향에서 추정한 역량: " +
-                               "; ".join(f"{s} ← {e}" for s, e in result["trait_evidence"].items()))
-
-    return render_template("details.html", profile_text=render(result), evidence_lines=evidence_lines)
+    return render_template("details.html", result_id=result_id)
 
 
 if __name__ == "__main__":

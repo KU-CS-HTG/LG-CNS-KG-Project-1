@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>세부 근거</title>
+<title>세부내용 확인</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -16,35 +16,38 @@
     border: 1px solid #e3e5e8; border-radius: 12px; padding: 32px;
   }
   h1 { font-size: 18px; margin: 0 0 20px; }
-  .evidence-list { margin: 0 0 20px; padding: 0; list-style: none; }
-  .evidence-list li {
-    font-size: 13px; color: #4a4f57; background: #f6f7f9; border: 1px solid #e3e5e8;
-    border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;
-  }
-  .profile-box {
-    white-space: pre-wrap; background: #f6f7f9; border: 1px solid #e3e5e8;
-    border-radius: 8px; padding: 16px; font-size: 13px; color: #1a1a1a;
-    font-family: ui-monospace, "SF Mono", Consolas, monospace;
-  }
-  .back { display: inline-block; margin-top: 20px; color: #3b6ef6; text-decoration: none; font-size: 14px; }
+  .explain-box { white-space: pre-wrap; }
+  .spinner { color: #8a8f98; font-size: 14px; }
+  .back { display: inline-block; margin-top: 24px; color: #3b6ef6; text-decoration: none; font-size: 14px; }
   .back:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 <div class="card">
-  <h1>세부 근거</h1>
-
-  {% if evidence_lines %}
-  <ul class="evidence-list">
-    {% for line in evidence_lines %}
-    <li>{{ line }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-
-  <div class="profile-box">{{ profile_text }}</div>
-
+  <h1>[진로 추천]</h1>
+  <div id="explain-text" class="explain-box"><span class="spinner">불러오는 중…</span></div>
   <a class="back" href="javascript:window.close()">이 창 닫기</a>
 </div>
+
+<script>
+const RESULT_ID = {{ result_id | tojson }};
+
+function streamExplain(resultId) {
+  const box = document.getElementById("explain-text");
+  box.textContent = "";
+  const source = new EventSource(`/api/explain/${resultId}`);
+  source.onmessage = (event) => {
+    const payload = JSON.parse(event.data);
+    box.textContent += payload.chunk;
+  };
+  source.addEventListener("done", () => source.close());
+  source.onerror = () => {
+    source.close();
+    if (box.textContent === "") box.textContent = "추천 문단을 불러오지 못했습니다.";
+  };
+}
+
+streamExplain(RESULT_ID);
+</script>
 </body>
 </html>
