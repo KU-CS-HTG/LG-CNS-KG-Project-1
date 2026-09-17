@@ -56,7 +56,13 @@ from vocab import TRAIT_TO_SKILL, canonicalize
 AREAS = ["interest", "strength"]          # 우리 그래프가 받을 수 있는 두 영역만 (interview() 용)
 TRAIT_WEIGHT = 0.5                        # 성향에서 추정한 태그의 신뢰 가중치
 TRAIT_MIN_CONFIDENCE = 0.6                # 이보다 낮은 confidence 의 성향은 쓰지 않는다
-FULL_INTERVIEW_MAX_PER_AREA = 2           # main.py 의 question_counts[area] < 2 와 동일
+# 기본 모드(InterviewSession) 되묻기 상한. main.py 원본은 2 — 답이 "잘 모르겠어요" 면 같은 영역을 같은 문장으로
+# 되묻는 현상(설명서 10장 한계 10)이 있어 9/17 에 1 로 내렸다: 한 번 물어 부족하면 넘어간다 (프로필은 불완전해도 된다).
+FULL_INTERVIEW_MAX_PER_AREA = 1
+# 기본 모드가 되묻는 영역. 매칭 근거로 쓰는 두 영역(interest·strength, profile_to_inputs 참고)만 묻는다 —
+# 나머지 영역은 자기소개 분석으로 채워진 만큼만 쓴다. None 이면 PROFILE_AREAS 전부(main.py 원본과 같은 흐름).
+# 실측(9/16): 전부 물으면 8라운드·LLM 20회·25초. 둘만 물으면 2~3라운드·6~8회.
+FULL_INTERVIEW_AREAS: tuple[str, ...] | None = ("interest", "strength")
 
 INTRO_PROMPT = ("안녕! 전공이나 진로를 추천하기 전에 너에 대해 먼저 알고 싶어.\n"
                 "좋아하는 것, 잘하는 것, 해본 것 등 편하게 자기소개해 줘.")
@@ -257,7 +263,9 @@ class InterviewSession:
         return self._advance()
 
     def _advance(self) -> str | None:
-        available = [a for a in get_missing_areas(self.profile) if self.counts[a] < FULL_INTERVIEW_MAX_PER_AREA]
+        available = [a for a in get_missing_areas(self.profile)
+                     if self.counts[a] < FULL_INTERVIEW_MAX_PER_AREA
+                     and (FULL_INTERVIEW_AREAS is None or a in FULL_INTERVIEW_AREAS)]
         if is_profile_complete(self.profile) or not available:          # 더 물어볼 수 있는 영역이 없으면 종료
             self._pending_area = self._pending_question = None
             return None
@@ -274,10 +282,10 @@ class InterviewSession:
 
 
 def full_interview(ask=input, say=print) -> dict:
-    """user_analysis/main.py 와 완전히 같은 흐름 — question_agent 가 7개 영역을 전부 그때그때 물어본다.
+    """user_analysis/main.py 와 같은 흐름 — question_agent 가 부족한 영역을 그때그때 물어본다.
 
-    interview() 보다 LLM 호출이 훨씬 많다(매 라운드 질문 생성 1회 + 영역 분석 1회). 데모용 지름길이 아니라
-    "app.py 에서 바로 main.py 를 돌린 것"이 필요할 때 쓴다. 실제 진행은 InterviewSession 이 한다 —
+    interview() 와 다른 점: 질문이 고정 문장이 아니라 대화 맥락으로 생성된다(라운드마다 질문 생성 1회 + 영역 분석 1회).
+    묻는 영역·횟수는 FULL_INTERVIEW_AREAS / FULL_INTERVIEW_MAX_PER_AREA 로 제한한다. 실제 진행은 InterviewSession 이 한다 —
     이 함수는 그걸 input()/print() 루프로 감싼 CLI 용 얇은 래퍼.
     """
     say(f"\n{INTRO_PROMPT}")

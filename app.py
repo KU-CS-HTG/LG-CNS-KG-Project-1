@@ -11,7 +11,8 @@ from pydantic import BaseModel, Field
 
 from vocab import CANON
 from graph_store import (find_majors_by_skills, find_jobs_by_skills,
-                         subjects_for, count_majors, taggable_skills)
+                         subjects_for, count_majors, taggable_skills,
+                         find_jobs_by_name, find_majors_for_job)
 
 load_dotenv()
 
@@ -171,8 +172,29 @@ def _disp_width(s: str) -> int:
     return sum(2 if unicodedata.east_asian_width(ch) in ("W", "F") else 1 for ch in s)
 
 
-def _pad(s: str, width: int) -> str:
-    return s + " " * max(0, width - _disp_width(s))
+LINE_WIDTH = 72   # 웹 details.html 의 <pre>(640px − 패딩, 13px 모노)가 한 줄에 보여주는 폭 — 영문 ≈78칸, 한글은 2칸으로 세므로 72 면 안전.
+                  # 넘는 줄은 의미 단위(항목 사이)로만 나눈다 (9/16 웹 시연 피드백)
+
+
+def _wrap_items(prefix: str, items: list[str], indent: str, sep: str = ", ") -> list[str]:
+    """`prefix + items 를 sep 으로 이은 것` 을 LINE_WIDTH 안에서 항목 경계로만 나눈다. 항목 하나가 잘리는 일은 없다.
+    이어지는 줄은 prefix 의 표시 폭만큼 들여 써서 항목의 세로선이 맞는다.
+
+    예: _wrap_items("✓ ", ["Data Analysis", …], IND) → ["          ✓ Data Analysis, Statistics, …", "            Machine Learning"]
+    """
+    lines: list[str] = []
+    cur = indent + prefix
+    cont = indent + " " * _disp_width(prefix)
+    first = True
+    for it in items:
+        piece = it if first else sep + it
+        if not first and _disp_width(cur) + _disp_width(piece) > LINE_WIDTH:
+            lines.append(cur.rstrip())
+            cur, piece = cont, it
+        cur += piece
+        first = False
+    lines.append(cur.rstrip())
+    return lines
 
 
 def _pretty(name: str) -> str:
@@ -188,42 +210,62 @@ def _one_school(r: dict) -> bool:
 
 
 def _job_lines(j: dict, indent: str, detail: bool) -> list[str]:
-    """직무 한 건의 커버/갭/태도/공고 줄. detail=True 는 1위(계열을 상위 개념별로 묶어 여러 줄), False 는 후보(압축 한 줄)."""
+    """직무 한 건의 커버/갭/태도/공고 줄. detail=True 는 1위(계열을 상위 개념별로 묶어 여러 줄), False 는 후보.
+
+    9/17: 웹 <pre> 폭(LINE_WIDTH)을 넘는 줄을 의미 단위로 나눈다 — 역량 목록은 _wrap_items 로, 후보의 ✓/≈/✗/요구 태도는
+    항목마다 한 줄. "(✓ = 너의 강점 성향과 맞음)" 범례는 여기서 빼고 render() 가 카드 끝에 한 번만 단다.
+    """
     fam = j.get("family", {})
     head = (f"요구 역량 {j['total']}개 중 {j['covered_count']}개 커버"
             + (f" (정확 {len(j['have'])} · 계열 {len(fam)})" if fam else ""))
+    sub = indent if detail else indent + "  "                             # 후보는 한 칸 더 들여 쓴다 (헤더 줄과 구분)
+    soft = [f"{sk} ✓" if sk in j.get("soft_match", []) else sk for sk in j.get("soft_wanted", [])]
     L: list[str] = []
     if detail:
         L.append(f"{indent}{head}")
-        if j["have"]:
-            L.append(f"{indent}✓ {', '.join(j['have'])}")
+    if j["have"]:
+        L += _wrap_items("✓ ", j["have"], sub)
+    if detail:
         by_parent: dict[str, list[str]] = {}                               # 계열 커버 — IS_A 한 홉, 상위 개념별로 묶는다
         for child, parent in sorted(fam.items()):
             by_parent.setdefault(parent, []).append(child)
         for parent, children in by_parent.items():
-            L.append(f"{indent}≈ {parent} 계열로 커버 — {', '.join(children)}")
-        if j["gap"]:
-            L.append(f"{indent}✗ 교과 밖에서 채울 것 — {', '.join(j['gap'])}")   # 갭 = 필수 중 미커버 (우대는 세지 않는다)
-        if j.get("soft_wanted"):                                               # 직무가 요구하는 태도 — 데이터가 있을 때만
-            marks = [f"{sk} ✓" if sk in j.get("soft_match", []) else sk for sk in j["soft_wanted"]]
-            L.append(f"{indent}요구 태도: {' · '.join(marks)}" + ("   (✓ = 너의 강점 성향과 맞음)" if j.get("soft_match") else ""))
-        if j.get("url"):
-            L.append(f"{indent}공고 → {j['url']}")                              # ③ 출처 — 챗봇이 줄 수 없는 것
-    else:
-        parts = []
-        if j["have"]:
-            parts.append(f"✓ {', '.join(j['have'])}")
-        if fam:
-            parts.append(f"≈ {', '.join(sorted(fam))}")                       # 후보는 자식 이름만 (카드 길이 방어)
-        if j["gap"]:
-            parts.append(f"✗ {', '.join(j['gap'])}")
-        if j.get("soft_wanted"):
-            parts.append("요구 태도: " + " · ".join(f"{sk} ✓" if sk in j.get("soft_match", []) else sk for sk in j["soft_wanted"]))
-        if parts:
-            L.append(f"{indent}  {'  '.join(parts)}")
-        if j.get("url"):
-            L.append(f"{indent}  공고 → {j['url']}")
+            L += _wrap_items(f"≈ {parent} 계열로 커버 — ", children, sub)
+    elif fam:
+        L += _wrap_items("≈ ", sorted(fam), sub)                           # 후보는 자식 이름만 (카드 길이 방어)
+    if j["gap"]:
+        L += _wrap_items("✗ 교과 밖에서 채울 것 — " if detail else "✗ ", j["gap"], sub)   # 갭 = 필수 중 미커버 (우대는 세지 않는다)
+    if soft:                                                               # 직무가 요구하는 태도 — 데이터가 있을 때만
+        L += _wrap_items("요구 태도: ", soft, sub, sep=" · ")
+    if j.get("url"):
+        L.append(f"{sub}공고 → {j['url']}")                                 # ③ 출처 — 챗봇이 줄 수 없는 것
     return L
+
+
+def _student_links(r: dict) -> tuple[list[str], dict[str, str]]:
+    """학생 태그(근거 + 성향 추정)가 1위 전공에 이어진 방식 — (정확 일치 목록, {태그: 커버한 전공 역량})."""
+    m = r["major"]
+    return list(m.get("matched_skills", [])), dict(m.get("family", {}))
+
+
+def _unlinked(r: dict) -> list[str]:
+    """1위 전공에 정확·계열 어느 쪽으로도 이어지지 않은 학생 태그 (입력 순서 유지)."""
+    exact, fam = _student_links(r)
+    tags = list(r["tags"]) + sorted(set(r.get("inferred_tags", [])))
+    return list(dict.fromkeys(t for t in tags if t not in set(exact) and t not in fam))
+
+
+def _ranking_lines(rows: list[dict], indent: str) -> list[str]:
+    """역량 연결도 — `█████░░░░░  65%  경영학과`. 바를 이름 **앞**에 둔다.
+
+    이름 뒤에 두면 이름 폭만큼 채워야 바가 맞는데(_pad), 웹 폰트는 한글이 정확히 2칸이 아니라 1~2칸씩 어긋났다
+    (설명서 10장 한계 11). 바가 먼저 오면 이름 길이와 무관하게 세로선이 맞는다 — 구조로 푼 것.
+    """
+    out = []
+    for x in rows:
+        raw = f"  ({x['score']:.3f})" if DEBUG else ""
+        out.append(f"{indent}  {_bar(x['score'])} {_pct(x['score']):>3}%  {_pretty(x['name'])}{raw}")
+    return out
 
 
 def render(r: dict) -> str:
@@ -240,22 +282,18 @@ def render(r: dict) -> str:
     m, rk = r["major"], r["ranking"]
     L.append(f"[전공]    {_pretty(m['name']) if _one_school(r) else m['school'] + ' ' + _pretty(m['name'])}")
     L.append(f"{IND}{r['total_majors']}개 전공 중 역량이 이어지는 {len(rk)}개를 비교한 결과 1위")
-    matched = list(m.get("matched_skills", []))
-    fam = m.get("family", {})                                              # {학생 태그: 그것을 커버한 전공 역량}
+    matched, fam = _student_links(r)                                       # fam = {학생 태그: 그것을 커버한 전공 역량}
     ev = m.get("evidence", {})
     if matched:
-        L.append(f"{IND}✓ " + " · ".join(f"{s} (과목 {len(ev.get(s, []))}개)" for s in matched))
+        L += _wrap_items("✓ ", [f"{s} (과목 {len(ev.get(s, []))}개)" for s in matched], IND, sep=" · ")
     for tag, parent in sorted(fam.items()):
         L.append(f"{IND}≈ {tag} → {parent} 계열로 커버 (과목 {len(ev.get(parent, []))}개)")
     inferred = set(r.get("inferred_tags", []))
-    missing = [t for t in list(r["tags"]) + sorted(inferred) if t not in set(matched) and t not in fam]
+    missing = _unlinked(r)
     if missing:
-        L.append(f"{IND}○ 아직 안 이어진 역량 — " + ", ".join(f"{t} (추정)" if t in inferred else t for t in dict.fromkeys(missing)))
-    L.append(f"{IND}역량 연결도")                                          # 라벨은 따로 한 줄 — 아래 세 줄의 들여쓰기가 같아야 웹 폰트에서도 바가 맞는다
-    width = max(_disp_width(_pretty(x["name"])) for x in rk[:3])
-    for x in rk[:3]:
-        raw = f"  ({x['score']:.3f})" if DEBUG else ""
-        L.append(f"{IND}  {_pad(_pretty(x['name']), width)}  {_bar(x['score'])} {_pct(x['score'])}%{raw}")
+        L += _wrap_items("○ 아직 안 이어진 역량 — ", [f"{t} (추정)" if t in inferred else t for t in missing], IND)
+    L.append(f"{IND}역량 연결도")
+    L += _ranking_lines(rk[:3], IND)
     L.append("")
 
     # ── [과목]  다리 과목. 과목별 꼬리표는 빼고 출처는 카드 끝 한 줄로 (9/16)
@@ -280,7 +318,82 @@ def render(r: dict) -> str:
                          + (f" (정확 {len(alt['have'])} · 계열 {len(fam_a)})" if fam_a else ""))
                 L += _job_lines(alt, IND, detail=False)
 
+    # ── 범례 — 요구 태도의 ✓ 가 한 번이라도 떴을 때만, 카드 끝에 한 줄 (9/16 웹 피드백: 줄 끝에 붙이면 <pre> 폭을 넘는다)
+    if any(x.get("soft_match") for x in r.get("jobs", [])[:3]):
+        L += ["", f"{IND}(요구 태도의 ✓ = 너의 강점 성향과 맞음)"]
+
     # ── 출처 한 줄 — "과목명이 실존한다"(확인 항목 ②) 와 "왜 서울대만?" 의 근거. 과목명은 넣지 않는다 (확인 ② 가 누출로 잡는다)
+    schools = " · ".join(sorted({x["school"] for x in rk}))
+    L += ["", "─" * 10,
+          f"출처 · 과목: {schools} 교육과정 — 대학알리미 {SOURCE_URLS['curriculum']} · 공고: LG Careers {SOURCE_URLS['jobs']} (스냅샷)"]
+    return "\n".join(L)
+
+
+# ═════════════════════════════════════════════════════════════
+# 역방향 질의 — "이 직무에 가려면 어느 전공?" (9/17). LLM 0회, 그래프만 탄다 (설명서 10장 '여유 시').
+#   정방향: 학생 태그 → 전공 → (전공 역량 전체) → 직무.  역방향: 직무 요구 역량 → 전공 → 그 전공의 다리 과목.
+#   같은 REQUIRES/DEVELOPS 엣지를 반대로 순회할 뿐이라 graph_store 함수 하나(find_majors_for_job)로 끝난다.
+# ═════════════════════════════════════════════════════════════
+
+def reverse(query: str) -> dict:
+    """직무 검색어 → {"job", "candidates", "ranking", "subjects", "total_majors"}. 못 찾으면 {"job": None}.
+
+    같은 이름이 여러 건이면 신입 → 회사명 순으로 첫 번째를 쓰고 나머지는 candidates 로 돌려준다
+    (회사명을 검색어에 같이 쓰면 좁혀진다: --job "LG CNS AI").
+    """
+    hits = find_jobs_by_name(query)
+    if not hits:
+        return {"job": None, "candidates": []}
+    job = hits[0]
+    ranking = find_majors_for_job(job, limit=100)
+    subjects = []
+    if ranking:
+        top = ranking[0]
+        bridge = sorted(set(top["matched_skills"]) | set(top["family"].values()))   # 정확 일치 + 계열 커버에 쓰인 전공 역량
+        subjects = subjects_for(top["id"], bridge, k=3)
+    return {"job": job, "candidates": hits[1:], "ranking": ranking, "subjects": subjects, "total_majors": count_majors()}
+
+
+def render_reverse(rv: dict) -> str:
+    IND = " " * 10
+    j = rv["job"]
+    if j is None:
+        return "그 이름의 직무 공고를 찾지 못했어. 직무명 일부(예: Smart Factory, AI, 소재개발)나 '회사 직무명'으로 다시 찾아볼래?"
+    L = [f"[직무]    {j['company']} {j['role']} ({j['career_type']})"]
+    if j["requires"]:
+        L += _wrap_items(f"필수 역량 {len(j['requires'])}개 — ", list(j["requires"]), IND)
+    if j["prefers"]:
+        L += _wrap_items(f"우대 역량 {len(j['prefers'])}개 — ", list(j["prefers"]), IND)
+    if not j["requires"] and not j["prefers"]:
+        L.append(f"{IND}공고에 역량 문장이 없어 전공을 이을 수 없어")
+    if j.get("url"):
+        L.append(f"{IND}공고 → {j['url']}")
+    if rv["candidates"]:
+        L.append(f"{IND}같은 이름 {len(rv['candidates'])}건 더 — "
+                 + " · ".join(f"{c['company']} {c['role']} ({c['career_type']})" for c in rv["candidates"][:4]))
+    L.append("")
+
+    rk = rv["ranking"]
+    if not rk:
+        L.append("[전공]    이 역량을 기르는 전공을 찾지 못했어")
+        return "\n".join(L)
+    one_school = len({m["school"] for m in rk}) == 1
+    L.append(f"[전공]    이 직무의 역량을 기르는 전공 — {rv['total_majors']}개 중 이어지는 {len(rk)}개를 비교")
+    L.append(f"{IND}역량 연결도 (필수 1.0 · 우대 0.5 가중)")
+    L += _ranking_lines(rk[:3], IND)
+    for x in rk[:3]:                                                       # 전공마다 무엇이 정확(✓)·계열(≈)로 이어졌나
+        L.append(f"{IND}{_pretty(x['name']) if one_school else x['school'] + ' ' + _pretty(x['name'])}")
+        if x["matched_skills"]:
+            L += _wrap_items("✓ ", x["matched_skills"], IND + "  ")
+        if x["family"]:
+            L += _wrap_items("≈ ", [f"{c}→{p}" for c, p in sorted(x["family"].items())], IND + "  ")
+    L.append("")
+
+    top = rk[0]
+    L.append(f"[과목]    {_pretty(top['name'])}에서 이 역량을 기르는 과목")
+    for sub in rv["subjects"]:
+        L.append(f"{IND}{sub['subject']} → {', '.join(sub['for'])}")
+
     schools = " · ".join(sorted({x["school"] for x in rk}))
     L += ["", "─" * 10,
           f"출처 · 과목: {schools} 교육과정 — 대학알리미 {SOURCE_URLS['curriculum']} · 공고: LG Careers {SOURCE_URLS['jobs']} (스냅샷)"]
@@ -293,7 +406,12 @@ EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
 숫자와 근거는 카드가 이미 보여주므로 다시 나열하지 말고, 카드의 항목들이 왜 그렇게 이어지는지 풀어 쓴다.
 단, 1단락에는 "전공 N개를 모두 비교했고, 그중 학생의 역량과 이어지는 M개 가운데 가장 잘 이어진 전공" 이라는 취지의
 문장을 **반드시 한 번** 친절한 말로 넣는다 — 숫자 N, M 은 [근거]의 "전체 전공 수 / 이어진 전공 수" 값을 그대로 쓴다.
-(예: "61개 전공을 모두 살펴봤고, 네 역량과 이어지는 46개 중에서 통계학과가 가장 잘 이어졌어요.")
+같은 문장(또는 바로 다음 문장)에서 **왜 가장 잘 이어졌는지**를 [근거]의 "[학생 역량이 이 전공에 이어진 방식]" 항목으로
+구체화한다 — 학생 역량 총 몇 개 중 몇 개가 이 전공의 과목으로 직접 이어지고, 몇 개가 계열(상위 개념)로 이어지는지.
+숫자와 역량 이름은 **그 항목의 것을 그대로** 쓴다. [근거 과목과 연결 역량] 목록에 등장하는 역량 수로 세지 않는다
+(그 목록은 과목 3개만 보여주므로 역량이 빠져 있을 수 있다). 미연결이 0이면 말하지 않는다.
+(예: "61개 전공을 모두 살펴봤고, 네 역량과 이어지는 46개 중에서 통계학과가 가장 잘 이어졌어요. 네 역량 세 가지 중
+ 두 가지(데이터 분석·통계)는 통계학과 과목에서 직접 다루고, 나머지 하나(파이썬)는 프로그래밍 계열로 이어져요.")
 전공명·과목명·직무명·회사명은 문장 안에 자연스럽게 포함한다.
 
 절대 규칙:
@@ -308,7 +426,7 @@ EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
    지어내지 않는다. 프로필 문장을 그대로 인용하지 말고 자연스러운 말로 풀어 쓴다.
 5. 문장 수를 채우려고 내용을 늘리지 않는다. 할 말이 적으면 짧게 쓴다.
 
-작성 순서 (총 4단락, 각 단락 사이 줄바꿈):
+작성 순서 (3단락, gap 이 있을 때만 4단락. 각 단락 사이 줄바꿈):
 
 [1단락 - 도입, 2~3문장]
 [학생 프로필]이 주어졌다면, 그 안의 관심사·성향이 왜 이 전공과 어울리는지 짧게 엮은 다음, 전공
@@ -328,10 +446,12 @@ EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
 [근거]의 "직무 요구 중 전공이 커버하는 역량"과 "상위 개념으로 커버하는 역량"을 근거로,
 그 전공에서 기른 역량이 직무의 어떤 요구와 이어지는지 설명한다. (직무의 실제 업무는 서술하지 않는다 — 규칙 3)
 
-[4단락 - 부족한 역량, 있을 때만 1~2문장]
-gap(부족한 역량)이 있다면 "다만 ~도 직무에서 요구되는 핵심 역량인데, 전공 과목에서
-다루어지지 않으므로 교과 밖에서 별도로 학습해야 한다"처럼 언급한다. gap이 없으면 이
-단락은 생략한다.
+[4단락 - 부족한 역량, [근거]에 "[직무가 요구하지만 전공에 없는 역량(gap)]" 항목이 **있을 때만** 1~2문장]
+"다만 ~도 직무에서 요구되는 핵심 역량인데, 전공 과목에서 다루어지지 않으므로 교과 밖에서
+별도로 학습해야 한다"처럼 언급한다.
+[근거]에 그 항목이 없으면 4단락은 **쓰지 않는다** — 3단락에서 글을 끝낸다. "부족한 역량이 없다",
+"다행히", "추가 학습이 필요하지 않다", "모두 갖추고 있다" 같은 문장도 쓰지 않는다 (없는 것을 언급하는 것
+자체가 4단락이다).
 
 전체적으로 확신에 찬 어조보다는 신중하고 친절한 설명 어조를 유지한다."""
 
@@ -354,18 +474,30 @@ def build_explain_prompt(r: dict) -> str:
     if r.get("profile_summary"):                     # 대화(또는 JSON)로 얻은 학생 프로필 — 있을 때만 1단락에 쓰인다
         lines += ["[학생 프로필]", r["profile_summary"], ""]
 
+    # 학생 역량 → 1위 전공 연결 상태. render() 의 ✓/≈/○ 와 같은 계산 — 1단락 "왜 가장 잘 이어졌는지" 의 재료 (9/16 웹 피드백)
+    exact, fam_m = _student_links(r)
+    link_parts = [f"과목으로 직접 {len(exact)}개" + (f" ({', '.join(exact)})" if exact else ""),
+                  f"계열로 {len(fam_m)}개" + (f" ({', '.join(f'{t} → {p}' for t, p in sorted(fam_m.items()))})" if fam_m else "")]
+    missing = _unlinked(r)
+    if missing:
+        link_parts.append(f"미연결 {len(missing)}개 ({', '.join(missing)})")
+
     lines += [
         f"전공: {major['name'] if _one_school(r) else major['school'] + ' ' + major['name']}",
         f"전체 전공 수 / 이어진 전공 수: {r.get('total_majors', '?')} / {len(r.get('ranking', []))}",   # 1단락 '전수 비교' 한 문장의 재료
         f"직무: {job['company']} {job['role']} ({job['career_type']})" if job else "직무: (매칭 없음)",
+        "",
+        "[학생 역량이 이 전공에 이어진 방식 — 1단락의 '몇 개 중 몇 개' 는 이 숫자만 쓴다]",
+        f"학생 역량 총 {len(exact) + len(fam_m) + len(missing)}개 · " + " · ".join(link_parts),
         "",
         "[근거 과목과 연결 역량]",
         *subject_lines,
         "",
         f"[직무 요구 중 전공이 정확히 커버하는 역량]\n{', '.join(job['have']) if job and job['have'] else '(없음)'}",
         f"[직무 요구 중 상위 개념으로 커버하는 역량 — IS_A 한 홉]\n{family_text}",
-        f"[직무가 요구하지만 전공에 없는 역량(gap)]\n{', '.join(job['gap']) if job and job['gap'] else '(없음)'}",
     ]
+    if job and job["gap"]:                                   # gap 이 없으면 항목 자체를 주지 않는다 — "(없음)" 을 주면 모델이 "다행히 …" 로 언급한다 (한계 12)
+        lines.append(f"[직무가 요구하지만 전공에 없는 역량(gap)]\n{', '.join(job['gap'])}")
     return "\n".join(lines)
 
 def _build_explain_chain():
@@ -421,6 +553,12 @@ if __name__ == "__main__":
     #   --profile <path>   : main.py 가 저장한 JSON을 그대로 읽는다 (대화 없음)
     #   --interview        : 데모용 축약 버전 (2개 영역, 고정 질문 최대 1회)
     #   --basic            : 원래의 고정 3질문 모드 (user_analysis 연동 이전 방식) — Q3 를 그대로 묻는다
+    #   --job <직무명>     : 역방향 — "이 직무에 가려면 어느 전공?" LLM 0회 (9/17)
+    if "--job" in sys.argv:
+        query = " ".join(sys.argv[sys.argv.index("--job") + 1:]) or input("\n어떤 직무가 궁금해? (직무명 일부)\n> ")
+        print("\n" + render_reverse(reverse(query)))
+        sys.exit(0)
+
     if "--profile" in sys.argv:
         from interview import from_profile_file
         path = sys.argv[sys.argv.index("--profile") + 1]
