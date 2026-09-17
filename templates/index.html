@@ -39,7 +39,16 @@
   .spinner { color: #8a8f98; font-size: 14px; }
 
   .result-label { font-weight: 700; margin-top: 8px; margin-bottom: 12px; font-size: 15px; }
-  .explain-box { white-space: pre-wrap; }
+  .evidence-list { margin: 0 0 16px; padding: 0; list-style: none; }
+  .evidence-list li {
+    font-size: 13px; color: #4a4f57; background: #f6f7f9; border: 1px solid #e3e5e8;
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;
+  }
+  .profile-box {
+    white-space: pre-wrap; background: #f6f7f9; border: 1px solid #e3e5e8;
+    border-radius: 8px; padding: 16px; font-size: 13px; color: #1a1a1a;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+  }
   .details-link {
     display: inline-block; margin-top: 24px; font-size: 14px; color: #3b6ef6; text-decoration: none;
   }
@@ -49,16 +58,17 @@
 </head>
 <body>
 <div class="card">
-  <h1>🎓 진로 추천</h1>
+  <h1>🎓 LG에 취업하고 싶어하는 학생을 위한 진로 추천</h1>
 
   <div id="transcript"></div>
   <div id="qa-flow"></div>
   <div id="error" class="error hidden"></div>
 
   <div id="result" class="hidden">
-    <div class="result-label">[진로 추천]</div>
-    <div id="explain-text" class="explain-box"></div>
-    <a id="details-link" class="details-link hidden" target="_blank" rel="noopener">세부 근거(전공 순위·과목·직무 커버리지) 보기</a>
+    <div class="result-label">[핵심 요약]</div>
+    <ul id="evidence-list" class="evidence-list hidden"></ul>
+    <div id="profile-text" class="profile-box"></div>
+    <a id="details-link" class="details-link hidden" target="_blank" rel="noopener">세부내용 확인</a>
   </div>
 </div>
 
@@ -147,28 +157,25 @@ async function submitAnswer(answer) {
     return;
   }
 
-  // status === "done"
+  // status === "done" — [핵심 요약]은 바로 보여주고, [진로 추천]은 링크를 눌러야 나온다
   flow.innerHTML = "";
   document.getElementById("result").classList.remove("hidden");
+  document.getElementById("profile-text").textContent = data.profile_text;
+
+  const evidenceList = document.getElementById("evidence-list");
+  if (data.evidence_lines && data.evidence_lines.length) {
+    evidenceList.innerHTML = "";
+    data.evidence_lines.forEach((line) => {
+      const li = document.createElement("li");
+      li.textContent = line;
+      evidenceList.appendChild(li);
+    });
+    evidenceList.classList.remove("hidden");
+  }
+
   const link = document.getElementById("details-link");
   link.href = `/details/${data.result_id}`;
   link.classList.remove("hidden");
-  streamExplain(data.result_id);
-}
-
-function streamExplain(resultId) {
-  const box = document.getElementById("explain-text");
-  box.textContent = "";
-  const source = new EventSource(`/api/explain/${resultId}`);
-  source.onmessage = (event) => {
-    const payload = JSON.parse(event.data);
-    box.textContent += payload.chunk;
-  };
-  source.addEventListener("done", () => source.close());
-  source.onerror = () => {
-    source.close();
-    if (box.textContent === "") box.textContent = "추천 문단을 불러오지 못했습니다.";
-  };
 }
 
 renderQuestion(INTRO_PROMPT);
