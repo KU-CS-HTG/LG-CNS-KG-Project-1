@@ -94,13 +94,14 @@ python webapp.py
 화면에는 `[진로 추천]` 문단만 보입니다. 전공 순위·근거 과목·직무 커버리지 같은 세부 근거는 결과 화면
 아래 "세부 근거 보기" 링크로 따로 열리는 `/details/<result_id>` 페이지에서 확인합니다.
 
-## `app.py` 입력 방식 4가지
+## `app.py` 입력 방식 4가지 + 역방향 질의
 
 ```
 python app.py                     # 기본값: user_analysis/main.py 와 완전히 같은 흐름 (7개 영역, 적응형 질문)
 python app.py --interview         # 데모용 축약 인터뷰 (관심·강점 2개 영역, 고정 질문 최대 1회)
 python app.py --profile <path>    # main.py 가 저장한 프로필 JSON을 그대로 읽어서 바로 추천 (대화 없음)
 python app.py --basic             # user_analysis 연동 이전의 고정 3질문 모드
+python app.py --job "Smart Factory"  # 역방향: 이 직무에 가려면 어느 전공? (LLM 0회, 직무명 일부 또는 '회사 직무명')
 ```
 
 `--basic`을 뺀 세 방식은 "① 데이터 분석 ② 시스템 설계 ③ 사람·일정 조율" 객관식(Q3)을 따로 묻지 않습니다 —

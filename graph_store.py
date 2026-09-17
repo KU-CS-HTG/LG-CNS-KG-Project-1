@@ -283,6 +283,35 @@ def subjects_for(major_id: str, skills: list[str], k: int = 3) -> list[dict]:
 
     return [{"subject": n, "hits": c, "for": detail[n]} for n, c in counter.most_common(k)]
 
+# ═════════════════════════════════════════════════════════════
+# 역방향 질의 — 직무 → 역량 → 전공 (9/17). 정방향(전공 → 역량 → 직무)과 같은 함수를 반대로 탄다.
+#   Neo4j 로 쓰면 (j:Job {role})-[:REQUIRES]->(s:Skill)<-[:DEVELOPS]-(m:Major). 관계형이라면 조인 순서를 바꿔 쿼리를
+#   새로 짜야 하지만, 그래프는 같은 엣지를 반대 방향으로 순회(traversal)하면 된다 — "왜 그래프인가" 의 짧은 답.
+# ═════════════════════════════════════════════════════════════
+
+def find_jobs_by_name(query: str, career_type: str | None = None) -> list[dict]:
+    """직무명(또는 '회사 직무명')에 query 가 들어가는 직무 노드. 대소문자·공백 무시. 신입 → 그 외 순."""
+    q = query.replace(" ", "").lower()
+    hits = [j for j in _load().get("jobs", [])
+            if q in f"{j['company']}{j['role']}".replace(" ", "").lower()
+            and (not career_type or career_type in (j.get("career_type") or ""))]
+    return sorted(hits, key=lambda j: (0 if "신입" in (j.get("career_type") or "") else 1, j["company"], j["role"]))
+
+
+PREFER_WEIGHT = 0.5   # 역방향에서 우대 역량의 무게 — 필수의 절반 (성향 추정 태그 0.5 와 같은 발상: 근거가 약한 쪽은 절반만)
+
+
+def find_majors_for_job(job: dict, limit: int = 10) -> list[dict]:
+    """직무 노드 → 그 요구 역량을 기르는 전공 랭킹. `find_majors_by_skills(job["requires"])` 를 그대로 쓴다.
+
+    우대(prefers)는 tag_weights 0.5 로 같이 넣는다 — 필수만으로는 역량이 0개인 공고(108건 중 20건)가 있어서.
+    반환값은 find_majors_by_skills 와 같다: matched_skills(정확) / family({직무 요구: 커버한 전공 역량}) / score.
+    """
+    req = list(dict.fromkeys(job.get("requires", [])))
+    pref = [s for s in dict.fromkeys(job.get("prefers", [])) if s not in req]
+    return find_majors_by_skills(req + pref, limit=limit, tag_weights={s: PREFER_WEIGHT for s in pref})
+
+
 def all_skills() -> list[str]:
     """그래프에 있는 Skill 노드 전체 (전공·직무·상위 개념)."""
     return _load().get("skills", [])
