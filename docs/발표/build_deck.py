@@ -108,8 +108,13 @@ def node_motif(slide, x, y, scale=1.0, colors=None):
         etree.SubElement(o._element.spPr, qn("a:effectLst"))
 
 
+SECTION = [0]
+
+
 def header(slide, num, title, subtitle=None, dark=False):
-    """장 번호(연한 큰 숫자) + 제목 + 부제. 모티프는 우상단."""
+    """장 번호(연한 큰 숫자, 자동 증가) + 제목 + 부제. 모티프는 우상단."""
+    if num:
+        SECTION[0] += 1; num = SECTION[0]
     bg = T["dark"] if dark else T["bg"]
     rect(slide, 0, 0, W, H, bg)
     col_t = T["dark_text"] if dark else T["text"]
@@ -346,6 +351,41 @@ card(s, 6.9, 1.85, 5.8, 3.6, title="지도 읽기 — 학생이 올 때마다 (L
     [("⑤ 카드 + AI가 쓴 설명 문단(1회) — 카드에 없는 건 쓰지 않도록 규칙", {})],
 ], body_size=12, icon="2")
 lesson(s, "판정(②③④)에 LLM이 없어서 같은 이야기에 같은 답이 나오고, 카드의 이름은 전부 실존한다.", y=5.75)
+
+# ════════════════════════════════════════════════════════════════════
+# 6-2. 기술 스택
+s = prs.slides.add_slide(BLANK)
+header(s, 5, "기술 스택 — 작게, 표준으로", "Python 3,100줄 · 파일 7개 · 외부 의존성 5개. \"판정은 도구가 한다\"를 지키려면 도구가 단순해야 했다")
+stack = [
+    ("언어 · 협업", "Py", [
+        [("Python 3.14", {"bold": True}), (" — 코드 3,100줄(팀 모듈 포함 4,500), 파일 7개", {})],
+        [("Git · GitHub", {"bold": True}), (" — 커밋 167 · PR 15 · 브랜치 전략(기능 브랜치 → PR)", {})],
+        [("VS Code · Claude Code", {"bold": True}), (" — 팀원 2명이 코딩 보조로 사용 (동시 편집 사고의 원인이자 문서화의 도구)", {})]]),
+    ("LLM", "AI", [
+        [("OpenAI gpt-4o-mini", {"bold": True}), (", temperature 0 — 추출·태거·설명 문단 전부 같은 모델", {})],
+        [("LangChain", {"bold": True}), (" — ChatPromptTemplate · with_structured_output(pydantic) · stream/astream", {})],
+        [("pydantic", {"bold": True}), (" — 출력 스키마(Tags · MajorSkills · JobExtraction · StudentProfile). Literal 로 라벨 고정", {})]]),
+    ("데이터 · 수집", "DB", [
+        [("requests", {"bold": True}), (" — LG Careers 내부 API(JSON) 호출, 날짜별 스냅샷 data/raw/", {})],
+        [("pandas", {"bold": True}), (" — 대학알리미 CSV(3,829행)를 전공 단위로 그룹화", {})],
+        [("JSON 파일 3층", {"bold": True}), (" — raw(LLM 원출력 캐시) → extracted(필터) → graph.json. DB 없음", {})]]),
+    ("지식그래프", "KG", [
+        [("graph.json + Python dict/set", {"bold": True}), (" — 노드 5종·관계 5종, 집합 연산으로 판정 (LLM 0회)", {})],
+        [("vocab.py", {"bold": True}), (" — 통제 어휘 139 · IS_A 102 · 성향→역량 7 · 성향→태도 17 (사람이 관리하는 온톨로지)", {})],
+        [("의도적으로 뺀 것: Neo4j · 벡터 임베딩", {"bold": True, "color": T["accent"]}), (" — 노드 300개 규모라 dict 로 충분. Cypher 로 옮길 수 있게 설계 (확장 과제)", {})]]),
+    ("화면", "UI", [
+        [("CLI", {"bold": True}), (" — app.py 입력 4방식(--basic · --interview · 기본 대화 · --profile) + 역방향 --job", {})],
+        [("Flask + Jinja", {"bold": True}), (" — index.html(채팅) · details.html(문단). 판정은 여기서 하지 않는다", {})],
+        [("SSE(EventSource)", {"bold": True}), (" — 설명 문단 스트리밍. 카드는 즉시, 문단은 흘려보냄", {})]]),
+    ("검증 · 문서", "QA", [
+        [("check.py", {"bold": True}), (" — 확인 3건 + 평가셋 24건(JSON) 자동 채점, 대본 주입(ask/say)으로 대화도 자동", {})],
+        [("tiktoken", {"bold": True}), (" — 토큰 실측(115k vs 1.4k). 감으로 말하지 않기 위해", {})],
+        [("Markdown + Mermaid", {"bold": True}), (" — 설명서 1,200줄 · 결정 기록 12개 · 시연 대본 · 챗봇 대조 실험", {})]]),
+]
+for i, (t1, ic, body) in enumerate(stack):
+    cx = 0.6 + (i % 3) * 4.1; cy = 1.8 + (i // 3) * 2.5
+    card(s, cx, cy, 3.85, 2.38, title=t1, body=body, body_size=10.5, title_size=14, icon=ic, title_color=T["accent"] if ic == "KG" else T["primary"])
+tb(s, 0.6, 6.78, 12, 0.3, "requirements.txt 5줄: flask · langchain-core · langchain-openai · python-dotenv · pydantic (+ pandas · requests · tiktoken)", size=10.5, color=T["muted"])
 
 # ════════════════════════════════════════════════════════════════════
 # 7~12. 시행착오 6개
