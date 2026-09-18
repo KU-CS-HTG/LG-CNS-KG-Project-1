@@ -132,22 +132,62 @@ for i, (big, lab, sub) in enumerate(stats):
     tb(s, cx + 0.2, cy + 1.1, 2.5, 0.4, lab, size=13, bold=True, color=T["text"])
     tb(s, cx + 0.2, cy + 1.48, 2.5, 0.55, sub, size=11, color=T["muted"])
 
-# 6. 어떻게 동작하나 — 흐름도 이미지 ────────────────────────────────
+# 6. 어떻게 동작하나 — 도형·글자 (편집 가능) ───────────────────────
+def flow_box(slide, x, y, w, h, title, sub, fill, tcol, sub_size=10.5):
+    rect(slide, x, y, w, h, fill, MSO_SHAPE.ROUNDED_RECTANGLE, radius=0.1)
+    tb(slide, x + 0.1, y + 0.14, w - 0.2, 0.38, title, size=13, bold=True, color=tcol, align=PP_ALIGN.CENTER)
+    tb(slide, x + 0.1, y + 0.52, w - 0.2, h - 0.6, sub, size=sub_size, color=T["muted"], align=PP_ALIGN.CENTER)
+
+
+def harrow(slide, x1, x2, y, dashed=False):
+    c = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(x1), Inches(y), Inches(x2), Inches(y))
+    c.line.color.rgb = rgb(T["muted"]); c.line.width = Pt(2)
+    ln = c.line._get_or_add_ln(); tail = etree.SubElement(ln, qn("a:tailEnd")); tail.set("type", "triangle"); tail.set("w", "med"); tail.set("len", "med")
+    if dashed: ln.insert(0, etree.Element(qn("a:prstDash"), val="dash"))
+    return c
+
+
 s = prs.slides.add_slide(BLANK)
 header(s, 4, "어떻게 동작하나 — 지도를 한 번 만들고, 매번 읽는다")
-pic(s, "flow.png", 0.6, 1.45, w=12.1)
-lesson(s, "판정 세 칸에 AI가 없어서, 같은 이야기에 같은 답이 나오고 카드의 이름은 전부 실제 데이터다.", y=6.35)
-s.notes_slide.notes_text_frame.text = "위: 지도 만들기(한 번, AI 277번). 아래: 학생이 올 때마다 읽기. 가운데 초록 띠 — 전공·직무·과목을 고르는 세 칸에는 AI가 없다."
-
-# 6-2. 실제 파이프라인 — 설명서 3장 캡처 ──────────────────────────
-s = prs.slides.add_slide(BLANK)
-header(s, 4, "실제 파이프라인 — 설명서 3장 그대로", "왼쪽: 지도 만들기(파일·스크립트 단위) · 오른쪽: 학생이 올 때마다 도는 순서. 앞 장을 코드 이름으로 그린 것")
-pic_fit(s, "shots/offline_c.png", 0.6, 1.65, 5.3, 4.85)
-pic_fit(s, "shots/online_L.png", 6.15, 1.65, 6.55, 2.3)
-pic_fit(s, "shots/online_R.png", 6.15, 4.15, 6.55, 2.3)
-tb(s, 6.15, 6.55, 6.55, 0.3, "위: 입력 4방식 → 역량 태그 → 전공 순위   아래: → 직무 → 다리 과목 → 카드 → 설명 문단", size=10, color=T["muted"])
-tb(s, 0.6, 6.55, 5.3, 0.3, "💰 = AI 호출 · 원기둥 = 저장 파일 · 사전(vocab.py)이 양쪽을 잇는다", size=10, color=T["muted"])
-s.notes_slide.notes_text_frame.text = "Q&A용. 파일 이름·스크립트 이름을 물으면 이 장. 왼쪽 위 노란 상자 두 개가 '지도 만들기'의 전공 절반·직무 절반, 가운데 vocab.py(사전)가 둘을 잇는다."
+CARD2 = T["card2"]; DONE = "DFE8F4"
+# ── ① 지도 만들기
+tb(s, 0.6, 1.5, 11, 0.35, [[("① 지도 만들기 — 미리, 한 번만", {"bold": True, "size": 14, "color": T["primary"]}), ("   AI가 글을 읽어 역량 이름을 뽑는다 (총 277번, 결과는 저장)", {"size": 10.5, "color": T["muted"]})]], size=14)
+flow_box(s, 0.6, 1.95, 2.2, 0.72, "과목 이름 3,829개", "서울대 105개 전공", T["card"], T["text"], sub_size=10)
+flow_box(s, 0.6, 2.8, 2.2, 0.72, "채용 공고 172개", "LG 계열사 9곳", T["card"], T["text"], sub_size=10)
+harrow(s, 2.85, 3.3, 2.31); harrow(s, 2.85, 3.3, 3.16)
+flow_box(s, 3.35, 2.0, 2.75, 1.5, "AI가 역량 이름 뽑기", "\"통계학과는 통계를 기른다\"\n\"이 직무는 머신러닝을 요구한다\"", CARD2, T["primary"])
+harrow(s, 6.15, 6.5, 2.75)
+flow_box(s, 6.55, 2.0, 2.75, 1.5, "사전으로 이름 통일", "같은 뜻은 한 단어로 — 139개\n\"Oracle은 Database의 한 종류\" 102개", CARD2, T["primary"], sub_size=10)
+harrow(s, 9.35, 9.7, 2.75)
+flow_box(s, 9.75, 2.0, 2.95, 1.5, "지도 완성", "전공 61 — 역량 120 — 직무 108\n관계 5종", DONE, T["primary"])
+# ── ② 지도 읽기
+tb(s, 0.6, 3.85, 8, 0.35, [[("② 지도 읽기 — 학생이 올 때마다", {"bold": True, "size": 14, "color": T["primary"]}), ("   전공·직무·과목은 위 지도에서 찾는다 — AI는 맨 앞과 맨 뒤에만", {"size": 10.5, "color": T["muted"]})]], size=14)
+steps = [("학생 이야기", "자기소개나\n질문 3개", T["card"], T["text"]), ("역량 태그", "AI 1번 —\n사전에 있는 단어만", CARD2, T["primary"]),
+         ("전공 1위", "61개 전부 비교\n예) 통계학과", CARD2, T["primary"]), ("직무", "전공이 기르는 역량으로\n충족/부족 세기", CARD2, T["primary"]),
+         ("과목 3개", "전공과 직무를\n잇는 다리", CARD2, T["primary"]), ("카드 + 설명", "숫자·근거는 카드\n말은 AI 1번", DONE, T["primary"])]
+bw, gap, y2 = 1.85, 0.2, 4.3
+for i, (t1, t2, fill, col) in enumerate(steps):
+    x = 0.6 + i * (bw + gap)
+    flow_box(s, x, y2, bw, 1.3, t1, t2, fill, col, sub_size=10)
+    if i < len(steps) - 1:
+        harrow(s, x + bw + 0.02, x + bw + gap - 0.02, y2 + 0.65)
+# 지도 → 판정 세 칸: 점선 + 띠
+x1 = 0.6 + 2 * (bw + gap); x2 = 0.6 + 5 * (bw + gap) - gap
+rect(s, x1 - 0.08, 5.75, x2 - x1 + 0.16, 0.62, "E6F7EF", MSO_SHAPE.ROUNDED_RECTANGLE, radius=0.3)
+tb(s, x1, 5.77, x2 - x1, 0.58, [[("↑ 위에서 만든 지도를 여기서 읽는다", {"bold": True, "size": 12, "color": T["good"]})],
+                                 [("전공·직무·과목은 AI가 고르지 않고, 지도에서 찾는다", {"size": 10, "color": T["good"]})]],
+   size=12, align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+# 지도 완성 → (오른쪽 여백을 돌아) 초록 띠: 점선 3토막, 마지막에 화살촉
+pts = [(12.7, 2.75), (12.95, 2.75), (12.95, 6.05), (x2 + 0.1, 6.05)]
+for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+    c = s.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(ax), Inches(ay), Inches(bx), Inches(by))
+    c.line.color.rgb = rgb(T["good"]); c.line.width = Pt(2)
+    ln = c.line._get_or_add_ln(); ln.insert(0, etree.Element(qn("a:prstDash"), val="dash"))
+    if (bx, by) == pts[-1]:
+        tail = etree.SubElement(ln, qn("a:tailEnd")); tail.set("type", "triangle"); tail.set("w", "med"); tail.set("len", "med")
+tb(s, 9.75, 3.52, 2.95, 0.3, "이 지도를 읽어서 →", size=10, color=T["good"], bold=True, align=PP_ALIGN.RIGHT)
+tb(s, 0.6, 6.6, 12.1, 0.4, "같은 이야기를 두 번 넣으면 같은 답이 나오고, 카드에 나오는 전공·과목·직무 이름은 전부 실제 데이터에 있는 것", size=11.5, color=T["text"])
+s.notes_slide.notes_text_frame.text = "위: 지도 만들기(한 번, AI 277번). 아래: 학생이 올 때마다 읽기. 초록 띠 — 전공·직무·과목을 고르는 세 칸은 위에서 만든 지도를 읽을 뿐 AI가 고르지 않는다."
 
 # 6-3. 기술 스택 ─────────────────────────────────────────────────
 s = prs.slides.add_slide(BLANK)
