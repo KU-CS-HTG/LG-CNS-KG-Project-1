@@ -121,7 +121,8 @@ _ORIENTATION_SYSTEM = """당신은 고등학생의 진로 성향을 판단하는
 2. "어려워하는 것"(약점)은 이 판단에 쓰지 마세요. 어렵다고 느끼는 것이 그 일을 못 한다는 뜻은 아닙니다.
 3. evidence 에는 판단 근거가 된 프로필의 문장을 그대로 적으세요."""
 
-_orientation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+_SEED = 20260915   # app.py 의 SEED 와 같은 이유 — temperature=0 만으로는 재현성이 완전히 보장되지 않는다 (app.py 주석 참고)
+_orientation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, seed=_SEED)
 _orientation_prompt = ChatPromptTemplate.from_messages([
     ("system", _ORIENTATION_SYSTEM),
     ("human", "{profile_text}"),

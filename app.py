@@ -54,7 +54,13 @@ class Tags(BaseModel):
     # 전공 추출의 "4~8개", my_service의 "정확히 3개"와 같은 함정. 개수는 근거가 정한다.
     tags: list[str] = Field(description="답변에 직접 근거가 있는 태그만. 근거 없으면 넣지 않는다. 최대 5개", max_length=5)
 
-_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+# temperature=0 만으로는 진짜 결정적이지 않다 — OpenAI는 배치·GPU 스케줄링에 따라 같은 입력에도 답이 달라질 수 있다고
+# 공식 문서에서 밝힌다. seed 를 고정하면 "대체로(mostly)" 재현되도록 해 준다 (완전 보장은 아니지만 훨씬 안정적).
+# 실측(9/18): 같은 대화로 [진로 추천] 문단을 두 번 돌렸더니 문장이 달라짐 — [핵심 요약]은 이미 동일했다(그래프 조회는
+# LLM 이 없어 항상 결정적). 태거(_llm)·설명 문단(_build_explain_chain) 둘 다에 적용한다.
+SEED = 20260915   # 아무 정수나 상관없다 — "이 프로젝트가 이 숫자로 고정했다"는 사실만 중요하다
+
+_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, seed=SEED)
 _TAG_PROMPT = ChatPromptTemplate.from_messages([
     ("system",
      "사용자 답변에서 역량 태그를 뽑습니다.\n"
@@ -430,7 +436,6 @@ EXPLAIN_SYSTEM = """너는 고등학생 진로 상담 전문가다.
 (예: "LG 직무와 연결되는 61개 전공을 모두 살펴봤고, 당신의 역량과 관련된 전공 15개 중 경영학과가 가장 잘 어울려요.
  당신의 역량 세 가지 중 두 가지(데이터 분석·통계)는 경영학과 과목에서 직접 다루고, 나머지 하나(파이썬)는
  아직 경영학과 과목으로 이어지지 않았어요.")
-계열로 이어진 역량이 있을 때만 "~계열로 이어져요" 라고 쓰고, 미연결 역량을 계열로 이어졌다고 쓰지 않는다 (9/17 팀 결정 B).
 전공명·과목명·직무명·회사명은 문장 안에 자연스럽게 포함한다.
 
 절대 규칙:
@@ -520,7 +525,7 @@ def build_explain_prompt(r: dict) -> str:
     return "\n".join(lines)
 
 def _build_explain_chain():
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, timeout=20, max_retries=2)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, seed=SEED, timeout=20, max_retries=2)
     prompt = ChatPromptTemplate.from_messages([
         ("system", EXPLAIN_SYSTEM),
         ("human", "{evidence}"),
